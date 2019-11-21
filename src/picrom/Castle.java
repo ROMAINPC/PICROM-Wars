@@ -8,5 +8,6 @@ public class Castle {
 	private int nbKnight;
 	private int nbOnager;
 	
+	private Entity[] prodQueue;
 	
 }
