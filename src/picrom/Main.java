@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -19,16 +20,23 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// Create world:
+			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
+			gameboard.generateWorldCastles(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
+
+			// setup GUI:
+			root.getChildren().add(gameboard);
 
 			Timeline gameLoop = new Timeline();
 			gameLoop.setCycleCount(Timeline.INDEFINITE);
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
-					// test if pause disabled
+					//TODO test if pause disabled
 
-					// update world
+					// update world:
+					gameboard.processCastles();
+					gameboard.processUnits();
 
-					// Test end of game
+					//TODO Test end of game
 				}
 			}));
 
