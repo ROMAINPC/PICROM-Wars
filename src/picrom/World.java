@@ -3,6 +3,8 @@ package picrom;
 import java.util.LinkedList;
 import java.util.Random;
 
+import entity.Castle;
+import entity.Entity;
 import javafx.scene.Group;
 
 public class World extends Group {
