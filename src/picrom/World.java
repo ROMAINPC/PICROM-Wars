@@ -49,6 +49,8 @@ public class World extends Group {
 		castlesArray = new Castle[width][height];
 
 		// TODO generates castles, randomize position
+		this.getChildren().addAll(new Castle(42, 2, 4, context), new Castle(66, 6, 4, context),
+				new Castle(42, 6, 5, context), new Castle(42, 7, 5, context));
 
 	}
 
