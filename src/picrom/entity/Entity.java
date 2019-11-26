@@ -1,4 +1,4 @@
-package entity;
+package picrom.entity;
 
 public class Entity {
 

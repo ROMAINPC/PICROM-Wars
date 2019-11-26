@@ -1,8 +1,8 @@
-package entity;
+package picrom.entity;
 
 import java.util.LinkedList;
 
-import entity.unit.Unit;
+import picrom.entity.unit.Unit;
 
 public class Castle extends Entity{
 	private int level;
