@@ -9,10 +9,6 @@ public class Castle extends Entity {
 
 	public Castle(int owner, int X, int Y, Scene context) {
 		super(Drawables.castle, owner, X, Y, context);
-		this.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
-		this.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
-		this.layoutXProperty().bind(this.fitWidthProperty().multiply(X));
-		this.layoutYProperty().bind(this.fitHeightProperty().multiply(Y));
 	}
 
 	private int level;
@@ -24,5 +20,13 @@ public class Castle extends Entity {
 
 	void rmUnit(Unit u) {
 
+	}
+
+	@Override
+	protected void updateUI() {
+		this.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
+		this.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
+		this.layoutXProperty().bind(this.fitWidthProperty().multiply(this.getWorldX()));
+		this.layoutYProperty().bind(this.fitHeightProperty().multiply(this.getWorldY()));
 	}
 }

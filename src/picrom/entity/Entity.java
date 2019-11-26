@@ -16,7 +16,10 @@ public abstract class Entity extends ImageView {
 		worldX = X;
 		worldY = Y;
 		context = world;
+		updateUI();
 	}
+
+	abstract protected void updateUI();
 
 	public int getOwner() {
 		return owner;
@@ -32,6 +35,7 @@ public abstract class Entity extends ImageView {
 
 	public void setWorldX(int worldX) {
 		this.worldX = worldX;
+		updateUI();
 	}
 
 	public int getWorldY() {
@@ -40,5 +44,6 @@ public abstract class Entity extends ImageView {
 
 	public void setWorldY(int worldY) {
 		this.worldY = worldY;
+		updateUI();
 	}
 }

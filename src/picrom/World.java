@@ -29,12 +29,15 @@ public class World extends Group {
 	private int nbBarons;
 
 	private Scene context;
+	private Castle cTest;
 
 	public World(int width, int height, Scene context) {
 		// generate background and manage layout with parent
 		this.width = width;
 		this.height = height;
 		this.context = context;
+
+		cTest = new Castle(42, 6, 5, context);
 
 		// load and display background:
 		ImageView background = new ImageView(Drawables.worldBackground);
@@ -50,11 +53,14 @@ public class World extends Group {
 
 		// TODO generates castles, randomize position
 		this.getChildren().addAll(new Castle(42, 2, 4, context), new Castle(66, 6, 4, context),
-				new Castle(42, 6, 5, context), new Castle(42, 7, 5, context));
+				new Castle(42, 6, 5, context), new Castle(42, 7, 5, context), cTest);
 
 	}
 
 	public void processCastles() {
+		System.out.println("process Castles");
+		cTest.setWorldX(cTest.getWorldX() + 1);
+
 		// TODO update money
 
 		// TODO update production
