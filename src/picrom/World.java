@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import picrom.entity.Castle;
 import picrom.entity.Entity;
 
@@ -26,10 +28,19 @@ public class World extends Group {
 	private int nbAIs;
 	private int nbBarons;
 
-	public World(int width, int height) {
+	private Scene context;
+
+	public World(int width, int height, Scene context) {
 		// generate background and manage layout with parent
 		this.width = width;
 		this.height = height;
+		this.context = context;
+
+		// load and display background:
+		ImageView background = new ImageView(Drawables.worldBackground);
+		background.fitWidthProperty().bind(context.widthProperty());
+		background.fitHeightProperty().bind(context.heightProperty());
+		this.getChildren().add(background);
 	}
 
 	public void generateWorldCastles(int nbAIs, int nbBarons) {

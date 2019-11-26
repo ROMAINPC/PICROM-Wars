@@ -18,9 +18,12 @@ public class Main extends Application {
 			Group root = new Group();
 			Scene scene = new Scene(root, Settings.DEFAULT_SCENE_WIDTH, Settings.DEFAULT_SCENE_HEIGHT);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
+			
+			//loading textures:
+			new Drawables();
+			
 			// Create world:
-			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
+			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, scene);
 			gameboard.generateWorldCastles(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
 
 			// setup GUI:
@@ -43,7 +46,7 @@ public class Main extends Application {
 			// start loop
 			gameLoop.play();
 
-			primaryStage.setResizable(false);
+			primaryStage.setResizable(true);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
