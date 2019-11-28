@@ -7,8 +7,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import picrom.entity.Castle;
 import picrom.entity.Entity;
+import picrom.entity.castle.Castle;
 import picrom.settings.Drawables;
 
 public class World extends Context {

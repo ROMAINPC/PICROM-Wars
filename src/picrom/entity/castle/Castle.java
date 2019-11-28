@@ -1,5 +1,6 @@
-package picrom.entity;
+package picrom.entity.castle;
 
+import picrom.entity.Entity;
 import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
 import picrom.settings.Drawables;
