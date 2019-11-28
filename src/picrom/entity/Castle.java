@@ -1,9 +1,9 @@
 package picrom.entity;
 
 import javafx.scene.Scene;
-import picrom.Drawables;
-import picrom.Settings;
 import picrom.entity.unit.Unit;
+import picrom.settings.Drawables;
+import picrom.settings.Settings;
 
 public class Castle extends Entity {
 

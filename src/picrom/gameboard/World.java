@@ -1,4 +1,4 @@
-package picrom;
+package picrom.gameboard;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Castle;
 import picrom.entity.Entity;
+import picrom.settings.Drawables;
+import picrom.settings.Settings;
 
 public class World extends Context {
 

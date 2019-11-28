@@ -1,4 +1,4 @@
-package picrom;
+package picrom.settings;
 
 import javafx.scene.image.Image;
 

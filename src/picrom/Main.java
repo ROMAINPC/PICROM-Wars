@@ -8,6 +8,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import picrom.gameboard.World;
+import picrom.settings.Drawables;
+import picrom.settings.Settings;
 
 public class Main extends Application {
 
