@@ -1,7 +1,10 @@
 package picrom.entity.unit;
 
-public class Unit {
-	
+import picrom.entity.castle.Castle;
+import picrom.entity.castle.Producible;
+
+public class Unit implements Producible {
+
 	private String name;
 	private int prodCost, prodTime, speed, hp, damage;
 
@@ -61,7 +64,22 @@ public class Unit {
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
-	
-	
-	
+
+	@Override
+	public int getCost() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNecessaryTurns() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void produce(Castle c) {
+		c.addUnit(this);
+	}
+
 }

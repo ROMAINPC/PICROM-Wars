@@ -3,12 +3,12 @@ package picrom.gameboard;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
+import picrom.entity.unit.Onager;
 import picrom.settings.Drawables;
 
 public class World extends Context {
@@ -29,8 +29,6 @@ public class World extends Context {
 	private int nbPlayers = 1;
 	private int nbAIs;
 	private int nbBarons;
-
-	private Castle cTest;
 
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, context.xProperty(), context.yProperty(), context.widthProperty(),
@@ -56,16 +54,13 @@ public class World extends Context {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
 		castlesArray = new Castle[worldWidth][worldHeight];
-		cTest = new Castle(42, 9, 5, this);
 		// TODO generates castles, randomize position
 		this.getChildren().addAll(new Castle(42, 2, 4, this), new Castle(66, 6, 4, this), new Castle(42, 6, 5, this),
-				new Castle(42, 7, 5, this), cTest);
+				new Castle(42, 7, 5, this));
 
 	}
 
 	public void processCastles() {
-		cTest.setWorldX(cTest.getWorldX() + 1);
-
 		// TODO update money
 
 		// TODO update production
