@@ -30,13 +30,11 @@ public class World extends Context {
 	private int nbAIs;
 	private int nbBarons;
 
-	private Scene context;
 	private Castle cTest;
 
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, context.xProperty(), context.yProperty(), context.widthProperty(),
 				context.heightProperty());
-		this.context = context;
 
 	}
 
@@ -58,10 +56,10 @@ public class World extends Context {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
 		castlesArray = new Castle[worldWidth][worldHeight];
-		cTest = new Castle(42, 9, 5, context);
+		cTest = new Castle(42, 9, 5, this);
 		// TODO generates castles, randomize position
-		this.getChildren().addAll(new Castle(42, 2, 4, context), new Castle(66, 6, 4, context),
-				new Castle(42, 6, 5, context), new Castle(42, 7, 5, context), cTest);
+		this.getChildren().addAll(new Castle(42, 2, 4, this), new Castle(66, 6, 4, this), new Castle(42, 6, 5, this),
+				new Castle(42, 7, 5, this), cTest);
 
 	}
 

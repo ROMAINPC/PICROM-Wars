@@ -1,25 +1,29 @@
 package picrom.entity;
 
-import javafx.scene.Scene;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import picrom.gameboard.World;
+import picrom.settings.Settings;
 
 public abstract class Entity extends ImageView {
-	private int worldX;
-	private int worldY;
+	private SimpleDoubleProperty worldX;
+	private SimpleDoubleProperty worldY;
 	private int owner; // TODO create owner type
-	protected Scene context;
+	protected World context;
 
-	protected Entity(Image img, int owner, int X, int Y, Scene world) {
+	protected Entity(Image img, int owner, int X, int Y, World world) {
 		this.setImage(img);
 		this.owner = owner;
-		worldX = X;
-		worldY = Y;
+		worldX = new SimpleDoubleProperty(X);
+		worldY = new SimpleDoubleProperty(Y);
 		context = world;
-		updateUI();
+		// default binding:
+		this.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
+		this.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
+		this.layoutXProperty().bind(this.fitWidthProperty().multiply(this.worldX));
+		this.layoutYProperty().bind(this.fitHeightProperty().multiply(this.worldY));
 	}
-
-	abstract protected void updateUI();
 
 	public int getOwner() {
 		return owner;
@@ -30,20 +34,18 @@ public abstract class Entity extends ImageView {
 	}
 
 	public int getWorldX() {
-		return worldX;
+		return (int) worldX.get();
 	}
 
 	public void setWorldX(int worldX) {
-		this.worldX = worldX;
-		updateUI();
+		this.worldX.set(worldX);
 	}
 
 	public int getWorldY() {
-		return worldY;
+		return (int) worldY.get();
 	}
 
 	public void setWorldY(int worldY) {
-		this.worldY = worldY;
-		updateUI();
+		this.worldY.set(worldY);
 	}
 }

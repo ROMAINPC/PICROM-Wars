@@ -1,6 +1,5 @@
 package picrom.gameboard;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
