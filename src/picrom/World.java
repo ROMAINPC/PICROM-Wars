@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import picrom.entity.Castle;
 import picrom.entity.Entity;
 
-public class World extends Group {
+public class World extends Context {
 
 	private static final Random random = new Random();
 
@@ -21,8 +21,8 @@ public class World extends Group {
 	private LinkedList<Entity> entities;
 
 	// size in number of cells
-	private int width;
-	private int height;
+	private int worldWidth;
+	private int worldHeight;
 
 	private int nbPlayers = 1;
 	private int nbAIs;
@@ -31,10 +31,11 @@ public class World extends Group {
 	private Scene context;
 	private Castle cTest;
 
-	public World(int width, int height, Scene context) {
+	public World(int worldWidth, int worldHeight, Scene context) {
+		super(0, 0, Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
 		// generate background and manage layout with parent
-		this.width = width;
-		this.height = height;
+		this.worldWidth = worldWidth;
+		this.worldHeight = worldHeight;
 		this.context = context;
 
 		cTest = new Castle(42, 6, 5, context);
@@ -49,7 +50,7 @@ public class World extends Group {
 	public void generateWorldCastles(int nbAIs, int nbBarons) {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
-		castlesArray = new Castle[width][height];
+		castlesArray = new Castle[worldWidth][worldHeight];
 
 		// TODO generates castles, randomize position
 		this.getChildren().addAll(new Castle(42, 2, 4, context), new Castle(66, 6, 4, context),
@@ -58,7 +59,6 @@ public class World extends Group {
 	}
 
 	public void processCastles() {
-		System.out.println("process Castles");
 		cTest.setWorldX(cTest.getWorldX() + 1);
 
 		// TODO update money
@@ -100,11 +100,11 @@ public class World extends Group {
 	}
 
 	public int getWorldWidth() {
-		return width;
+		return worldWidth;
 	}
 
 	public int getWorldHeight() {
-		return height;
+		return worldHeight;
 	}
 
 }
