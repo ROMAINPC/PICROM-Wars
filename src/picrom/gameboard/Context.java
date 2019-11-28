@@ -1,5 +1,7 @@
 package picrom.gameboard;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 
@@ -17,6 +19,18 @@ public class Context extends Group {
 		Y = new SimpleDoubleProperty(y);
 		this.width = new SimpleDoubleProperty(width);
 		this.height = new SimpleDoubleProperty(height);
+	}
+
+	public Context(ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y, ReadOnlyDoubleProperty width,
+			ReadOnlyDoubleProperty height) {
+		X = new SimpleDoubleProperty();
+		X.bind(x);
+		Y = new SimpleDoubleProperty();
+		Y.bind(y);
+		this.width = new SimpleDoubleProperty();
+		this.width.bind(width);
+		this.height = new SimpleDoubleProperty();
+		this.height.bind(height);
 	}
 
 	public SimpleDoubleProperty xProperty() {
