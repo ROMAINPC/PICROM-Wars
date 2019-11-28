@@ -1,9 +1,12 @@
 package picrom.entity.unit;
 
-public class Knight extends Unit{
-	
-	public Knight(){
-		super("Knight", 500, 20, 6, 3, 5);
+import picrom.entity.castle.Castle;
+import picrom.settings.Drawables;
+
+public class Knight extends Unit {
+
+	public Knight(Castle castle) {
+		super(Drawables.knight, 500, 20, 6, 3, 5, castle);
 	}
 
 }

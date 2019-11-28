@@ -1,9 +1,12 @@
 package picrom.entity.unit;
 
-public class Onager extends Unit{
-	
-	public Onager(){
-		super("Onagre", 1000, 50, 1, 5, 10);
+import picrom.entity.castle.Castle;
+import picrom.settings.Drawables;
+
+public class Onager extends Unit {
+
+	public Onager(Castle castle) {
+		super(Drawables.onager, 1000, 50, 1, 5, 10, castle);
 	}
 
 }

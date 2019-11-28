@@ -5,20 +5,20 @@ import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
 import picrom.settings.Drawables;
 
-public class Castle extends Entity implements Producible{
-	
+public class Castle extends Entity implements Producible {
+
 	private ProductionUnit productionUnit;
-
-	
-
-	public Castle(int owner, int X, int Y, World context) {
-		super(Drawables.castle, owner, X, Y, context);
-		productionUnit = new ProductionUnit(this);
-		
-	}
-
 	private int level;
 	private int treasure;
+
+	public Castle(int owner, int X, int Y, World context) {
+		super(Drawables.castle, owner, X, Y, 0, 0, context);
+		level = 1;
+		setNextLevelCost(level);
+		setNextLevelTime(level);
+		productionUnit = new ProductionUnit(this);
+
+	}
 
 	public void addUnit(Unit u) {
 	}
@@ -26,29 +26,33 @@ public class Castle extends Entity implements Producible{
 	public void rmUnit(Unit u) {
 
 	}
+
 	public ProductionUnit getProductionUnit() {
 		return productionUnit;
 	}
 
-	@Override
-	public int getCost() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void setNextLevelCost(int currentLevel) {
+		// TODO change prodCost (Entity)
 	}
 
-	@Override
-	public int getNecessaryTurns() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void setNextLevelTime(int currentLevel) {
+		// TODO change prodtime(Entity)
 	}
 
-	@Override
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
 	public void produce(Castle castle) {
-		// TODO Auto-generated method stub
+		// TODO change level and update next costs
 	}
 
 	public void updateProduction() {
 		productionUnit.update();
-		
+
 	}
 }

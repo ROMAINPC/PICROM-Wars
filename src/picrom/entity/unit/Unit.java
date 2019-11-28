@@ -1,44 +1,19 @@
 package picrom.entity.unit;
 
+import javafx.scene.image.Image;
+import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
 import picrom.entity.castle.Producible;
 
-public class Unit implements Producible {
+public class Unit extends Entity implements Producible {
 
-	private String name;
-	private int prodCost, prodTime, speed, hp, damage;
+	private int speed, hp, damage;
 
-	public Unit(String name, int prodCost, int prodTime, int speed, int hp, int damage) {
-		this.name = name;
-		this.prodCost = prodCost;
-		this.prodTime = prodTime;
+	public Unit(Image img, int prodCost, int prodTime, int speed, int hp, int damage, Castle origin) {
+		super(img, prodCost, prodTime, origin);
 		this.speed = speed;
 		this.hp = hp;
 		this.damage = damage;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getProdCost() {
-		return prodCost;
-	}
-
-	public void setProdCost(int prodCost) {
-		this.prodCost = prodCost;
-	}
-
-	public int getProdTime() {
-		return prodTime;
-	}
-
-	public void setProdTime(int prodTime) {
-		this.prodTime = prodTime;
 	}
 
 	public int getSpeed() {
@@ -65,19 +40,6 @@ public class Unit implements Producible {
 		this.damage = damage;
 	}
 
-	@Override
-	public int getCost() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getNecessaryTurns() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void produce(Castle c) {
 		c.addUnit(this);
 	}

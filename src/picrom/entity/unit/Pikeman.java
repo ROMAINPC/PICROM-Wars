@@ -1,9 +1,12 @@
 package picrom.entity.unit;
 
-public class Pikeman extends Unit{
-	
-	public Pikeman(){
-		super("Pikeman", 100, 5, 2, 1, 1);
+import picrom.entity.castle.Castle;
+import picrom.settings.Drawables;
+
+public class Pikeman extends Unit {
+
+	public Pikeman(Castle castle) {
+		super(Drawables.pikeman, 100, 5, 2, 1, 1, castle);
 	}
 
 }
