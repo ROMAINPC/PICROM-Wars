@@ -1,13 +1,12 @@
 package picrom.entity;
 
-import javafx.scene.Scene;
 import picrom.entity.unit.Unit;
+import picrom.gameboard.World;
 import picrom.settings.Drawables;
-import picrom.settings.Settings;
 
 public class Castle extends Entity {
 
-	public Castle(int owner, int X, int Y, Scene context) {
+	public Castle(int owner, int X, int Y, World context) {
 		super(Drawables.castle, owner, X, Y, context);
 	}
 
@@ -20,13 +19,5 @@ public class Castle extends Entity {
 
 	void rmUnit(Unit u) {
 
-	}
-
-	@Override
-	protected void updateUI() {
-		this.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
-		this.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
-		this.layoutXProperty().bind(this.fitWidthProperty().multiply(this.getWorldX()));
-		this.layoutYProperty().bind(this.fitHeightProperty().multiply(this.getWorldY()));
 	}
 }

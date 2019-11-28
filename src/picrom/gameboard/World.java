@@ -3,13 +3,13 @@ package picrom.gameboard;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javafx.scene.Group;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Castle;
 import picrom.entity.Entity;
 import picrom.settings.Drawables;
-import picrom.settings.Settings;
 
 public class World extends Context {
 
@@ -30,22 +30,25 @@ public class World extends Context {
 	private int nbAIs;
 	private int nbBarons;
 
-	private Scene context;
 	private Castle cTest;
 
 	public World(int worldWidth, int worldHeight, Scene context) {
-		super(0, 0, Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT);
+		this(worldWidth, worldHeight, context.xProperty(), context.yProperty(), context.widthProperty(),
+				context.heightProperty());
+
+	}
+
+	public World(int worldWidth, int worldHeight, ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y,
+			ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
+		super(x, y, width, height); // linking layout
 		// generate background and manage layout with parent
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
-		this.context = context;
-
-		cTest = new Castle(42, 6, 5, context);
 
 		// load and display background:
 		ImageView background = new ImageView(Drawables.worldBackground);
-		background.fitWidthProperty().bind(context.widthProperty());
-		background.fitHeightProperty().bind(context.heightProperty());
+		background.fitWidthProperty().bind(this.widthProperty());
+		background.fitHeightProperty().bind(this.heightProperty());
 		this.getChildren().add(background);
 	}
 
@@ -53,10 +56,10 @@ public class World extends Context {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
 		castlesArray = new Castle[worldWidth][worldHeight];
-
+		cTest = new Castle(42, 9, 5, this);
 		// TODO generates castles, randomize position
-		this.getChildren().addAll(new Castle(42, 2, 4, context), new Castle(66, 6, 4, context),
-				new Castle(42, 6, 5, context), new Castle(42, 7, 5, context), cTest);
+		this.getChildren().addAll(new Castle(42, 2, 4, this), new Castle(66, 6, 4, this), new Castle(42, 6, 5, this),
+				new Castle(42, 7, 5, this), cTest);
 
 	}
 
