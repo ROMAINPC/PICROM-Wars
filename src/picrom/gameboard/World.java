@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
-import picrom.entity.unit.Onager;
+import picrom.entity.unit.Knight;
 import picrom.settings.Drawables;
 
 public class World extends Context {
@@ -57,7 +57,6 @@ public class World extends Context {
 		// TODO generates castles, randomize position
 		this.getChildren().addAll(new Castle(42, 2, 4, this), new Castle(66, 6, 4, this), new Castle(42, 6, 5, this),
 				new Castle(42, 7, 5, this));
-
 	}
 
 	public void processCastles() {

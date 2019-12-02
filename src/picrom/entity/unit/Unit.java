@@ -4,12 +4,13 @@ import javafx.scene.image.Image;
 import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
 import picrom.entity.castle.Producible;
+import picrom.settings.Drawables.EntityAssets;
 
 public class Unit extends Entity implements Producible {
 
 	private int speed, hp, damage;
 
-	public Unit(Image img, int prodCost, int prodTime, int speed, int hp, int damage, Castle origin) {
+	public Unit(EntityAssets img, int prodCost, int prodTime, int speed, int hp, int damage, Castle origin) {
 		super(img, prodCost, prodTime, origin);
 		this.speed = speed;
 		this.hp = hp;

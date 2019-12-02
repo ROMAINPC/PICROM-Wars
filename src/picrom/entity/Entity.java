@@ -1,13 +1,15 @@
 package picrom.entity;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.image.Image;
+import javafx.scene.Group;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import picrom.entity.castle.Castle;
 import picrom.gameboard.World;
+import picrom.settings.Drawables.EntityAssets;
 import picrom.settings.Settings;
 
-public abstract class Entity extends ImageView {
+public abstract class Entity extends Group {
 	private SimpleDoubleProperty worldX;
 	private SimpleDoubleProperty worldY;
 	private int owner; // TODO create owner type
@@ -15,22 +17,40 @@ public abstract class Entity extends ImageView {
 
 	protected World context;
 
-	protected Entity(Image img, int owner, int X, int Y, int prodCost, int prodTime, World world) {
-		this.setImage(img);
+	private ImageView image;
+	private ImageView mask;
+
+	protected Entity(EntityAssets assets, int owner, int X, int Y, int prodCost, int prodTime, World world) {
+		// this.setImage(img);
+
+		image = new ImageView(assets.getImage());
+		mask = new ImageView(assets.getMask());
 		this.owner = owner;
 		worldX = new SimpleDoubleProperty(X);
 		worldY = new SimpleDoubleProperty(Y);
 		this.prodCost = prodCost;
 		this.prodTime = prodTime;
 		context = world;
-		// default binding:
-		this.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
-		this.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
-		this.layoutXProperty().bind(this.fitWidthProperty().multiply(this.worldX));
-		this.layoutYProperty().bind(this.fitHeightProperty().multiply(this.worldY));
+
+		// default binding
+		image.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
+		image.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
+		image.layoutXProperty().bind(image.fitWidthProperty().multiply(this.worldX));
+		image.layoutYProperty().bind(image.fitHeightProperty().multiply(this.worldY));
+		mask.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
+		mask.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
+		mask.layoutXProperty().bind(image.fitWidthProperty().multiply(this.worldX));
+		mask.layoutYProperty().bind(image.fitHeightProperty().multiply(this.worldY));
+
+		// color effect:
+		ColorAdjust colorAdjust = new ColorAdjust();
+		colorAdjust.setHue(0.5d);// TODO
+		mask.setEffect(colorAdjust);
+
+		this.getChildren().addAll(image, mask); // add assets
 	}
 
-	protected Entity(Image img, int prodCost, int prodTime, Castle owner) {
+	protected Entity(EntityAssets img, int prodCost, int prodTime, Castle owner) {
 		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.context);
 	}
 
