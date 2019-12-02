@@ -1,15 +1,19 @@
 package picrom.gameboard;
+import javafx.scene.paint.Color;
 
 import java.util.LinkedList;
 import java.util.Random;
+
+import com.sun.prism.paint.Color;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
+import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
-import picrom.entity.unit.Onager;
 import picrom.settings.Drawables;
+import picrom.settings.Settings;
 
 public class World extends Context {
 
@@ -21,7 +25,7 @@ public class World extends Context {
 	// lists of entities engaged in the world.
 	private LinkedList<Entity> castles;
 	private LinkedList<Entity> entities;
-
+	
 	// size in number of cells
 	private int worldWidth;
 	private int worldHeight;
@@ -54,9 +58,15 @@ public class World extends Context {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
 		castlesArray = new Castle[worldWidth][worldHeight];
+		
+		Owner loic = new Owner(Color.RED, "Loic", Settings.OwnerType.Player);
+		Owner romain = new Owner(Color.BLUE, "Romain", Settings.OwnerType.AI);
+		Owner switzerland = new Owner(Color.WHITE, "Switzerland", Settings.OwnerType.Baron);
+		
 		// TODO generates castles, randomize position
-		this.getChildren().addAll(new Castle(42, 2, 4, this), new Castle(66, 6, 4, this), new Castle(42, 6, 5, this),
-				new Castle(42, 7, 5, this));
+		this.getChildren().addAll(new Castle(loic, 2, 4, this), 
+								  new Castle(romain, 6, 4, this), 
+								  new Castle(switzerland, 6, 5, this));
 
 	}
 

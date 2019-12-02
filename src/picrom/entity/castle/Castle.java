@@ -1,6 +1,7 @@
 package picrom.entity.castle;
 
 import picrom.entity.Entity;
+import picrom.entity.Owner;
 import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
 import picrom.settings.Drawables;
@@ -11,7 +12,7 @@ public class Castle extends Entity implements Producible {
 	private int level;
 	private int treasure;
 
-	public Castle(int owner, int X, int Y, World context) {
+	public Castle(Owner owner, int X, int Y, World context) {
 		super(Drawables.castle, owner, X, Y, 0, 0, context);
 		level = 1;
 		setNextLevelCost(level);
@@ -47,12 +48,19 @@ public class Castle extends Entity implements Producible {
 		this.level = level;
 	}
 
+	public int getTreasure() {
+		return treasure;
+	}
+
+	public void setTreasure(int treasure) {
+		this.treasure = treasure;
+	}
+	
 	public void produce(Castle castle) {
 		// TODO change level and update next costs
 	}
 
 	public void updateProduction() {
 		productionUnit.update();
-
 	}
 }

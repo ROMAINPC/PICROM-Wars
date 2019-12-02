@@ -10,12 +10,12 @@ import picrom.settings.Settings;
 public abstract class Entity extends ImageView {
 	private SimpleDoubleProperty worldX;
 	private SimpleDoubleProperty worldY;
-	private int owner; // TODO create owner type
+	private Owner owner; // TODO create owner type
 	private int prodCost, prodTime;
 
 	protected World context;
 
-	protected Entity(Image img, int owner, int X, int Y, int prodCost, int prodTime, World world) {
+	protected Entity(Image img, Owner owner, int X, int Y, int prodCost, int prodTime, World world) {
 		this.setImage(img);
 		this.owner = owner;
 		worldX = new SimpleDoubleProperty(X);
@@ -34,11 +34,11 @@ public abstract class Entity extends ImageView {
 		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.context);
 	}
 
-	public int getOwner() {
+	public Owner getOwner() {
 		return owner;
 	}
 
-	public void setOwner(int owner) {
+	public void setOwner(Owner owner) {
 		this.owner = owner;
 	}
 
