@@ -12,7 +12,7 @@ import picrom.settings.Settings;
 public abstract class Entity extends Group {
 	private SimpleDoubleProperty worldX;
 	private SimpleDoubleProperty worldY;
-	private int owner; // TODO create owner type
+	private Owner owner; // TODO create owner type
 	private int prodCost, prodTime;
 
 	protected World context;
@@ -20,9 +20,7 @@ public abstract class Entity extends Group {
 	private ImageView image;
 	private ImageView mask;
 
-	protected Entity(EntityAssets assets, int owner, int X, int Y, int prodCost, int prodTime, World world) {
-		// this.setImage(img);
-
+	protected Entity(EntityAssets assets, Owner owner, int X, int Y, int prodCost, int prodTime, World world) {
 		image = new ImageView(assets.getImage());
 		mask = new ImageView(assets.getMask());
 		this.owner = owner;
@@ -54,11 +52,11 @@ public abstract class Entity extends Group {
 		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.context);
 	}
 
-	public int getOwner() {
+	public Owner getOwner() {
 		return owner;
 	}
 
-	public void setOwner(int owner) {
+	public void setOwner(Owner owner) {
 		this.owner = owner;
 	}
 
