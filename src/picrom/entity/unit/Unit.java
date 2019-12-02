@@ -1,6 +1,5 @@
 package picrom.entity.unit;
 
-import javafx.scene.image.Image;
 import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
 import picrom.entity.castle.Producible;

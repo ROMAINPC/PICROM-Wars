@@ -7,30 +7,31 @@ import picrom.settings.Settings;
 
 public class Owner {
 	private static Random random = new Random();
-	
-	private double hue; //betwenn -1.0 and 1.0
-	private String name;//not use as ID, prefer object reference
+
+	private Color color;
+	private String name;// not use as ID, prefer object reference
 	private Settings.OwnerType ownerType;
 
-	public Owner(double hue, String name, Settings.OwnerType ownerType) {
-		hue = hue > 1.0 ? 1.0 : hue;
-		hue = hue > 1.0 ? 1.0 : hue;
-		this.hue = hue;
+	public Owner(Color color, String name, Settings.OwnerType ownerType) {
+		this.color = color;
 		this.name = name;
 		this.ownerType = ownerType;
 	}
 
 	public Owner(Settings.OwnerType ownerType) {
-		this(0, null, ownerType);
-		this.hue = random.nextDouble() * 2 - 1; 
+		this(null, null, ownerType);
+		// generate random color:
+		this.color = Color.hsb(random.nextInt(360), 1.0, 1.0);
+
+		// generate random name ?
 	}
 
-	public double getHue() {
-		return hue;
+	public Color getColor() {
+		return color;
 	}
 
-	public void setHue(double hue) {
-		this.hue = hue;
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	public String getName() {

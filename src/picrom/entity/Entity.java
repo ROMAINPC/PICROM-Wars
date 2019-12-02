@@ -4,10 +4,12 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import picrom.entity.castle.Castle;
 import picrom.gameboard.World;
 import picrom.settings.Drawables.EntityAssets;
 import picrom.settings.Settings;
+import picrom.settings.Utils;
 
 public abstract class Entity extends Group {
 	private SimpleDoubleProperty worldX;
@@ -41,12 +43,12 @@ public abstract class Entity extends Group {
 		mask.layoutYProperty().bind(image.fitHeightProperty().multiply(this.worldY));
 
 		// color effect:
-		ColorAdjust colorAdjust = new ColorAdjust();
-		colorAdjust.setHue(owner.getHue());
-		mask.setEffect(colorAdjust);
+		applyColor(owner.getColor());
 
 		this.getChildren().addAll(image, mask); // add assets
 	}
+	
+	
 
 	protected Entity(EntityAssets img, int prodCost, int prodTime, Castle owner) {
 		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.context);
@@ -58,6 +60,7 @@ public abstract class Entity extends Group {
 
 	public void setOwner(Owner owner) {
 		this.owner = owner;
+		applyColor(owner.getColor());
 	}
 
 	public int getWorldX() {
@@ -90,5 +93,14 @@ public abstract class Entity extends Group {
 
 	public void setProdTime(int prodTime) {
 		this.prodTime = prodTime;
+	}
+	
+	private void applyColor(Color c) {
+		//colorize white mask:
+		ColorAdjust colorAdjust = new ColorAdjust();
+		colorAdjust.setHue(Utils.map( (c.getHue() + 180) % 360, 0, 360, -1, 1));
+		colorAdjust.setSaturation(c.getSaturation());
+		colorAdjust.setBrightness(Utils.map( c.getBrightness(), 0, 1, -1, 0));
+		mask.setEffect(colorAdjust);
 	}
 }

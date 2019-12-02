@@ -1,8 +1,5 @@
 package picrom.entity.castle;
 
-import picrom.entity.unit.Unit;
-import picrom.gameboard.World;
-
 public class ProductionUnit {
 
 	private Castle castle;
