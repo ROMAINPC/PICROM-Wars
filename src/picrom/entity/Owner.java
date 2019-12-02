@@ -1,30 +1,36 @@
 package picrom.entity;
 
+import java.util.Random;
+
 import javafx.scene.paint.Color;
 import picrom.settings.Settings;
 
 public class Owner {
-
-	private Color color;
+	private static Random random = new Random();
+	
+	private double hue; //betwenn -1.0 and 1.0
 	private String name;//not use as ID, prefer object reference
 	private Settings.OwnerType ownerType;
 
-	public Owner(Color color, String name, Settings.OwnerType ownerType) {
-		this.color = color;
+	public Owner(double hue, String name, Settings.OwnerType ownerType) {
+		hue = hue > 1.0 ? 1.0 : hue;
+		hue = hue > 1.0 ? 1.0 : hue;
+		this.hue = hue;
 		this.name = name;
 		this.ownerType = ownerType;
 	}
 
 	public Owner(Settings.OwnerType ownerType) {
-		this(Color.ORANGE, null, ownerType);// TODO color
+		this(0, null, ownerType);
+		this.hue = random.nextDouble() * 2 - 1; 
 	}
 
-	public Color getColor() {
-		return color;
+	public double getHue() {
+		return hue;
 	}
 
-	public void setColor(Color color) {
-		this.color = color;
+	public void setHue(double hue) {
+		this.hue = hue;
 	}
 
 	public String getName() {

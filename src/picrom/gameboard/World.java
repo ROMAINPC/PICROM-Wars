@@ -33,6 +33,10 @@ public class World extends Context {
 	
 	private Castle test;
 	private Knight testU;
+	private Castle test2;
+	private Knight testU2;
+	private Castle test3;
+	private Knight testU3;
 
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, context.xProperty(), context.yProperty(), context.widthProperty(),
@@ -68,6 +72,12 @@ public class World extends Context {
 		test = new Castle(Settings.OwnerType.AI, 0, 8, this);
 		testU = new Knight(test);
 		this.getChildren().addAll(test, testU);
+		test2 = new Castle(Settings.OwnerType.AI, 0, 9, this);
+		testU2 = new Knight(test2);
+		this.getChildren().addAll(test2, testU2);
+		test3 = new Castle(Settings.OwnerType.AI, 0, 10, this);
+		testU3 = new Knight(test3);
+		this.getChildren().addAll(test3, testU3);
 		
 		
 
@@ -84,6 +94,9 @@ public class World extends Context {
 	// Process units engaged on the field
 	public void processUnits() {
 		// TODO move units
+		testU.setWorldX(testU.getWorldX()+1);
+		testU2.setWorldX(testU2.getWorldX()+2);
+		testU3.setWorldX(testU3.getWorldX()+3);
 
 		// TODO assault or enter castle, if unit reached the target
 	}

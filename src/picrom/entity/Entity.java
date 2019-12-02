@@ -42,7 +42,7 @@ public abstract class Entity extends Group {
 
 		// color effect:
 		ColorAdjust colorAdjust = new ColorAdjust();
-		colorAdjust.setHue(0.5d);// TODO
+		colorAdjust.setHue(owner.getHue());
 		mask.setEffect(colorAdjust);
 
 		this.getChildren().addAll(image, mask); // add assets
