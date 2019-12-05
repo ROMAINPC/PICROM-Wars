@@ -2,31 +2,30 @@ package picrom.gameboard;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.List;
+import java.util.Map;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import picrom.entity.Entity;
 import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
 import picrom.entity.unit.Knight;
 import picrom.entity.unit.Onager;
+import picrom.entity.unit.Unit;
 import picrom.settings.Drawables;
 import picrom.settings.Settings;
 
 public class World extends Context {
 
-	private static final Random random = new Random();
-
 	// 2D array to store castles positions (used for click)
 	private Castle[][] castlesArray;
 
-	// lists of entities engaged in the world
-	private LinkedList<Entity> entities;
+	// lists of units engaged in the world
+	private List<Unit> entities;
 
 	// hashmap that binds owners to their castles
-	private HashMap<Owner, LinkedList<Castle>> castles;
+	private Map<Owner, List<Castle>> castles;
 
 	// size in number of cells
 	private int worldWidth;
@@ -55,6 +54,10 @@ public class World extends Context {
 		// generate background and manage layout with parent
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
+
+		this.castlesArray = new Castle[worldWidth][worldHeight];
+		this.entities = new LinkedList<Unit>();
+		this.castles = new HashMap<Owner, List<Castle>>();
 
 		// load and display background:
 		ImageView background = new ImageView(Drawables.worldBackground);
