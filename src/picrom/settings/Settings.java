@@ -17,6 +17,7 @@ public class Settings {
 	public static final int WORLD_HEIGHT = 15;
 	public static final int NUMBER_OF_AIS = 3;
 	public static final int NUMBER_OF_BARONS = 6;
+	public static final int MINIMAL_CASTLE_DISTANCE = 2;
 
 	// graphical settings:
 	public static final double DEFAULT_SCENE_WIDTH = 900;
