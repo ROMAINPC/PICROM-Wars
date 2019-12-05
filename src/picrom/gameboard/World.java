@@ -10,11 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
-import picrom.entity.unit.Knight;
-import picrom.entity.unit.Onager;
 import picrom.entity.unit.Unit;
 import picrom.settings.Drawables;
-import picrom.settings.Settings;
+import picrom.settings.Settings.OwnerType;
 
 public class World extends Context {
 
@@ -31,16 +29,10 @@ public class World extends Context {
 	private int worldWidth;
 	private int worldHeight;
 
-	private int nbPlayers = 1;
+	private int nbPlayers;
 	private int nbAIs;
 	private int nbBarons;
-
-	private Castle test;
-	private Knight testU;
-	private Castle test2;
-	private Onager testU2;
-	private Castle test3;
-	private Knight testU3;
+	
 
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, context.xProperty(), context.yProperty(), context.widthProperty(),
@@ -65,25 +57,27 @@ public class World extends Context {
 		background.fitHeightProperty().bind(this.heightProperty());
 		this.getChildren().add(background);
 	}
-
-	public void generateWorldCastles(int nbAIs, int nbBarons) {
+	
+	public void generateOwners(int nbAIs, int nbBarons) {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
-		castlesArray = new Castle[worldWidth][worldHeight];
+		this.nbPlayers = 1;
+		
+		//generate Map structure:
+		//generate player:
+		for(int i = 0 ; i < this.nbPlayers ; i++)
+			castles.put(new Owner(OwnerType.Player), new LinkedList<Castle>());
+		//generate AIs:
+		for(int i = 0 ; i < this.nbAIs ; i++)
+			castles.put(new Owner(OwnerType.AI), new LinkedList<Castle>());
+		//generate barons:
+		for(int i = 0 ; i < this.nbBarons ; i++)
+			castles.put(new Owner(OwnerType.Baron), new LinkedList<Castle>());
+	}
 
+	public void generateWorldCastles() {
 		// TODO generates castles, randomize position
-		this.getChildren().addAll(new Castle(Settings.OwnerType.AI, 2, 4, this),
-				new Castle(Settings.OwnerType.AI, 6, 4, this), new Castle(Settings.OwnerType.AI, 6, 5, this));
-
-		test = new Castle(Settings.OwnerType.AI, 0, 8, this);
-		testU = new Knight(test);
-		this.getChildren().addAll(test, testU);
-		test2 = new Castle(Settings.OwnerType.AI, 0, 9, this);
-		testU2 = new Onager(test2);
-		this.getChildren().addAll(test2, testU2);
-		test3 = new Castle(Settings.OwnerType.AI, 0, 10, this);
-		testU3 = new Knight(test3);
-		this.getChildren().addAll(test3, testU3);
+		
 
 	}
 
@@ -98,9 +92,7 @@ public class World extends Context {
 	// Process units engaged on the field
 	public void processUnits() {
 		// TODO move units
-		testU.setWorldX(testU.getWorldX() + 1);
-		testU2.setWorldX(testU2.getWorldX() + 2);
-		testU3.setWorldX(testU3.getWorldX() + 3);
+		
 
 		// TODO assault or enter castle, if unit reached the target
 	}

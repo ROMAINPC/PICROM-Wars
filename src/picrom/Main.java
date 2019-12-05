@@ -21,13 +21,16 @@ public class Main extends Application {
 			Group root = new Group();
 			Scene scene = new Scene(root, Settings.DEFAULT_SCENE_WIDTH, Settings.DEFAULT_SCENE_HEIGHT);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
-			//loading textures:
+
+			// loading textures:
 			new Drawables();
-			
+
 			// Create world:
 			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, scene);
-			gameboard.generateWorldCastles(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
+
+			gameboard.generateOwners(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
+
+			gameboard.generateWorldCastles();
 
 			// setup GUI:
 			root.getChildren().add(gameboard);
@@ -36,13 +39,13 @@ public class Main extends Application {
 			gameLoop.setCycleCount(Timeline.INDEFINITE);
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
-					//TODO test if pause disabled
+					// TODO test if pause disabled
 
 					// update world:
 					gameboard.processCastles();
 					gameboard.processUnits();
 
-					//TODO Test end of game
+					// TODO Test end of game
 				}
 			}));
 
