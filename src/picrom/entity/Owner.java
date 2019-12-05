@@ -3,6 +3,7 @@ package picrom.entity;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
+import picrom.settings.Kingdom;
 import picrom.settings.Settings;
 
 public class Owner {
@@ -19,11 +20,10 @@ public class Owner {
 	}
 
 	public Owner(Settings.OwnerType ownerType) {
-		this(null, null, ownerType);
-		// generate random color:
-		this.color = Color.hsb(random.nextInt(360), 1.0, 1.0);
-
-		// generate random name ?
+		Kingdom k = Kingdom.randomKingdom();
+		this.color = k.getColor();
+		this.name = k.getName();
+		this.ownerType = ownerType;
 	}
 
 	public Color getColor() {
