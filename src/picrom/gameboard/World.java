@@ -1,5 +1,6 @@
 package picrom.gameboard;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -7,6 +8,7 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
+import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
 import picrom.entity.unit.Knight;
 import picrom.entity.unit.Onager;
@@ -17,12 +19,14 @@ public class World extends Context {
 
 	private static final Random random = new Random();
 
-	// 2D array to store castle, used essentially for click events.
+	// 2D array to store castles positions (used for click)
 	private Castle[][] castlesArray;
 
-	// lists of entities engaged in the world.
-	private LinkedList<Entity> castles;
+	// lists of entities engaged in the world
 	private LinkedList<Entity> entities;
+
+	// hashmap that binds owners to their castles
+	private HashMap<Owner, LinkedList<Castle>> castles;
 
 	// size in number of cells
 	private int worldWidth;
