@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import picrom.settings.Settings;
 
 public class Owner {
-	private static Random random = new Random();
+	private static Random random = Settings.SEED;
 
 	private Color color;
 	private String name;// not use as ID, prefer object reference

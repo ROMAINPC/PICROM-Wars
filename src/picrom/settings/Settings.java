@@ -1,5 +1,7 @@
 package picrom.settings;
 
+import java.util.Random;
+
 import javafx.util.Duration;
 
 /**
@@ -19,6 +21,9 @@ public class Settings {
 	// graphical settings:
 	public static final double DEFAULT_SCENE_WIDTH = 900;
 	public static final double DEFAULT_SCENE_HEIGHT = 750;
+	
+	//game seed:
+	public static final Random SEED = new Random();
 	
 	public static enum OwnerType{
 		Player,
