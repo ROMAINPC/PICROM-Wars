@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.Owner;
@@ -39,14 +40,14 @@ public class World extends Context {
 	private int nbBarons;
 
 	public World(int worldWidth, int worldHeight, Scene context) {
-		this(worldWidth, worldHeight, context.xProperty(), context.yProperty(), context.widthProperty(),
+		this(worldWidth, worldHeight, new SimpleDoubleProperty(0), new SimpleDoubleProperty(0), context.widthProperty(),
 				context.heightProperty());
 
 	}
 
 	public World(int worldWidth, int worldHeight, ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y,
 			ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
-		super(x, y, width, height); // linking layout
+		super(x, y, width, height, (double) worldWidth / (double) worldHeight); // linking layout
 		// generate background and manage layout with parent
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
@@ -59,6 +60,8 @@ public class World extends Context {
 		ImageView background = new ImageView(Drawables.worldBackground);
 		background.fitWidthProperty().bind(this.widthProperty());
 		background.fitHeightProperty().bind(this.heightProperty());
+		background.xProperty().bind(this.xProperty());
+		background.yProperty().bind(this.yProperty());
 		this.getChildren().add(background);
 	}
 
@@ -86,7 +89,7 @@ public class World extends Context {
 		for (Owner owner : castles.keySet()) {
 			boolean valid = false;
 			int x = 0, y = 0;
-			//TODO : security to avoid while loop if too many castles
+			// TODO : security to avoid while loop if too many castles
 			while (!valid) { // avoid too near castles.
 				x = random.nextInt(worldWidth);
 				y = random.nextInt(worldHeight);

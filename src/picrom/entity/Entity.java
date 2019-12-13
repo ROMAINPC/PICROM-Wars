@@ -35,12 +35,12 @@ public abstract class Entity extends Group {
 		// default binding
 		image.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
 		image.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
-		image.layoutXProperty().bind(image.fitWidthProperty().multiply(this.worldX));
-		image.layoutYProperty().bind(image.fitHeightProperty().multiply(this.worldY));
+		image.layoutXProperty().bind(context.xProperty().add(image.fitWidthProperty().multiply(this.worldX)));
+		image.layoutYProperty().bind(context.yProperty().add(image.fitHeightProperty().multiply(this.worldY)));
 		mask.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
 		mask.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
-		mask.layoutXProperty().bind(image.fitWidthProperty().multiply(this.worldX));
-		mask.layoutYProperty().bind(image.fitHeightProperty().multiply(this.worldY));
+		mask.layoutXProperty().bind(context.xProperty().add(image.fitWidthProperty().multiply(this.worldX)));
+		mask.layoutYProperty().bind(context.yProperty().add(image.fitHeightProperty().multiply(this.worldY)));
 
 		// color effect:
 		applyColor(owner.getColor());

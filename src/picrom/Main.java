@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import picrom.gameboard.World;
 import picrom.settings.Drawables;
@@ -21,9 +22,10 @@ public class Main extends Application {
 			Group root = new Group();
 			Scene scene = new Scene(root, Settings.DEFAULT_SCENE_WIDTH, Settings.DEFAULT_SCENE_HEIGHT);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
+			
 			// loading textures:
 			new Drawables();
+			scene.setFill(Color.BLACK);
 
 			// Create world:
 			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, scene);

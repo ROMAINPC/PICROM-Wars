@@ -1,5 +1,7 @@
 package picrom.gameboard;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
@@ -30,6 +32,32 @@ public class Context extends Group {
 		this.width.bind(width);
 		this.height = new SimpleDoubleProperty();
 		this.height.bind(height);
+	}
+
+	/**
+	 * Context with preserved ratio, context property may be different from property
+	 * passed, however there is always a binding.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param ratio  Wanted preserved ratio, Context surface will cover the maximum
+	 *               area but whithout affect this ratio. Ratio = Width / Height
+	 */
+	public Context(ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y, ReadOnlyDoubleProperty width,
+			ReadOnlyDoubleProperty height, double ratio) {
+
+		X = new SimpleDoubleProperty();
+		Y = new SimpleDoubleProperty();
+		this.width = new SimpleDoubleProperty();
+		this.height = new SimpleDoubleProperty();
+
+		When condition = Bindings.when((width.divide(height)).greaterThanOrEqualTo(ratio));
+		this.width.bind(condition.then(this.height.multiply(ratio)).otherwise(width));
+		this.height.bind(condition.then(height).otherwise(this.width.divide(ratio)));
+		X.bind(x.add((width.subtract(this.width)).divide(2)));
+		Y.bind(y.add((height.subtract(this.height)).divide(2)));
 	}
 
 	public SimpleDoubleProperty xProperty() {
