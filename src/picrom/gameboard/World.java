@@ -82,15 +82,19 @@ public class World extends Context {
 			castles.put(new Owner(OwnerType.Baron), new LinkedList<Castle>());
 	}
 
-	public void generateWorldCastles() {
+	public void generateWorldCastles() throws TooManyCastlesException {
 		// TODO generates castles, randomize position
 
 		// Each owner (player or AI or baron) start the game with one castle.
+		long time = System.currentTimeMillis();
 		for (Owner owner : castles.keySet()) {
 			boolean valid = false;
 			int x = 0, y = 0;
 			// TODO : security to avoid while loop if too many castles
 			while (!valid) { // avoid too near castles.
+				// infinite loop check:
+				if (System.currentTimeMillis() - time > 1000)
+					throw new TooManyCastlesException();
 				x = random.nextInt(worldWidth);
 				y = random.nextInt(worldHeight);
 				valid = true;
@@ -113,7 +117,6 @@ public class World extends Context {
 			this.getChildren().add(castle);
 
 		}
-
 	}
 
 	public void processCastles() {
