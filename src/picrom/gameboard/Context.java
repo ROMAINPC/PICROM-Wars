@@ -5,6 +5,7 @@ import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -107,6 +108,24 @@ public class Context extends Group {
 		s.yProperty().bind(Y.add(height.multiply(yRatio)));
 		s.widthProperty().bind(width.multiply(widthRatio));
 		s.heightProperty().bind(height.multiply(heightRatio));
+	}
+
+	/**
+	 * Function to anchor a ImageView in the context.
+	 * 
+	 * @param iV          The ImageView to anchor
+	 * @param xRatio      X position in the context (value between 0.0 and 1.0)
+	 * @param yRatio      Y position in the context (value between 0.0 and 1.0)
+	 * @param widthRatio  Fraction of the Width of the context (value between 0.0
+	 *                    and 1.0)
+	 * @param heightRatio Fraction of the height of the context (value between 0.0
+	 *                    and 1.0)
+	 */
+	public void bindIn(ImageView iV, int xRatio, int yRatio, int widthRatio, int heightRatio) {
+		iV.xProperty().bind(X.add(width.multiply(xRatio)));
+		iV.yProperty().bind(Y.add(height.multiply(yRatio)));
+		iV.fitWidthProperty().bind(width.multiply(widthRatio));
+		iV.fitHeightProperty().bind(height.multiply(heightRatio));
 	}
 
 }

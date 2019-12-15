@@ -10,8 +10,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 import picrom.gameboard.Context;
@@ -56,15 +56,11 @@ public class Main extends Application {
 
 			// setup GUI:
 			Context infos = new Context();
-			infos.xProperty().bind(vSeparator);
-			infos.yProperty().bind(gameboard.yProperty());
-			infos.heightProperty().bind(gameboard.heightProperty());
+			infos.xProperty().bind(gameboard.xProperty().add(gameboard.widthProperty()));
+			infos.yProperty().set(0);
+			infos.heightProperty().bind(scene.heightProperty());
 			infos.widthProperty().bind(scene.widthProperty().multiply(1 - Settings.WORLD_WIDTH_RATIO));
-			Rectangle infosBackground = new Rectangle();
-			infosBackground.setStroke(Color.BLUE);
-			infosBackground.setStrokeType(StrokeType.INSIDE);
-			infosBackground.setStrokeWidth(30);
-			infosBackground.setFill(Color.RED);
+			ImageView infosBackground = new ImageView(Drawables.infosBackground);
 			infos.bindIn(infosBackground, 0, 0, 1, 1);
 			infos.getChildren().add(infosBackground);
 

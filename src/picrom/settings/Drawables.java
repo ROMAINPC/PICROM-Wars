@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 public class Drawables {
 
 	public static Image worldBackground;
+	public static Image infosBackground;
 	public static EntityAssets castle;
 	public static EntityAssets onager;
 	public static EntityAssets knight;
@@ -15,9 +16,10 @@ public class Drawables {
 
 	public Drawables() {
 		worldBackground = new Image("Drawables/world_background.png");
+		infosBackground = new Image("Drawables/infos_background.png");
 
 		castle = new EntityAssets("castle");
-		onager = new EntityAssets("knight");// TODO
+		onager = new EntityAssets("onager");
 		knight = new EntityAssets("knight");
 		pikeman = new EntityAssets("knight");// TODO
 	}
