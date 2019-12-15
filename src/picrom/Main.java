@@ -3,6 +3,7 @@ package picrom;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -10,7 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
+import picrom.gameboard.Context;
 import picrom.gameboard.TooManyCastlesException;
 import picrom.gameboard.World;
 import picrom.settings.Drawables;
@@ -31,7 +35,10 @@ public class Main extends Application {
 			scene.setFill(Color.BLACK);
 
 			// Create world:
-			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, scene);
+			SimpleDoubleProperty vSeparator = new SimpleDoubleProperty();
+			vSeparator.bind(scene.widthProperty().multiply(Settings.WORLD_WIDTH_RATIO));
+			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, new SimpleDoubleProperty(0),
+					new SimpleDoubleProperty(0), vSeparator, scene.heightProperty());
 
 			gameboard.generateOwners(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
 
@@ -48,8 +55,23 @@ public class Main extends Application {
 			}
 
 			// setup GUI:
-			root.getChildren().add(gameboard);
+			Context infos = new Context();
+			infos.xProperty().bind(vSeparator);
+			infos.yProperty().bind(gameboard.yProperty());
+			infos.heightProperty().bind(gameboard.heightProperty());
+			infos.widthProperty().bind(scene.widthProperty().multiply(1 - Settings.WORLD_WIDTH_RATIO));
+			Rectangle infosBackground = new Rectangle();
+			infosBackground.setStroke(Color.BLUE);
+			infosBackground.setStrokeType(StrokeType.INSIDE);
+			infosBackground.setStrokeWidth(30);
+			infosBackground.setFill(Color.RED);
+			infos.bindIn(infosBackground, 0, 0, 1, 1);
+			infos.getChildren().add(infosBackground);
 
+			// add elements:
+			root.getChildren().addAll(gameboard, infos);
+
+			// Main game loop:
 			Timeline gameLoop = new Timeline();
 			gameLoop.setCycleCount(Timeline.INDEFINITE);
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {

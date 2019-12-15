@@ -5,6 +5,7 @@ import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Class representing a Group with fixed dimensions.
@@ -14,23 +15,30 @@ public class Context extends Group {
 	private SimpleDoubleProperty Y;
 	private SimpleDoubleProperty width;
 	private SimpleDoubleProperty height;
+	private SimpleDoubleProperty largerWidth;
+	private SimpleDoubleProperty largerHeight;
+
+	public Context() {
+		X = new SimpleDoubleProperty();
+		Y = new SimpleDoubleProperty();
+		this.width = new SimpleDoubleProperty();
+		this.height = new SimpleDoubleProperty();
+	}
 
 	public Context(double x, double y, double width, double height) {
-		X = new SimpleDoubleProperty(x);
-		Y = new SimpleDoubleProperty(y);
-		this.width = new SimpleDoubleProperty(width);
-		this.height = new SimpleDoubleProperty(height);
+		this();
+		X.set(x);
+		Y.set(y);
+		this.width.set(width);
+		this.height.set(height);
 	}
 
 	public Context(ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y, ReadOnlyDoubleProperty width,
 			ReadOnlyDoubleProperty height) {
-		X = new SimpleDoubleProperty();
+		this();
 		X.bind(x);
-		Y = new SimpleDoubleProperty();
 		Y.bind(y);
-		this.width = new SimpleDoubleProperty();
 		this.width.bind(width);
-		this.height = new SimpleDoubleProperty();
 		this.height.bind(height);
 	}
 
@@ -47,17 +55,16 @@ public class Context extends Group {
 	 */
 	public Context(ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y, ReadOnlyDoubleProperty width,
 			ReadOnlyDoubleProperty height, double ratio) {
-
-		X = new SimpleDoubleProperty();
-		Y = new SimpleDoubleProperty();
-		this.width = new SimpleDoubleProperty();
-		this.height = new SimpleDoubleProperty();
-
+		this();
 		When condition = Bindings.when((width.divide(height)).greaterThanOrEqualTo(ratio));
 		this.width.bind(condition.then(this.height.multiply(ratio)).otherwise(width));
 		this.height.bind(condition.then(height).otherwise(this.width.divide(ratio)));
 		X.bind(x.add((width.subtract(this.width)).divide(2)));
 		Y.bind(y.add((height.subtract(this.height)).divide(2)));
+		largerWidth = new SimpleDoubleProperty();
+		largerWidth.bind(width);
+		largerHeight = new SimpleDoubleProperty();
+		largerHeight.bind(height);
 	}
 
 	public SimpleDoubleProperty xProperty() {
@@ -74,6 +81,32 @@ public class Context extends Group {
 
 	public SimpleDoubleProperty heightProperty() {
 		return height;
+	}
+
+	public SimpleDoubleProperty largerWidthProperty() {
+		return largerWidth;
+	}
+
+	public SimpleDoubleProperty largerHeightProperty() {
+		return largerHeight;
+	}
+
+	/**
+	 * Function to anchor a shape in the context.
+	 * 
+	 * @param s           The shape to anchor
+	 * @param xRatio      X position in the context (value between 0.0 and 1.0)
+	 * @param yRatio      Y position in the context (value between 0.0 and 1.0)
+	 * @param widthRatio  Fraction of the Width of the context (value between 0.0
+	 *                    and 1.0)
+	 * @param heightRatio Fraction of the height of the context (value between 0.0
+	 *                    and 1.0)
+	 */
+	public void bindIn(Rectangle s, double xRatio, double yRatio, double widthRatio, double heightRatio) {
+		s.xProperty().bind(X.add(width.multiply(xRatio)));
+		s.yProperty().bind(Y.add(height.multiply(yRatio)));
+		s.widthProperty().bind(width.multiply(widthRatio));
+		s.heightProperty().bind(height.multiply(heightRatio));
 	}
 
 }
