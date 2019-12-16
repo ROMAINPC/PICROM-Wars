@@ -44,7 +44,7 @@ public class Owner extends StackPane {
 		type.setPrefWidth(25);
 		Label nameL = new Label(" " + name);
 
-		Rectangle rec = new Rectangle(30, 12, color);
+		Rectangle rec = new Rectangle(30, 15, color);
 		numberL = new Label();
 		numberL.setTextFill(color.getBrightness() < 0.5 ? Color.WHITE : Color.BLACK);
 		StackPane castlesOwned = new StackPane();

@@ -69,7 +69,7 @@ public class Main extends Application {
 
 			ScrollPane owners = new ScrollPane();
 			owners.setId("owners_list");
-			infos.bindIn(owners, 0.15, 0.05, 0.8, 0.4);
+			infos.bindIn(owners, 0.15, 0.07, 0.8, 0.4);
 			owners.prefHeightProperty().bind(infos.heightProperty().divide(2));
 			VBox ownersBox = new VBox();
 			ownersBox.setAlignment(Pos.CENTER);
@@ -101,6 +101,7 @@ public class Main extends Application {
 
 			primaryStage.setResizable(true);
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("PICOM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Université de Bordeaux");
 			primaryStage.show();
 
 		} catch (Exception e) {
