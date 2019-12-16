@@ -2,6 +2,10 @@ package picrom.utils;
 
 import java.util.Random;
 
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+
 public class Utils {
 	private static Random r = Settings.SEED;
 
@@ -43,6 +47,14 @@ public class Utils {
 					: alphabet.charAt(r.nextInt(alphabet.length()));
 		}
 		return "Kingdom of " + name;
+	}
+
+	public static void colorize(ImageView image, Color color) {
+		ColorAdjust colorAdjust = new ColorAdjust();
+		colorAdjust.setHue(Utils.map( (color.getHue() + 180) % 360, 0, 360, -1, 1));
+		colorAdjust.setSaturation(color.getSaturation());
+		colorAdjust.setBrightness(Utils.map( color.getBrightness(), 0, 1, -1, 0));
+		image.setEffect(colorAdjust);
 	}
 
 }

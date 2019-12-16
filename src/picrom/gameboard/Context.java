@@ -145,6 +145,8 @@ public class Context extends Group {
 		r.layoutYProperty().bind(Y.add(height.multiply(yRatio)));
 		r.prefWidthProperty().bind(width.multiply(widthRatio));
 		r.prefHeightProperty().bind(height.multiply(heightRatio));
+		r.maxHeightProperty().bind(height.multiply(heightRatio));
+		r.minHeightProperty().bind(height.multiply(heightRatio));
 	}
 
 }

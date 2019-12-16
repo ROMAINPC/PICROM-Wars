@@ -8,20 +8,25 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import picrom.entity.Owner;
+import picrom.entity.castle.Castle;
 import picrom.gameboard.Context;
 import picrom.gameboard.TooManyCastlesException;
 import picrom.gameboard.World;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
+import picrom.utils.Utils;
 
 public class Main extends Application {
 
@@ -68,7 +73,6 @@ public class Main extends Application {
 			infos.getChildren().add(infosBackground);
 
 			ScrollPane owners = new ScrollPane();
-			owners.setId("owners_list");
 			infos.bindIn(owners, 0.15, 0.07, 0.8, 0.4);
 			owners.prefHeightProperty().bind(infos.heightProperty().divide(2));
 			VBox ownersBox = new VBox();
@@ -78,8 +82,51 @@ public class Main extends Application {
 			owners.setContent(ownersBox);
 			infos.getChildren().add(owners);
 
+			VBox castleInfos = new VBox();
+			ScrollPane castleInfosSP = new ScrollPane(castleInfos);
+			infos.bindIn(castleInfosSP, 0.15, 0.57, 0.8, 0.4);
+			castleInfos.setAlignment(Pos.CENTER);
+			StackPane castlePreview = new StackPane();
+			ImageView castleImage = new ImageView(Drawables.castle.getImage());
+			ImageView castleMask = new ImageView(Drawables.castle.getMask());
+			castleImage.fitHeightProperty().bind(infos.heightProperty().multiply(0.15));
+			castleImage.setPreserveRatio(true);
+			castleMask.fitHeightProperty().bind(infos.heightProperty().multiply(0.15));
+			castleMask.setPreserveRatio(true);
+			castlePreview.getChildren().addAll(castleImage, castleMask);
+			Label ownerL = new Label();
+			Label levelL = new Label();
+			Label treasorL = new Label();
+			Label incomeL = new Label();
+			Label productionL = new Label();
+			Label doorL = new Label();
+			Label garrisonL = new Label();
+			castleInfosSP.setVisible(false);
+			castleInfos.getChildren().addAll(castlePreview, ownerL, levelL, treasorL, incomeL, productionL, doorL,
+					garrisonL);
+			infos.getChildren().add(castleInfosSP);
+
 			// add elements:
 			root.getChildren().addAll(gameboard, infos);
+
+			// Listeners:
+			gameboard.setOnMouseClicked(e -> {
+				Parent clicked = e.getPickResult().getIntersectedNode().getParent();
+				if (clicked instanceof Castle) {
+					Castle castle = (Castle) clicked;
+					Utils.colorize(castleMask, castle.getOwner().getColor());
+					ownerL.setText("Propriétaire:\n" + castle.getOwner().getName());
+					levelL.setText("Niveau: " + castle.getLevel());
+					treasorL.setText("Trésor: " + castle.getTreasure());
+					incomeL.setText("Revenu: ");
+					productionL.setText("Production: ");
+					doorL.setText("Porte:");
+					garrisonL.setText("Garnison:");
+					castleInfosSP.setVisible(true);
+				} else {
+					castleInfosSP.setVisible(false);
+				}
+			});
 
 			// Main game loop:
 			Timeline gameLoop = new Timeline();

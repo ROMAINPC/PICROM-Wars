@@ -1,20 +1,20 @@
-#owners_list>.viewport{
+.scroll-pane>.viewport{
    -fx-background-color: transparent;
 }
-#owners_list>.corner{
+.scroll-pane>.corner{
    -fx-background-color: transparent;
 }
-#owners_list>.scroll-bar{
+.scroll-pane>.scroll-bar{
    -fx-background-color: transparent;
    
 }
-#owners_list>.scroll-bar>.thumb{
+.scroll-pane>.scroll-bar>.thumb{
    -fx-color: chocolate;
 }
-#owners_list>.corner{
+.scroll-pane>.corner{
    -fx-background-color: transparent;
 }
-#owners_list{
+.scroll-pane{
    -fx-background-color: transparent;
    -fx--hbar-policy : as_needed;
    -fx--vbar-policy : always;
