@@ -6,14 +6,17 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
+import picrom.entity.Owner;
 import picrom.gameboard.Context;
 import picrom.gameboard.TooManyCastlesException;
 import picrom.gameboard.World;
@@ -63,6 +66,17 @@ public class Main extends Application {
 			ImageView infosBackground = new ImageView(Drawables.infosBackground);
 			infos.bindIn(infosBackground, 0, 0, 1, 1);
 			infos.getChildren().add(infosBackground);
+
+			ScrollPane owners = new ScrollPane();
+			owners.setId("owners_list");
+			infos.bindIn(owners, 0.15, 0.05, 0.8, 0.4);
+			owners.prefHeightProperty().bind(infos.heightProperty().divide(2));
+			VBox ownersBox = new VBox();
+			ownersBox.setAlignment(Pos.CENTER);
+			for (Owner o : gameboard.getOwnersCastles().keySet())
+				ownersBox.getChildren().add(o);
+			owners.setContent(ownersBox);
+			infos.getChildren().add(owners);
 
 			// add elements:
 			root.getChildren().addAll(gameboard, infos);

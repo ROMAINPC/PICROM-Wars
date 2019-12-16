@@ -10,7 +10,6 @@ import javafx.util.Duration;
 public class Settings {
 	// gameplay settings:
 	public static final Duration TURN_DURATION = Duration.millis(1000);
-	
 
 	// game board settings:
 	public static final int WORLD_WIDTH = 18;
@@ -23,21 +22,26 @@ public class Settings {
 	public static final double DEFAULT_SCENE_WIDTH = 900;
 	public static final double DEFAULT_SCENE_HEIGHT = 750;
 	public static final double WORLD_WIDTH_RATIO = 0.8;
-	
-	//game seed:
+
+	// game seed:
 	public static final Random SEED = new Random();
-	
-	public static enum OwnerType{
-		Player,
-		AI,
-		Baron
+
+	public static enum OwnerType {
+		Player("HU"), AI("AI"), Baron("BR");
+
+		private String string;
+
+		private OwnerType(String str) {
+			string = str;
+		}
+
+		public String toString() {
+			return string;
+		}
 	}
-	
-	public static enum Orientation{
-		N,
-		E,
-		S,
-		W
+
+	public static enum Orientation {
+		N, E, S, W
 	}
 
 }

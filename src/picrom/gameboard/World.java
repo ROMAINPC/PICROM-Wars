@@ -15,8 +15,8 @@ import picrom.entity.castle.Castle;
 import picrom.entity.unit.Unit;
 import picrom.settings.Drawables;
 import picrom.settings.Settings;
-import picrom.settings.Settings.OwnerType;
 import picrom.settings.Utils;
+import picrom.settings.Settings.OwnerType;
 
 public class World extends Context {
 
@@ -166,4 +166,7 @@ public class World extends Context {
 		return worldHeight;
 	}
 
+	public Map<Owner, List<Castle>> getOwnersCastles() {
+		return castles;
+	}
 }

@@ -6,6 +6,7 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -121,11 +122,29 @@ public class Context extends Group {
 	 * @param heightRatio Fraction of the height of the context (value between 0.0
 	 *                    and 1.0)
 	 */
-	public void bindIn(ImageView iV, int xRatio, int yRatio, int widthRatio, int heightRatio) {
+	public void bindIn(ImageView iV, double xRatio, double yRatio, double widthRatio, double heightRatio) {
 		iV.xProperty().bind(X.add(width.multiply(xRatio)));
 		iV.yProperty().bind(Y.add(height.multiply(yRatio)));
 		iV.fitWidthProperty().bind(width.multiply(widthRatio));
 		iV.fitHeightProperty().bind(height.multiply(heightRatio));
+	}
+
+	/**
+	 * Function to anchor a Region in the context.
+	 * 
+	 * @param iV          The Region to anchor
+	 * @param xRatio      X position in the context (value between 0.0 and 1.0)
+	 * @param yRatio      Y position in the context (value between 0.0 and 1.0)
+	 * @param widthRatio  Fraction of the Width of the context (value between 0.0
+	 *                    and 1.0)
+	 * @param heightRatio Fraction of the height of the context (value between 0.0
+	 *                    and 1.0)
+	 */
+	public void bindIn(Region r, double xRatio, double yRatio, double widthRatio, double heightRatio) {
+		r.layoutXProperty().bind(X.add(width.multiply(xRatio)));
+		r.layoutYProperty().bind(Y.add(height.multiply(yRatio)));
+		r.prefWidthProperty().bind(width.multiply(widthRatio));
+		r.prefHeightProperty().bind(height.multiply(heightRatio));
 	}
 
 }

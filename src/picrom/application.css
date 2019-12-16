@@ -1,1 +1,27 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+#owners_list>.viewport{
+   -fx-background-color: transparent;
+}
+#owners_list>.corner{
+   -fx-background-color: transparent;
+}
+#owners_list>.scroll-bar{
+   -fx-background-color: transparent;
+   
+}
+#owners_list>.scroll-bar>.thumb{
+   -fx-color: chocolate;
+}
+#owners_list>.corner{
+   -fx-background-color: transparent;
+}
+#owners_list{
+   -fx-background-color: transparent;
+   -fx--hbar-policy : as_needed;
+   -fx--vbar-policy : always;
+}
+
+.label {
+	-fx-font-size: 10pt;
+	-fx-font-weight: bold;
+
+}
