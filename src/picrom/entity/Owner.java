@@ -1,7 +1,5 @@
 package picrom.entity;
 
-import java.util.Random;
-
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -9,20 +7,20 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import picrom.settings.Kingdom;
-import picrom.settings.Settings;
+import picrom.utils.Kingdom;
+import picrom.utils.Utils.OwnerType;
 
 public class Owner extends StackPane {
 
 	private Color color;
 	private String name; // not use as ID, prefer object reference
-	private Settings.OwnerType ownerType;
+	private OwnerType ownerType;
 	private int castlesNumber;
 
 	private Label numberL;
 	private Line crossed;
 
-	public Owner(Color color, String name, Settings.OwnerType ownerType) {
+	public Owner(Color color, String name, OwnerType ownerType) {
 		this.color = color;
 		this.name = name;
 		this.ownerType = ownerType;
@@ -30,7 +28,7 @@ public class Owner extends StackPane {
 		setCastlesNumber(1);
 	}
 
-	public Owner(Settings.OwnerType ownerType) {
+	public Owner(OwnerType ownerType) {
 		Kingdom k = Kingdom.randomKingdom();
 		this.color = k.getColor();
 		this.name = k.getName();
@@ -86,11 +84,11 @@ public class Owner extends StackPane {
 		crossed.setVisible(n < 1);
 	}
 
-	public Settings.OwnerType getOwnerType() {
+	public OwnerType getOwnerType() {
 		return ownerType;
 	}
 
-	public void setOwnerType(Settings.OwnerType ownerType) {
+	public void setOwnerType(OwnerType ownerType) {
 		this.ownerType = ownerType;
 	}
 

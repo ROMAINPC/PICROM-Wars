@@ -1,9 +1,27 @@
-package picrom.settings;
+package picrom.utils;
 
 import java.util.Random;
 
 public class Utils {
 	private static Random r = Settings.SEED;
+
+	public static enum OwnerType {
+		Player("HU"), AI("AI"), Baron("BR");
+
+		private String string;
+
+		private OwnerType(String str) {
+			string = str;
+		}
+
+		public String toString() {
+			return string;
+		}
+	}
+
+	public static enum Orientation {
+		N, E, S, W
+	}
 
 	public static double map(double value, double start, double stop, double targetStart, double targetStop) {
 		return targetStart + (targetStop - targetStart) * ((value - start) / (stop - start));

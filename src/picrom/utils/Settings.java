@@ -1,4 +1,4 @@
-package picrom.settings;
+package picrom.utils;
 
 import java.util.Random;
 
@@ -25,23 +25,5 @@ public class Settings {
 
 	// game seed:
 	public static final Random SEED = new Random();
-
-	public static enum OwnerType {
-		Player("HU"), AI("AI"), Baron("BR");
-
-		private String string;
-
-		private OwnerType(String str) {
-			string = str;
-		}
-
-		public String toString() {
-			return string;
-		}
-	}
-
-	public static enum Orientation {
-		N, E, S, W
-	}
 
 }

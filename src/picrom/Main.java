@@ -20,8 +20,8 @@ import picrom.entity.Owner;
 import picrom.gameboard.Context;
 import picrom.gameboard.TooManyCastlesException;
 import picrom.gameboard.World;
-import picrom.settings.Drawables;
-import picrom.settings.Settings;
+import picrom.utils.Drawables;
+import picrom.utils.Settings;
 
 public class Main extends Application {
 

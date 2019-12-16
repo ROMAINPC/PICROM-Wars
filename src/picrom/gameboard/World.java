@@ -13,10 +13,10 @@ import javafx.scene.image.ImageView;
 import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
 import picrom.entity.unit.Unit;
-import picrom.settings.Drawables;
-import picrom.settings.Settings;
-import picrom.settings.Utils;
-import picrom.settings.Settings.OwnerType;
+import picrom.utils.Drawables;
+import picrom.utils.Settings;
+import picrom.utils.Utils;
+import picrom.utils.Utils.OwnerType;
 
 public class World extends Context {
 

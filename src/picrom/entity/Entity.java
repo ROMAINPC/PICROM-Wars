@@ -7,9 +7,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import picrom.entity.castle.Castle;
 import picrom.gameboard.World;
-import picrom.settings.Drawables.EntityAssets;
-import picrom.settings.Settings;
-import picrom.settings.Utils;
+import picrom.utils.Settings;
+import picrom.utils.Utils;
+import picrom.utils.Drawables.EntityAssets;
 
 public abstract class Entity extends Group {
 	private SimpleDoubleProperty worldX;

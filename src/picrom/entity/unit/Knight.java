@@ -1,7 +1,7 @@
 package picrom.entity.unit;
 
 import picrom.entity.castle.Castle;
-import picrom.settings.Drawables;
+import picrom.utils.Drawables;
 
 public class Knight extends Unit {
 

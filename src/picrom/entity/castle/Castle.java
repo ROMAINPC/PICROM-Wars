@@ -4,8 +4,8 @@ import picrom.entity.Entity;
 import picrom.entity.Owner;
 import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
-import picrom.settings.Drawables;
-import picrom.settings.Settings.OwnerType;
+import picrom.utils.Drawables;
+import picrom.utils.Utils.OwnerType;
 
 public class Castle extends Entity implements Producible {
 

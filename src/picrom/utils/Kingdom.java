@@ -1,4 +1,4 @@
-package picrom.settings;
+package picrom.utils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +24,6 @@ public enum Kingdom {
 	private static int index = 0;
 
 	private static List<Kingdom> kingdoms = Arrays.asList(values());
-	private static final int SIZE = kingdoms.size();
 	private static final Random r = Settings.SEED;
 
 	Kingdom(String name, Color color) {

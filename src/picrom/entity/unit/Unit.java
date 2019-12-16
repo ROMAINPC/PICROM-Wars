@@ -3,7 +3,7 @@ package picrom.entity.unit;
 import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
 import picrom.entity.castle.Producible;
-import picrom.settings.Drawables.EntityAssets;
+import picrom.utils.Drawables.EntityAssets;
 
 public class Unit extends Entity implements Producible {
 
