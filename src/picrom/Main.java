@@ -54,11 +54,11 @@ public class Main extends Application {
 				gameboard.generateWorldCastles();
 			} catch (TooManyCastlesException e) {
 				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Trop de chÃ¢teaux !");
+				alert.setTitle("Trop de châteaux !");
 				alert.setHeaderText(
-						"La gÃ©nÃ©ration des chÃ¢teaux est trop longue, certains chÃ¢teaux n'ont peut-Ãªtre pas Ã©tÃ© placÃ©s sur le plateau.");
+						"La génération des châteaux est trop longue, certains châteaux n'ont peut-être pas été placés sur le plateau.");
 				alert.setContentText(
-						"Essayez de rÃ©duire le nombre de chateaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
+						"Essayez de réduire le nombre de chateaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
 				alert.showAndWait();
 			}
 
@@ -77,7 +77,7 @@ public class Main extends Application {
 			owners.prefHeightProperty().bind(infos.heightProperty().divide(2));
 			VBox ownersBox = new VBox();
 			ownersBox.setAlignment(Pos.CENTER);
-			for (Owner o : gameboard.getOwnersCastles().keySet())
+			for (Owner o : gameboard.getOwners())
 				ownersBox.getChildren().add(o);
 			owners.setContent(ownersBox);
 			infos.getChildren().add(owners);
@@ -148,7 +148,7 @@ public class Main extends Application {
 
 			primaryStage.setResizable(true);
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("PICOM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Université de Bordeaux");
+			primaryStage.setTitle("PICROM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Université de Bordeaux");
 			primaryStage.show();
 
 		} catch (Exception e) {

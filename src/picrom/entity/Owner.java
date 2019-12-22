@@ -1,5 +1,8 @@
 package picrom.entity;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -7,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import picrom.entity.castle.Castle;
 import picrom.utils.Kingdom;
 import picrom.utils.Utils.OwnerType;
 
@@ -15,26 +19,25 @@ public class Owner extends StackPane {
 	private Color color;
 	private String name; // not use as ID, prefer object reference
 	private OwnerType ownerType;
-	private int castlesNumber;
+	private List<Castle> castles;
 
 	private Label numberL;
 	private Line crossed;
+
+	public Owner(Kingdom kingdom, OwnerType ownerType) {
+		this(kingdom.getColor(), kingdom.getName(), ownerType);
+	}
 
 	public Owner(Color color, String name, OwnerType ownerType) {
 		this.color = color;
 		this.name = name;
 		this.ownerType = ownerType;
+		castles = new LinkedList<Castle>();
 		setUI();
-		setCastlesNumber(1);
 	}
 
 	public Owner(OwnerType ownerType) {
-		Kingdom k = Kingdom.randomKingdom();
-		this.color = k.getColor();
-		this.name = k.getName();
-		this.ownerType = ownerType;
-		setUI();
-		setCastlesNumber(1);
+		this(Kingdom.randomKingdom(), ownerType);
 	}
 
 	private void setUI() {
@@ -45,7 +48,7 @@ public class Owner extends StackPane {
 		Label nameL = new Label(" " + name);
 
 		Rectangle rec = new Rectangle(30, 15, color);
-		numberL = new Label();
+		numberL = new Label(String.valueOf(castles.size()));
 		numberL.setTextFill(color.getBrightness() < 0.5 ? Color.WHITE : Color.BLACK);
 		StackPane castlesOwned = new StackPane();
 		castlesOwned.getChildren().addAll(rec, numberL);
@@ -54,7 +57,6 @@ public class Owner extends StackPane {
 		crossed = new Line(0, 0, 100, 0);
 		crossed.setStrokeWidth(3);
 		crossed.setTranslateX(20);
-		crossed.setVisible(false);
 		this.getChildren().addAll(content, crossed);
 	}
 
@@ -75,13 +77,13 @@ public class Owner extends StackPane {
 	}
 
 	public int getCastlesNumber() {
-		return castlesNumber;
+		return castles.size();
 	}
 
-	public void setCastlesNumber(int n) {
-		this.castlesNumber = n;
-		numberL.setText(String.valueOf(n));
-		crossed.setVisible(n < 1);
+	public void addCastle(Castle castle) {
+		castles.add(castle);
+		numberL.setText(String.valueOf(castles.size()));
+		crossed.setVisible(castles.size() < 1);
 	}
 
 	public OwnerType getOwnerType() {

@@ -1,9 +1,8 @@
 package picrom.gameboard;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -29,7 +28,7 @@ public class World extends Context {
 	private List<Unit> entities;
 
 	// hashmap that binds owners to their castles
-	private Map<Owner, List<Castle>> castles;
+	private List<Owner> owners;
 
 	// size in number of cells
 	private int worldWidth;
@@ -54,7 +53,7 @@ public class World extends Context {
 
 		this.castlesArray = new Castle[worldWidth][worldHeight];
 		this.entities = new LinkedList<Unit>();
-		this.castles = new HashMap<Owner, List<Castle>>();
+		this.owners = new ArrayList<Owner>();
 
 		// load and display background:
 		ImageView background = new ImageView(Drawables.worldBackground);
@@ -73,13 +72,13 @@ public class World extends Context {
 		// generate Map structure:
 		// generate player:
 		for (int i = 0; i < this.nbPlayers; i++)
-			castles.put(new Owner(OwnerType.Player), new LinkedList<Castle>());
+			owners.add(new Owner(OwnerType.Player));
 		// generate AIs:
 		for (int i = 0; i < this.nbAIs; i++)
-			castles.put(new Owner(OwnerType.AI), new LinkedList<Castle>());
+			owners.add(new Owner(OwnerType.AI));
 		// generate barons:
 		for (int i = 0; i < this.nbBarons; i++)
-			castles.put(new Owner(OwnerType.Baron), new LinkedList<Castle>());
+			owners.add(new Owner(OwnerType.Baron));
 	}
 
 	public void generateWorldCastles() throws TooManyCastlesException {
@@ -87,7 +86,7 @@ public class World extends Context {
 
 		// Each owner (player or AI or baron) start the game with one castle.
 		long time = System.currentTimeMillis();
-		for (Owner owner : castles.keySet()) {
+		for (Owner owner : owners) {
 			boolean valid = false;
 			int x = 0, y = 0;
 			// TODO : security to avoid while loop if too many castles
@@ -112,7 +111,7 @@ public class World extends Context {
 				}
 			}
 			Castle castle = new Castle(owner, x, y, this);
-			castles.get(owner).add(castle);
+			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
 			this.getChildren().add(castle);
 
@@ -166,7 +165,7 @@ public class World extends Context {
 		return worldHeight;
 	}
 
-	public Map<Owner, List<Castle>> getOwnersCastles() {
-		return castles;
+	public List<Owner> getOwners() {
+		return owners;
 	}
 }
