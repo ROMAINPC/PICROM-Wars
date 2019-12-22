@@ -23,8 +23,15 @@ public class Utils {
 		}
 	}
 
-	public static enum Orientation {
-		N, E, S, W
+	public static enum Direction {
+		North(0, -1), East(1, 0), South(0, 1), West(-1, 0);
+
+		public int dx, dy;
+
+		private Direction(int dx, int dy) {
+			this.dx = dx;
+			this.dy = dy;
+		}
 	}
 
 	public static double map(double value, double start, double stop, double targetStart, double targetStop) {
@@ -51,9 +58,9 @@ public class Utils {
 
 	public static void colorize(ImageView image, Color color) {
 		ColorAdjust colorAdjust = new ColorAdjust();
-		colorAdjust.setHue(Utils.map( (color.getHue() + 180) % 360, 0, 360, -1, 1));
+		colorAdjust.setHue(Utils.map((color.getHue() + 180) % 360, 0, 360, -1, 1));
 		colorAdjust.setSaturation(color.getSaturation());
-		colorAdjust.setBrightness(Utils.map( color.getBrightness(), 0, 1, -1, 0));
+		colorAdjust.setBrightness(Utils.map(color.getBrightness(), 0, 1, -1, 0));
 		image.setEffect(colorAdjust);
 	}
 
