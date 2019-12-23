@@ -15,6 +15,7 @@ import picrom.entity.unit.Unit;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
+import picrom.utils.Utils.Direction;
 import picrom.utils.Utils.OwnerType;
 
 public class World extends Context {
@@ -87,22 +88,24 @@ public class World extends Context {
 		// Each owner (player or AI or baron) start the game with one castle.
 		long time = System.currentTimeMillis();
 		for (Owner owner : owners) {
-			boolean valid = false;
+			boolean validCastle = false;
+			boolean validDoor = false;
 			int x = 0, y = 0;
+			Direction doorDir = null;
 			// TODO : security to avoid while loop if too many castles
-			while (!valid) { // avoid too near castles.
+			while (!validCastle) { // avoid too near castles.
 				// infinite loop check:
 				if (System.currentTimeMillis() - time > 1000)
 					throw new TooManyCastlesException();
 				x = random.nextInt(worldWidth);
 				y = random.nextInt(worldHeight);
-				valid = true;
+				validCastle = true;
 				for (int i = -Settings.MINIMAL_CASTLE_DISTANCE; i <= Settings.MINIMAL_CASTLE_DISTANCE; i++) {
 					for (int j = -Settings.MINIMAL_CASTLE_DISTANCE; j <= Settings.MINIMAL_CASTLE_DISTANCE; j++) {
 						if (x + i >= 0 && x + i < worldWidth && y + j >= 0 && y + j < worldHeight) {
 							if (castlesArray[x + i][y + j] != null
 									&& Utils.manDistance(x, y, x + i, y + j) <= Settings.MINIMAL_CASTLE_DISTANCE) {
-								valid = false;
+								validCastle = false;
 								j = Settings.MINIMAL_CASTLE_DISTANCE + 1;
 								i = j;
 							}
@@ -110,7 +113,17 @@ public class World extends Context {
 					}
 				}
 			}
-			Castle castle = new Castle(owner, x, y, this);
+			
+			while(!validDoor) {
+				doorDir = Direction.randomDirection();
+				validDoor = true;
+				if (x + doorDir.getX() >= worldWidth  || x + doorDir.getX() < 0 ||
+				    y + doorDir.getY() >= worldHeight || y + doorDir.getY() < 0) {
+					validDoor = false;
+				}
+			}
+			
+			Castle castle = new Castle(owner, x, y, doorDir, this);
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
 			this.getChildren().add(castle);

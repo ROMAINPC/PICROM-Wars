@@ -1,5 +1,7 @@
 package picrom.utils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import javafx.scene.effect.ColorAdjust;
@@ -26,11 +28,25 @@ public class Utils {
 	public static enum Direction {
 		North(0, -1), East(1, 0), South(0, 1), West(-1, 0);
 
-		public int dx, dy;
+		public int x, y;
+		private static List<Direction> DIRS = Arrays.asList(values());
+		private static final int SIZE = DIRS.size();
+		
+		private Direction(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		public static Direction randomDirection() {
+			return DIRS.get(r.nextInt(SIZE));
+		}
 
-		private Direction(int dx, int dy) {
-			this.dx = dx;
-			this.dy = dy;
+		public int getX() {
+			return x;
+		}
+
+		public int getY() {
+			return y;
 		}
 	}
 

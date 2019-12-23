@@ -27,6 +27,7 @@ import picrom.gameboard.World;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
+import picrom.utils.Utils.Direction;
 
 public class Main extends Application {
 
@@ -120,7 +121,7 @@ public class Main extends Application {
 					treasorL.setText("Trésor: " + castle.getTreasure());
 					incomeL.setText("Revenu: ");
 					productionL.setText("Production: ");
-					doorL.setText("Porte:");
+					doorL.setText("Porte:" + castle.getDoor());
 					garrisonL.setText("Garnison:");
 					castleInfosSP.setVisible(true);
 				} else {
