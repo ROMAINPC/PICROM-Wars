@@ -26,17 +26,19 @@ public class Utils {
 	}
 
 	public static enum Direction {
-		North(0, -1), East(1, 0), South(0, 1), West(-1, 0);
+		North(0, -1, "Nord"), East(1, 0, "Est"), South(0, 1, "Sud"), West(-1, 0, "Ouest");
 
-		public int x, y;
+		private int x, y;
+		private String str;
 		private static List<Direction> DIRS = Arrays.asList(values());
 		private static final int SIZE = DIRS.size();
-		
-		private Direction(int x, int y) {
+
+		private Direction(int x, int y, String str) {
 			this.x = x;
 			this.y = y;
+			this.str = str;
 		}
-		
+
 		public static Direction randomDirection() {
 			return DIRS.get(r.nextInt(SIZE));
 		}
@@ -47,6 +49,10 @@ public class Utils {
 
 		public int getY() {
 			return y;
+		}
+
+		public String toString() {
+			return str;
 		}
 	}
 

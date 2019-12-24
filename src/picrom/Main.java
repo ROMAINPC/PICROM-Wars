@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
@@ -96,11 +97,13 @@ public class Main extends Application {
 			castleMask.setPreserveRatio(true);
 			castlePreview.getChildren().addAll(castleImage, castleMask);
 			Label ownerL = new Label();
+			ownerL.setTextAlignment(TextAlignment.CENTER);
 			Label levelL = new Label();
 			Label treasorL = new Label();
 			Label incomeL = new Label();
 			Label productionL = new Label();
 			Label doorL = new Label();
+			doorL.setTextAlignment(TextAlignment.CENTER);
 			Label garrisonL = new Label();
 			castleInfosSP.setVisible(false);
 			castleInfos.getChildren().addAll(castlePreview, ownerL, levelL, treasorL, incomeL, productionL, doorL,
@@ -121,7 +124,7 @@ public class Main extends Application {
 					treasorL.setText("Trésor: " + castle.getTreasure());
 					incomeL.setText("Revenu: ");
 					productionL.setText("Production: ");
-					doorL.setText("Porte:" + castle.getDoor());
+					doorL.setText("Porte:\n" + castle.getDoor());
 					garrisonL.setText("Garnison:");
 					castleInfosSP.setVisible(true);
 				} else {

@@ -10,28 +10,11 @@ public class Door {
 		this.dir = dir;
 		this.open = open;
 	}
-	
+
 	public String toString() {
-		String openS = "";
-		String dirS = "";
-		openS = open == false ? "Fermée" : "Ouverte";
-		switch (dir) {
-		case North:
-			dirS = "Nord";
-			break;
-		case East:
-			dirS = "Est";
-			break;
-		case South:
-			dirS = "Sud";
-			break;
-		case West:
-			dirS = "Ouest";
-			break;
-		}
-		return " " + openS + " (direction " + dirS + ")";
+		return (open ? "Ouverte" : "Fermée") + " (direction " + dir + ")";
 	}
-	
+
 	public Direction getDir() {
 		return dir;
 	}
