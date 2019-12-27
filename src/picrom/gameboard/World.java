@@ -24,12 +24,16 @@ public class World extends Context {
 
 	// 2D array to store castles positions (used for click)
 	private Castle[][] castlesArray;
+	
+	// lists of castles engaged in the world
+	private List<Castle> castles;
 
 	// lists of units engaged in the world
 	private List<Unit> entities;
 
-	// hashmap that binds owners to their castles
+	// list of owners engaged in the world
 	private List<Owner> owners;
+	
 
 	// size in number of cells
 	private int worldWidth;
@@ -53,6 +57,7 @@ public class World extends Context {
 		this.worldHeight = worldHeight;
 
 		this.castlesArray = new Castle[worldWidth][worldHeight];
+		this.castles = new LinkedList<Castle>();
 		this.entities = new LinkedList<Unit>();
 		this.owners = new ArrayList<Owner>();
 
@@ -63,6 +68,7 @@ public class World extends Context {
 		background.xProperty().bind(this.xProperty());
 		background.yProperty().bind(this.yProperty());
 		this.getChildren().add(background);
+		
 	}
 
 	public void generateOwners(int nbAIs, int nbBarons) {
@@ -126,6 +132,7 @@ public class World extends Context {
 			Castle castle = new Castle(owner, x, y, doorDir, this);
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
+			castles.add(castle);
 			this.getChildren().add(castle);
 
 		}
@@ -137,12 +144,20 @@ public class World extends Context {
 		// TODO update production
 
 		// TODO manage unit exit castle
+		for(Castle castle : castles) {
+			List<Unit> l = castle.getCourtyard().takeOutUnits();
+			if(l != null) {
+				entities.addAll(l);
+				this.getChildren().addAll(l);
+			}
+			System.out.println(entities);
+		}
 	}
 
 	// Process units engaged on the field
 	public void processUnits() {
 		// TODO move units
-
+		
 		// TODO assault or enter castle, if unit reached the target
 	}
 

@@ -10,6 +10,7 @@ import javafx.util.Duration;
 public class Settings {
 	// gameplay settings:
 	public static final Duration TURN_DURATION = Duration.millis(1000);
+	public static final int MAX_UNITS_OUT_BY_TURN = 3;
 
 	// game board settings:
 	public static final int WORLD_WIDTH = 18;

@@ -56,11 +56,11 @@ public class Main extends Application {
 				gameboard.generateWorldCastles();
 			} catch (TooManyCastlesException e) {
 				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Trop de châteaux !");
+				alert.setTitle("Trop de chï¿½teaux !");
 				alert.setHeaderText(
-						"La génération des châteaux est trop longue, certains châteaux n'ont peut-être pas été placés sur le plateau.");
+						"La gï¿½nï¿½ration des chï¿½teaux est trop longue, certains chï¿½teaux n'ont peut-ï¿½tre pas ï¿½tï¿½ placï¿½s sur le plateau.");
 				alert.setContentText(
-						"Essayez de réduire le nombre de chateaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
+						"Essayez de rï¿½duire le nombre de chateaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
 				alert.showAndWait();
 			}
 
@@ -119,13 +119,13 @@ public class Main extends Application {
 				if (clicked instanceof Castle) {
 					Castle castle = (Castle) clicked;
 					Utils.colorize(castleMask, castle.getOwner().getColor());
-					ownerL.setText("Propriétaire:\n" + castle.getOwner().getName());
+					ownerL.setText("Propriï¿½taire:\n" + castle.getOwner().getName());
 					levelL.setText("Niveau: " + castle.getLevel());
-					treasorL.setText("Trésor: " + castle.getTreasure());
+					treasorL.setText("Trï¿½sor: " + castle.getTreasure());
 					incomeL.setText("Revenu: ");
 					productionL.setText("Production: ");
 					doorL.setText("Porte:\n" + castle.getDoor());
-					garrisonL.setText("Garnison:");
+					garrisonL.setText("Garnison:" + castle.getCourtyard());
 					castleInfosSP.setVisible(true);
 				} else {
 					castleInfosSP.setVisible(false);
@@ -152,7 +152,7 @@ public class Main extends Application {
 
 			primaryStage.setResizable(true);
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("PICROM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Université de Bordeaux");
+			primaryStage.setTitle("PICROM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Universitï¿½ de Bordeaux");
 			primaryStage.show();
 
 		} catch (Exception e) {

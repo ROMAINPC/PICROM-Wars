@@ -49,7 +49,9 @@ public abstract class Entity extends Group {
 	}
 
 	protected Entity(EntityAssets img, int prodCost, int prodTime, Castle owner) {
-		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.context);
+		this(img, owner.getOwner(), owner.getWorldX() + owner.getDoor().getDir().getX(), 
+									owner.getWorldY() + owner.getDoor().getDir().getY(), 
+									prodCost, prodTime, owner.context);
 	}
 
 	public Owner getOwner() {

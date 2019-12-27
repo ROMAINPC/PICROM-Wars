@@ -21,7 +21,7 @@ public class Drawables {
 		castle = new EntityAssets("castle");
 		onager = new EntityAssets("onager");
 		knight = new EntityAssets("knight");
-		pikeman = new EntityAssets("knight");// TODO
+		pikeman = new EntityAssets("pikeman");
 	}
 
 	public class EntityAssets {

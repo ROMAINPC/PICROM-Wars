@@ -8,12 +8,14 @@ import picrom.utils.Drawables.EntityAssets;
 public class Unit extends Entity implements Producible {
 
 	private int speed, hp, damage;
+	private String name;
 
-	public Unit(EntityAssets img, int prodCost, int prodTime, int speed, int hp, int damage, Castle origin) {
+	public Unit(EntityAssets img, String name, int prodCost, int prodTime, int speed, int hp, int damage, Castle origin) {
 		super(img, prodCost, prodTime, origin);
 		this.speed = speed;
 		this.hp = hp;
 		this.damage = damage;
+		this.name = name;
 	}
 
 	public int getSpeed() {
@@ -38,6 +40,10 @@ public class Unit extends Entity implements Producible {
 
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public void produce(Castle c) {
