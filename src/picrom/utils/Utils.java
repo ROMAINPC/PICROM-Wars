@@ -70,11 +70,14 @@ public class Utils {
 
 	public static String generateKingdomName() {
 		String name = "";
-		String alphabet = "aaaazeeeertyuuuuiiiioooopqsdfghjklmwxcvbn";
-		for (int i = 0; i < r.nextInt(5) + 4; i++) {
-			name += i == 0 ? Character.toUpperCase(alphabet.charAt(r.nextInt(alphabet.length())))
-					: alphabet.charAt(r.nextInt(alphabet.length()));
+		String[] syllables = {"li","la","le","chto","chta","fra","fro","fru",
+				              "tro","tru","tra","tri","nou","mou","kou","ing",
+				              "bra","bre","bri","bru","ka","ke","ki","ku",
+				              "vish","vik","gla","glo","gle"};
+		for (int i = 0; i < r.nextInt(3) + 2; i++) {
+			name += syllables[r.nextInt(syllables.length)];
 		}
+		name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 		return "Kingdom of " + name;
 	}
 
