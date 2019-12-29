@@ -22,18 +22,14 @@ public class World extends Context {
 
 	private static Random random = Settings.SEED;
 
-	// 2D array to store castles positions (used for click)
+	// 2D array to store castles positions
 	private Castle[][] castlesArray;
-	
-	// lists of castles engaged in the world
-	private List<Castle> castles;
 
 	// lists of units engaged in the world
 	private List<Unit> entities;
 
 	// list of owners engaged in the world
 	private List<Owner> owners;
-	
 
 	// size in number of cells
 	private int worldWidth;
@@ -57,7 +53,6 @@ public class World extends Context {
 		this.worldHeight = worldHeight;
 
 		this.castlesArray = new Castle[worldWidth][worldHeight];
-		this.castles = new LinkedList<Castle>();
 		this.entities = new LinkedList<Unit>();
 		this.owners = new ArrayList<Owner>();
 
@@ -68,7 +63,7 @@ public class World extends Context {
 		background.xProperty().bind(this.xProperty());
 		background.yProperty().bind(this.yProperty());
 		this.getChildren().add(background);
-		
+
 	}
 
 	public void generateOwners(int nbAIs, int nbBarons) {
@@ -119,20 +114,19 @@ public class World extends Context {
 					}
 				}
 			}
-			
-			while(!validDoor) {
+
+			while (!validDoor) {
 				doorDir = Direction.randomDirection();
 				validDoor = true;
-				if (x + doorDir.getX() >= worldWidth  || x + doorDir.getX() < 0 ||
-				    y + doorDir.getY() >= worldHeight || y + doorDir.getY() < 0) {
+				if (x + doorDir.getX() >= worldWidth || x + doorDir.getX() < 0 || y + doorDir.getY() >= worldHeight
+						|| y + doorDir.getY() < 0) {
 					validDoor = false;
 				}
 			}
-			
+
 			Castle castle = new Castle(owner, x, y, doorDir, this);
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
-			castles.add(castle);
 			this.getChildren().add(castle);
 
 		}
@@ -144,11 +138,13 @@ public class World extends Context {
 		// TODO update production
 
 		// TODO manage unit exit castle
-		for(Castle castle : castles) {
-			List<Unit> l = castle.getCourtyard().takeOutUnits();
-			if(l != null) {
-				entities.addAll(l);
-				this.getChildren().addAll(l);
+		for (Owner owner : owners) {
+			for (Castle castle : owner.getCastles()) {
+				List<Unit> l = castle.getCourtyard().takeOutUnits();
+				if (l != null) {
+					entities.addAll(l);
+					this.getChildren().addAll(l);
+				}
 			}
 		}
 	}
@@ -156,7 +152,7 @@ public class World extends Context {
 	// Process units engaged on the field
 	public void processUnits() {
 		// TODO move units
-		
+
 		// TODO assault or enter castle, if unit reached the target
 	}
 

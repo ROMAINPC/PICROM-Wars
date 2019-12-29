@@ -14,9 +14,8 @@ public class Castle extends Entity implements Producible {
 	private int level;
 	private int treasure;
 	private Door door;
-	private Castle objective;
 	private Courtyard court;
-	
+
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
 		super(Drawables.castle, owner, X, Y, 0, 0, context);
 		level = 1;
@@ -24,8 +23,7 @@ public class Castle extends Entity implements Producible {
 		setNextLevelTime(level);
 		productionUnit = new ProductionUnit(this);
 		this.door = new Door(doorDir, false);
-		objective = null;
-		court = new Courtyard(this);
+		court = new Courtyard();
 	}
 
 	public Castle(OwnerType type, int x, int y, Direction doorDir, World context) {
@@ -74,15 +72,11 @@ public class Castle extends Entity implements Producible {
 	public void produce(Castle castle) {
 		// TODO change level and update next costs
 	}
-	
-	public Castle getObjective() {
-		return objective;
-	}
-	
+
 	public Courtyard getCourtyard() {
 		return court;
 	}
-	
+
 	public void updateProduction() {
 		productionUnit.update();
 	}

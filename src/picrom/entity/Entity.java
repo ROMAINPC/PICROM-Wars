@@ -2,14 +2,13 @@ package picrom.entity;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import picrom.entity.castle.Castle;
 import picrom.gameboard.World;
+import picrom.utils.Drawables.EntityAssets;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
-import picrom.utils.Drawables.EntityAssets;
 
 public abstract class Entity extends Group {
 	private SimpleDoubleProperty worldX;
@@ -49,9 +48,7 @@ public abstract class Entity extends Group {
 	}
 
 	protected Entity(EntityAssets img, int prodCost, int prodTime, Castle owner) {
-		this(img, owner.getOwner(), owner.getWorldX() + owner.getDoor().getDir().getX(), 
-									owner.getWorldY() + owner.getDoor().getDir().getY(), 
-									prodCost, prodTime, owner.context);
+		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.context);
 	}
 
 	public Owner getOwner() {

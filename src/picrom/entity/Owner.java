@@ -19,6 +19,8 @@ public class Owner extends StackPane {
 	private Color color;
 	private String name; // not use as ID, prefer object reference
 	private OwnerType ownerType;
+
+	// castles owned
 	private List<Castle> castles;
 
 	private Label numberL;
@@ -76,8 +78,8 @@ public class Owner extends StackPane {
 		this.name = name;
 	}
 
-	public int getCastlesNumber() {
-		return castles.size();
+	public List<Castle> getCastles() {
+		return castles;
 	}
 
 	public void addCastle(Castle castle) {
