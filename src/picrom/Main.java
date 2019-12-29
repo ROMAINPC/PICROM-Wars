@@ -28,7 +28,6 @@ import picrom.gameboard.World;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
-import picrom.utils.Utils.Direction;
 
 public class Main extends Application {
 
@@ -56,11 +55,11 @@ public class Main extends Application {
 				gameboard.generateWorldCastles();
 			} catch (TooManyCastlesException e) {
 				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Trop de ch�teaux !");
+				alert.setTitle("Trop de châteaux !");
 				alert.setHeaderText(
-						"La g�n�ration des ch�teaux est trop longue, certains ch�teaux n'ont peut-�tre pas �t� plac�s sur le plateau.");
+						"La génération des châteaux est trop longue, certains châteaux n'ont peut-être pas été placés sur le plateau.");
 				alert.setContentText(
-						"Essayez de r�duire le nombre de chateaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
+						"Essayez de réduire le nombre de châteaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
 				alert.showAndWait();
 			}
 
@@ -119,9 +118,9 @@ public class Main extends Application {
 				if (clicked instanceof Castle) {
 					Castle castle = (Castle) clicked;
 					Utils.colorize(castleMask, castle.getOwner().getColor());
-					ownerL.setText("Propri�taire:\n" + castle.getOwner().getName());
+					ownerL.setText("Propriétaire:\n" + castle.getOwner().getName());
 					levelL.setText("Niveau: " + castle.getLevel());
-					treasorL.setText("Tr�sor: " + castle.getTreasure());
+					treasorL.setText("Trésor: " + castle.getTreasure());
 					incomeL.setText("Revenu: ");
 					productionL.setText("Production: ");
 					doorL.setText("Porte:\n" + castle.getDoor());
@@ -152,7 +151,7 @@ public class Main extends Application {
 
 			primaryStage.setResizable(true);
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("PICROM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Universit� de Bordeaux");
+			primaryStage.setTitle("PICROM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Université de Bordeaux");
 			primaryStage.show();
 
 		} catch (Exception e) {

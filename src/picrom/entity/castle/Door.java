@@ -12,7 +12,7 @@ public class Door {
 	}
 
 	public String toString() {
-		return (open ? "Ouverte" : "Fermée") + " (direction " + dir + ")";
+		return (open ? "Ouverte" : "FermÃ©e") + " (direction " + dir + ")";
 	}
 
 	public Direction getDir() {

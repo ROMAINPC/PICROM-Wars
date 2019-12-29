@@ -150,7 +150,6 @@ public class World extends Context {
 				entities.addAll(l);
 				this.getChildren().addAll(l);
 			}
-			System.out.println(entities);
 		}
 	}
 

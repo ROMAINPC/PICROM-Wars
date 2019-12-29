@@ -12,7 +12,7 @@ public class Utils {
 	private static Random r = Settings.SEED;
 
 	public static enum OwnerType {
-		Player("HU"), AI("AI"), Baron("BR");
+		Player("HU"), AI("IA"), Baron("BR");
 
 		private String string;
 
