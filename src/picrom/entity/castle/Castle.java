@@ -19,6 +19,7 @@ public class Castle extends Entity implements Producible {
 	private Courtyard court;
 	private int nextLevelCost, nextLevelTime;
 	private int income;
+	private Class<? extends Producible> productionType;
 
 	private ImageView circled;
 
@@ -31,6 +32,7 @@ public class Castle extends Entity implements Producible {
 		nextLevelCost = 1000 * level;
 		nextLevelTime = 100 + 50 * level;
 		income = level * Settings.INCOME_MULTIPLIER;
+		productionType = null;
 
 		circled = new ImageView(Drawables.circled);
 		setCircled(false);
@@ -76,7 +78,7 @@ public class Castle extends Entity implements Producible {
 	public void setTreasure(int treasure) {
 		this.treasure = treasure;
 	}
-	
+
 	public int getIncome() {
 		return income;
 	}
@@ -112,17 +114,46 @@ public class Castle extends Entity implements Producible {
 	}
 
 	public void updateProduction() {
+		if (productionType != null) {
+			if (productionUnit.isProduced()) { // start or restart new production
+				if (productionType == Castle.class) {
+					productionUnit.setProduction(this);
+				} else {
+					try {
+						productionUnit
+								.setProduction(productionType.getDeclaredConstructor(Castle.class).newInstance(this));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
 		productionUnit.update();
+		if (productionUnit.isProduced()) {
+			productionType = (productionType == Castle.class ? null : productionType); // stop production if it was
+																						// castle improvments
+		}
 	}
 
-	public void setProduction(Producible p) {
-		productionUnit.setProduction(p);
+	public void setProduction(Class<? extends Producible> productionType) {
+		this.productionType = productionType;
 	}
-	public Producible getProduction() {
-		return productionUnit.getProduction();
+
+	public Class<? extends Producible> getProduction() {
+		return productionType;
+	}
+
+	public String productionName() {
+		if (productionType == null)
+			return "Pas de Production";
+		if (productionType == Castle.class)
+			return "Fortifications";
+		return ((Unit) productionUnit.getProduction()).getName();
 	}
 
 	public void setCircled(boolean b) {
 		circled.setVisible(b);
 	}
+
 }

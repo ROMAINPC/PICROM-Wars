@@ -5,21 +5,23 @@ public class ProductionUnit {
 	private Castle castle;
 
 	private Producible currentProduction;
+	private boolean produced;
 
 	private int timeLeft;
 
 	public ProductionUnit(Castle castle) {
 		this.castle = castle;
-		currentProduction = null;
+		produced = true;
 	}
 
 	public void update() {
-		if (currentProduction != null) {
+		if (!produced) {
 			timeLeft--;
+			System.out.println(timeLeft);
 			if (timeLeft <= 0 && castle.getTreasure() >= currentProduction.getProductionCost()) {
 				castle.setTreasure(castle.getTreasure() - currentProduction.getProductionCost()); // Apply cost
 				currentProduction.produce(castle);
-				setProduction(currentProduction); // start again same production
+				produced = true;
 			}
 
 		}
@@ -27,12 +29,17 @@ public class ProductionUnit {
 
 	public void setProduction(Producible production) {
 		currentProduction = production;
+		produced = false;
 		if (production != null)
 			timeLeft = production.getProductionTime();
 	}
 
 	public Producible getProduction() {
 		return currentProduction;
+	}
+
+	public boolean isProduced() {
+		return produced;
 	}
 
 }
