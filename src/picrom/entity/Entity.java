@@ -20,7 +20,7 @@ public abstract class Entity extends Group {
 	protected ImageView image;
 	protected ImageView mask;
 
-	protected Entity(EntityAssets assets, Owner owner, int X, int Y, World world) {
+	protected Entity(EntityAssets assets, Owner owner, double X, double Y, World world) {
 		image = new ImageView(assets.getImage());
 		mask = new ImageView(assets.getMask());
 		this.owner = owner;
@@ -57,19 +57,19 @@ public abstract class Entity extends Group {
 		applyColor(owner.getColor());
 	}
 
-	public int getWorldX() {
-		return (int) worldX.get();
+	public double getWorldX() {
+		return worldX.get();
 	}
 
-	public void setWorldX(int worldX) {
+	public void setWorldX(double worldX) {
 		this.worldX.set(worldX);
 	}
 
-	public int getWorldY() {
-		return (int) worldY.get();
+	public double getWorldY() {
+		return worldY.get();
 	}
 
-	public void setWorldY(int worldY) {
+	public void setWorldY(double worldY) {
 		this.worldY.set(worldY);
 	}
 
