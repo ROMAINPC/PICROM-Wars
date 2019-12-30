@@ -12,6 +12,7 @@ public class Settings {
 	public static final Duration TURN_DURATION = Duration.millis(1000);
 	public static final int MAX_UNITS_OUT_BY_TURN = 3;
 	public static final int INCOME_MULTIPLIER = 10;
+	public static final double UNITS_SPEED_MULTIPLIER = 0.05;
 
 	// game board settings:
 	public static final int WORLD_WIDTH = 18;

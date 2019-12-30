@@ -120,7 +120,7 @@ public class World extends Context {
 					validDoor = false;
 				}
 			}
-
+			
 			Castle castle = new Castle(owner, x, y, doorDir, this);
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
@@ -151,7 +151,16 @@ public class World extends Context {
 
 	// Process units engaged on the field
 	public void processUnits() {
-		// TODO move units
+		
+		for(Unit u : units) {
+			double varx = u.getObjective().getWorldX() - u.getWorldX();
+			double vary = u.getObjective().getWorldY() - u.getWorldY();
+
+			if (Math.abs(varx) > Math.abs(vary))
+				u.setWorldX(u.getWorldX() + Settings.UNITS_SPEED_MULTIPLIER * varx/Math.abs(varx) * u.getSpeed());
+			else
+				u.setWorldY(u.getWorldY() + Settings.UNITS_SPEED_MULTIPLIER * vary/Math.abs(vary) * u.getSpeed());
+		}
 
 		// TODO assault or enter castle, if unit reached the target
 	}

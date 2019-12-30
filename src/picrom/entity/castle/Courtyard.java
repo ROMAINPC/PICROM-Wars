@@ -39,6 +39,7 @@ public class Courtyard {
 			while (!units.isEmpty() && i < Settings.MAX_UNITS_OUT_BY_TURN) {
 				Unit u = units.get(0);
 				units.remove(0);
+				 u.setObjective(objective);
 				l.add(u);
 				i++;
 			}
