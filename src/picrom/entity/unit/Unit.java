@@ -10,6 +10,7 @@ public class Unit extends Entity implements Producible {
 	private int speed, hp, damage;
 	private String name;
 	private int productionCost, productionTime;
+	private Castle objective;
 
 	public Unit(EntityAssets img, String name, int prodCost, int prodTime, int speed, int hp, int damage,
 			Castle origin) {
@@ -20,6 +21,7 @@ public class Unit extends Entity implements Producible {
 		this.name = name;
 		this.productionCost = prodCost;
 		this.productionTime = prodTime;
+		objective = null;
 	}
 
 	public int getSpeed() {
@@ -61,5 +63,14 @@ public class Unit extends Entity implements Producible {
 	public int getProductionTime() {
 		return productionTime;
 	}
+	
+	public Castle getObjective() {
+		return objective;
+	}
+	
+	public void setObjective(Castle objective) {
+		this.objective = objective;
+	}
+	
 
 }
