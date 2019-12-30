@@ -22,9 +22,9 @@ public class Settings {
 	public static final int MINIMAL_CASTLE_DISTANCE = 2;
 
 	// graphical settings:
-	public static final double DEFAULT_SCENE_WIDTH = 900;
-	public static final double DEFAULT_SCENE_HEIGHT = 750;
-	public static final double WORLD_WIDTH_RATIO = 0.8;
+	public static final double DEFAULT_SCENE_WIDTH = 1100;
+	public static final double DEFAULT_SCENE_HEIGHT = 700;
+	public static final double WORLD_WIDTH_RATIO = 0.7;
 
 	// game seed:
 	public static final Random SEED = new Random();

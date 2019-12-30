@@ -133,9 +133,13 @@ public class World extends Context {
 		
 		for (Owner owner : owners) {
 			for (Castle castle : owner.getCastles()) {
+				// Manage money
 				castle.setTreasure(castle.getTreasure() + castle.getIncome());
+				
+				// Manage production 
 				castle.updateProduction();
 				
+				// Manage doors and exit of units
 				List<Unit> l = castle.getCourtyard().takeOutUnits();
 				if (l != null) {
 					for(Unit u : l) {
@@ -145,6 +149,7 @@ public class World extends Context {
 					units.addAll(l);
 					this.getChildren().addAll(l);
 				}
+				
 			}
 		}
 	}
