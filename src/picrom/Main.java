@@ -139,7 +139,7 @@ public class Main extends Application {
 						ownerL.setText("Propriétaire:\n" + currentClicked.getOwner().getName());
 						levelL.setText("Niveau: " + currentClicked.getLevel());
 						treasorL.setText("Trésor: " + currentClicked.getTreasure());
-						incomeL.setText("Revenu: ");
+						incomeL.setText("Revenu: " + currentClicked.getIncome());
 						productionL.setText("Production: " + (currentClicked.getProduction() == null ? "X"
 								: (currentClicked.getProduction() instanceof Unit
 										? ((Unit) currentClicked.getProduction()).getName()

@@ -6,6 +6,7 @@ import picrom.entity.Owner;
 import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
 import picrom.utils.Drawables;
+import picrom.utils.Settings;
 import picrom.utils.Utils.Direction;
 import picrom.utils.Utils.OwnerType;
 
@@ -17,6 +18,7 @@ public class Castle extends Entity implements Producible {
 	private Door door;
 	private Courtyard court;
 	private int nextLevelCost, nextLevelTime;
+	private int income;
 
 	private ImageView circled;
 
@@ -28,6 +30,7 @@ public class Castle extends Entity implements Producible {
 		court = new Courtyard();
 		nextLevelCost = 1000 * level;
 		nextLevelTime = 100 + 50 * level;
+		income = level * Settings.INCOME_MULTIPLIER;
 
 		circled = new ImageView(Drawables.circled);
 		setCircled(false);
@@ -63,6 +66,7 @@ public class Castle extends Entity implements Producible {
 
 	public void setLevel(int level) {
 		this.level = level;
+		income = level * Settings.INCOME_MULTIPLIER;
 	}
 
 	public int getTreasure() {
@@ -71,6 +75,10 @@ public class Castle extends Entity implements Producible {
 
 	public void setTreasure(int treasure) {
 		this.treasure = treasure;
+	}
+	
+	public int getIncome() {
+		return income;
 	}
 
 	public Door getDoor() {

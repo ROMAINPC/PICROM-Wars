@@ -70,8 +70,7 @@ public class World extends Context {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
 		this.nbPlayers = 1;
-
-		// generate Map structure:
+		
 		// generate player:
 		for (int i = 0; i < this.nbPlayers; i++)
 			owners.add(new Owner(OwnerType.Player));
@@ -84,8 +83,7 @@ public class World extends Context {
 	}
 
 	public void generateWorldCastles() throws TooManyCastlesException {
-		// TODO generates castles, randomize position
-
+		
 		// Each owner (player or AI or baron) start the game with one castle.
 		long time = System.currentTimeMillis();
 		for (Owner owner : owners) {
@@ -93,7 +91,6 @@ public class World extends Context {
 			boolean validDoor = false;
 			int x = 0, y = 0;
 			Direction doorDir = null;
-			// TODO : security to avoid while loop if too many castles
 			while (!validCastle) { // avoid too near castles.
 				// infinite loop check:
 				if (System.currentTimeMillis() - time > 1000)
@@ -136,12 +133,9 @@ public class World extends Context {
 		
 		for (Owner owner : owners) {
 			for (Castle castle : owner.getCastles()) {
-				// TODO update money
-
-				// Update production
+				castle.setTreasure(castle.getTreasure() + castle.getIncome());
 				castle.updateProduction();
-
-				// TODO manage unit exit castle
+				
 				List<Unit> l = castle.getCourtyard().takeOutUnits();
 				if (l != null) {
 					for(Unit u : l) {
