@@ -23,6 +23,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
+import picrom.entity.unit.Unit;
 import picrom.gameboard.Context;
 import picrom.gameboard.TooManyCastlesException;
 import picrom.gameboard.World;
@@ -139,7 +140,10 @@ public class Main extends Application {
 						levelL.setText("Niveau: " + currentClicked.getLevel());
 						treasorL.setText("Trésor: " + currentClicked.getTreasure());
 						incomeL.setText("Revenu: ");
-						productionL.setText("Production: ");
+						productionL.setText("Production: " + (currentClicked.getProduction() == null ? "X"
+								: (currentClicked.getProduction() instanceof Unit
+										? ((Unit) currentClicked.getProduction()).getName()
+										: "Fortifications")));
 						doorL.setText("Porte:\n" + currentClicked.getDoor());
 						garrisonL.setText("Garnison:" + currentClicked.getCourtyard());
 						castleInfosSP.setVisible(true);

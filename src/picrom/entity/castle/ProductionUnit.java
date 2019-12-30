@@ -6,26 +6,33 @@ public class ProductionUnit {
 
 	private Producible currentProduction;
 
-	private int nbTurnProd;
-	private int turnCount;
+	private int timeLeft;
 
 	public ProductionUnit(Castle castle) {
 		this.castle = castle;
+		currentProduction = null;
 	}
 
 	public void update() {
 		if (currentProduction != null) {
+			timeLeft--;
+			if (timeLeft <= 0 && castle.getTreasure() >= currentProduction.getProductionCost()) {
+				castle.setTreasure(castle.getTreasure() - currentProduction.getProductionCost()); // Apply cost
+				currentProduction.produce(castle);
+				setProduction(currentProduction); // start again same production
+			}
 
-			// TODO while unit not produce
-
-			// if conditions reunies:
-			// TODO manage castle money and start new production
-			currentProduction.produce(castle);
 		}
 	}
 
 	public void setProduction(Producible production) {
 		currentProduction = production;
+		if (production != null)
+			timeLeft = production.getProductionTime();
+	}
+
+	public Producible getProduction() {
+		return currentProduction;
 	}
 
 }

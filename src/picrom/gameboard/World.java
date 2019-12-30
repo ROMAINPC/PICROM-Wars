@@ -133,13 +133,15 @@ public class World extends Context {
 	}
 
 	public void processCastles() {
-		// TODO update money
-
-		// TODO update production
-
-		// TODO manage unit exit castle
+		
 		for (Owner owner : owners) {
 			for (Castle castle : owner.getCastles()) {
+				// TODO update money
+
+				// Update production
+				castle.updateProduction();
+
+				// TODO manage unit exit castle
 				List<Unit> l = castle.getCourtyard().takeOutUnits();
 				if (l != null) {
 					entities.addAll(l);

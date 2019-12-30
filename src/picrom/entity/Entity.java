@@ -14,21 +14,18 @@ public abstract class Entity extends Group {
 	private SimpleDoubleProperty worldX;
 	private SimpleDoubleProperty worldY;
 	private Owner owner; // TODO create owner type
-	private int prodCost, prodTime;
 
 	private World context;
 
 	protected ImageView image;
 	protected ImageView mask;
 
-	protected Entity(EntityAssets assets, Owner owner, int X, int Y, int prodCost, int prodTime, World world) {
+	protected Entity(EntityAssets assets, Owner owner, int X, int Y, World world) {
 		image = new ImageView(assets.getImage());
 		mask = new ImageView(assets.getMask());
 		this.owner = owner;
 		worldX = new SimpleDoubleProperty(X);
 		worldY = new SimpleDoubleProperty(Y);
-		this.prodCost = prodCost;
-		this.prodTime = prodTime;
 		context = world;
 
 		// default binding
@@ -47,8 +44,8 @@ public abstract class Entity extends Group {
 		this.getChildren().addAll(image, mask); // add assets
 	}
 
-	protected Entity(EntityAssets img, int prodCost, int prodTime, Castle owner) {
-		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.getContext());
+	protected Entity(EntityAssets img, Castle owner) {
+		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), owner.getContext());
 	}
 
 	public Owner getOwner() {
@@ -82,22 +79,6 @@ public abstract class Entity extends Group {
 
 	public SimpleDoubleProperty worldYProperty() {
 		return worldY;
-	}
-
-	public int getProdCost() {
-		return prodCost;
-	}
-
-	public void setProdCost(int prodCost) {
-		this.prodCost = prodCost;
-	}
-
-	public int getProdTime() {
-		return prodTime;
-	}
-
-	public void setProdTime(int prodTime) {
-		this.prodTime = prodTime;
 	}
 
 	private void applyColor(Color c) {

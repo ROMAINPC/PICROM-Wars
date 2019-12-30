@@ -16,17 +16,18 @@ public class Castle extends Entity implements Producible {
 	private int treasure;
 	private Door door;
 	private Courtyard court;
+	private int nextLevelCost, nextLevelTime;
 
 	private ImageView circled;
 
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
-		super(Drawables.castle, owner, X, Y, 0, 0, context);
+		super(Drawables.castle, owner, X, Y, context);
 		level = 1;
-		setNextLevelCost(level);
-		setNextLevelTime(level);
 		productionUnit = new ProductionUnit(this);
 		this.door = new Door(doorDir, false);
 		court = new Courtyard();
+		nextLevelCost = 1000 * level;
+		nextLevelTime = 100 + 50 * level;
 
 		circled = new ImageView(Drawables.circled);
 		setCircled(false);
@@ -45,22 +46,15 @@ public class Castle extends Entity implements Producible {
 	}
 
 	public void addUnit(Unit u) {
+		court.addUnit(u);
 	}
 
 	public void rmUnit(Unit u) {
-
+		court.removeUnit(u);
 	}
 
 	public ProductionUnit getProductionUnit() {
 		return productionUnit;
-	}
-
-	public void setNextLevelCost(int currentLevel) {
-		// TODO change prodCost (Entity)
-	}
-
-	public void setNextLevelTime(int currentLevel) {
-		// TODO change prodtime(Entity)
 	}
 
 	public int getLevel() {
@@ -84,7 +78,17 @@ public class Castle extends Entity implements Producible {
 	}
 
 	public void produce(Castle castle) {
-		// TODO change level and update next costs
+		level++;
+		nextLevelCost = 1000 * level;
+		nextLevelTime = 100 + 50 * level;
+	}
+
+	public int getProductionCost() {
+		return nextLevelCost;
+	}
+
+	public int getProductionTime() {
+		return nextLevelTime;
 	}
 
 	public Courtyard getCourtyard() {
@@ -102,7 +106,14 @@ public class Castle extends Entity implements Producible {
 	public void updateProduction() {
 		productionUnit.update();
 	}
-	
+
+	public void setProduction(Producible p) {
+		productionUnit.setProduction(p);
+	}
+	public Producible getProduction() {
+		return productionUnit.getProduction();
+	}
+
 	public void setCircled(boolean b) {
 		circled.setVisible(b);
 	}
