@@ -144,6 +144,10 @@ public class World extends Context {
 				// TODO manage unit exit castle
 				List<Unit> l = castle.getCourtyard().takeOutUnits();
 				if (l != null) {
+					for(Unit u : l) {
+						u.setWorldX(u.getWorldX() + castle.getDoor().getDir().getX());
+						u.setWorldY(u.getWorldY() + castle.getDoor().getDir().getY());
+					}
 					entities.addAll(l);
 					this.getChildren().addAll(l);
 				}
