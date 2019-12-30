@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,8 +29,11 @@ import picrom.gameboard.World;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
+import picrom.utils.Utils.OwnerType;
 
 public class Main extends Application {
+
+	private Castle currentClicked;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -113,22 +117,40 @@ public class Main extends Application {
 			root.getChildren().addAll(gameboard, infos);
 
 			// Listeners:
+			currentClicked = null;
 			gameboard.setOnMouseClicked(e -> {
 				Parent clicked = e.getPickResult().getIntersectedNode().getParent();
+				if (currentClicked != null && currentClicked.getObjective() != null)
+					currentClicked.getObjective().setCircled(false);
 				if (clicked instanceof Castle) {
-					Castle castle = (Castle) clicked;
-					Utils.colorize(castleMask, castle.getOwner().getColor());
-					ownerL.setText("Propriétaire:\n" + castle.getOwner().getName());
-					levelL.setText("Niveau: " + castle.getLevel());
-					treasorL.setText("Trésor: " + castle.getTreasure());
-					incomeL.setText("Revenu: ");
-					productionL.setText("Production: ");
-					doorL.setText("Porte:\n" + castle.getDoor());
-					garrisonL.setText("Garnison:" + castle.getCourtyard());
-					castleInfosSP.setVisible(true);
+					if (currentClicked != null && currentClicked.getOwner().getOwnerType() == OwnerType.Player
+							&& e.getButton() == MouseButton.SECONDARY) { // Right click to
+																			// define objectiv
+						Castle target = (Castle) clicked;
+						if (target != currentClicked) {
+							currentClicked.setObjective(target);
+						}
+						if (currentClicked.getObjective() != null)
+							currentClicked.getObjective().setCircled(true);
+					} else if (e.getButton() == MouseButton.PRIMARY) { // Normal click
+						currentClicked = (Castle) clicked;
+						Utils.colorize(castleMask, currentClicked.getOwner().getColor());
+						ownerL.setText("Propriétaire:\n" + currentClicked.getOwner().getName());
+						levelL.setText("Niveau: " + currentClicked.getLevel());
+						treasorL.setText("Trésor: " + currentClicked.getTreasure());
+						incomeL.setText("Revenu: ");
+						productionL.setText("Production: ");
+						doorL.setText("Porte:\n" + currentClicked.getDoor());
+						garrisonL.setText("Garnison:" + currentClicked.getCourtyard());
+						castleInfosSP.setVisible(true);
+						if (currentClicked.getObjective() != null)
+							currentClicked.getObjective().setCircled(true);
+					}
 				} else {
 					castleInfosSP.setVisible(false);
+					currentClicked = null;
 				}
+
 			});
 
 			// Main game loop:

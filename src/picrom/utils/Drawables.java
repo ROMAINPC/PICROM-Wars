@@ -9,6 +9,7 @@ public class Drawables {
 
 	public static Image worldBackground;
 	public static Image infosBackground;
+	public static Image circled;
 	public static EntityAssets castle;
 	public static EntityAssets onager;
 	public static EntityAssets knight;
@@ -17,6 +18,7 @@ public class Drawables {
 	public Drawables() {
 		worldBackground = new Image("Drawables/world_background.png");
 		infosBackground = new Image("Drawables/infos_background.png");
+		circled = new Image("Drawables/circled.png");
 
 		castle = new EntityAssets("castle");
 		onager = new EntityAssets("onager");

@@ -16,10 +16,10 @@ public abstract class Entity extends Group {
 	private Owner owner; // TODO create owner type
 	private int prodCost, prodTime;
 
-	protected World context;
+	private World context;
 
-	private ImageView image;
-	private ImageView mask;
+	protected ImageView image;
+	protected ImageView mask;
 
 	protected Entity(EntityAssets assets, Owner owner, int X, int Y, int prodCost, int prodTime, World world) {
 		image = new ImageView(assets.getImage());
@@ -32,14 +32,14 @@ public abstract class Entity extends Group {
 		context = world;
 
 		// default binding
-		image.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
-		image.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
-		image.layoutXProperty().bind(context.xProperty().add(image.fitWidthProperty().multiply(this.worldX)));
-		image.layoutYProperty().bind(context.yProperty().add(image.fitHeightProperty().multiply(this.worldY)));
-		mask.fitWidthProperty().bind(context.widthProperty().divide(Settings.WORLD_WIDTH));
-		mask.fitHeightProperty().bind(context.heightProperty().divide(Settings.WORLD_HEIGHT));
-		mask.layoutXProperty().bind(context.xProperty().add(image.fitWidthProperty().multiply(this.worldX)));
-		mask.layoutYProperty().bind(context.yProperty().add(image.fitHeightProperty().multiply(this.worldY)));
+		image.fitWidthProperty().bind(getContext().widthProperty().divide(Settings.WORLD_WIDTH));
+		image.fitHeightProperty().bind(getContext().heightProperty().divide(Settings.WORLD_HEIGHT));
+		image.layoutXProperty().bind(getContext().xProperty().add(image.fitWidthProperty().multiply(this.worldX)));
+		image.layoutYProperty().bind(getContext().yProperty().add(image.fitHeightProperty().multiply(this.worldY)));
+		mask.fitWidthProperty().bind(getContext().widthProperty().divide(Settings.WORLD_WIDTH));
+		mask.fitHeightProperty().bind(getContext().heightProperty().divide(Settings.WORLD_HEIGHT));
+		mask.layoutXProperty().bind(getContext().xProperty().add(image.fitWidthProperty().multiply(this.worldX)));
+		mask.layoutYProperty().bind(getContext().yProperty().add(image.fitHeightProperty().multiply(this.worldY)));
 
 		// color effect:
 		applyColor(owner.getColor());
@@ -48,7 +48,7 @@ public abstract class Entity extends Group {
 	}
 
 	protected Entity(EntityAssets img, int prodCost, int prodTime, Castle owner) {
-		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.context);
+		this(img, owner.getOwner(), owner.getWorldX(), owner.getWorldY(), prodCost, prodTime, owner.getContext());
 	}
 
 	public Owner getOwner() {
@@ -104,4 +104,9 @@ public abstract class Entity extends Group {
 		// colorize white mask:
 		Utils.colorize(mask, c);
 	}
+
+	public World getContext() {
+		return context;
+	}
+
 }

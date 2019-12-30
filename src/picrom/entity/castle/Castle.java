@@ -1,5 +1,6 @@
 package picrom.entity.castle;
 
+import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
 import picrom.entity.Owner;
 import picrom.entity.unit.Unit;
@@ -16,6 +17,8 @@ public class Castle extends Entity implements Producible {
 	private Door door;
 	private Courtyard court;
 
+	private ImageView circled;
+
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
 		super(Drawables.castle, owner, X, Y, 0, 0, context);
 		level = 1;
@@ -24,6 +27,17 @@ public class Castle extends Entity implements Producible {
 		productionUnit = new ProductionUnit(this);
 		this.door = new Door(doorDir, false);
 		court = new Courtyard();
+
+		circled = new ImageView(Drawables.circled);
+		setCircled(false);
+		double imageRatio = circled.getImage().getHeight() / image.getImage().getHeight();
+		circled.layoutXProperty()
+				.bind(image.layoutXProperty().subtract(image.fitWidthProperty().multiply((imageRatio - 1) / 2)));
+		circled.layoutYProperty()
+				.bind(image.layoutYProperty().subtract(image.fitHeightProperty().multiply((imageRatio - 1) / 2)));
+		circled.fitHeightProperty().bind(image.fitHeightProperty().multiply(imageRatio));
+		circled.fitWidthProperty().bind(image.fitWidthProperty().multiply(imageRatio));
+		this.getChildren().addAll(circled);
 	}
 
 	public Castle(OwnerType type, int x, int y, Direction doorDir, World context) {
@@ -77,7 +91,19 @@ public class Castle extends Entity implements Producible {
 		return court;
 	}
 
+	public Castle getObjective() {
+		return court.getObjective();
+	}
+
+	public void setObjective(Castle objective) {
+		court.setObjective(objective);
+	}
+
 	public void updateProduction() {
 		productionUnit.update();
+	}
+	
+	public void setCircled(boolean b) {
+		circled.setVisible(b);
 	}
 }
