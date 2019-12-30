@@ -105,6 +105,7 @@ public class Main extends Application {
 			Label treasorL = new Label();
 			Label incomeL = new Label();
 			Label productionL = new Label();
+			productionL.setTextAlignment(TextAlignment.CENTER);
 			Label doorL = new Label();
 			doorL.setTextAlignment(TextAlignment.CENTER);
 			Label garrisonL = new Label();
@@ -139,7 +140,7 @@ public class Main extends Application {
 						levelL.setText("Niveau: " + currentClicked.getLevel());
 						treasorL.setText("Trésor: " + currentClicked.getTreasure());
 						incomeL.setText("Revenu: " + currentClicked.getIncome());
-						productionL.setText("Production: " + currentClicked.productionName());
+						productionL.setText("Production:\n" + currentClicked.productionName());
 						doorL.setText("Porte:\n" + currentClicked.getDoor());
 						garrisonL.setText("Garnison:" + currentClicked.getCourtyard());
 						castleInfosSP.setVisible(true);
@@ -174,6 +175,7 @@ public class Main extends Application {
 			primaryStage.setResizable(true);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("PICROM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Université de Bordeaux");
+			primaryStage.setMaximized(true);
 			primaryStage.show();
 
 		} catch (Exception e) {
