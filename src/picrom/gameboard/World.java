@@ -26,7 +26,7 @@ public class World extends Context {
 	private Castle[][] castlesArray;
 
 	// lists of units engaged in the world
-	private List<Unit> entities;
+	private List<Unit> units;
 
 	// list of owners engaged in the world
 	private List<Owner> owners;
@@ -53,7 +53,7 @@ public class World extends Context {
 		this.worldHeight = worldHeight;
 
 		this.castlesArray = new Castle[worldWidth][worldHeight];
-		this.entities = new LinkedList<Unit>();
+		this.units = new LinkedList<Unit>();
 		this.owners = new ArrayList<Owner>();
 
 		// load and display background:
@@ -142,7 +142,7 @@ public class World extends Context {
 						u.setWorldX(u.getWorldX() + castle.getDoor().getDir().getX());
 						u.setWorldY(u.getWorldY() + castle.getDoor().getDir().getY());
 					}
-					entities.addAll(l);
+					units.addAll(l);
 					this.getChildren().addAll(l);
 				}
 			}
