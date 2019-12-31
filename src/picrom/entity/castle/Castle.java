@@ -33,6 +33,7 @@ public class Castle extends Entity implements Producible {
 		nextLevelTime = 100 + 50 * level;
 		income = level * Settings.INCOME_MULTIPLIER;
 		productionType = null;
+		setTreasure(Settings.START_TREASURE);
 
 		circled = new ImageView(Drawables.circled);
 		setCircled(false);
