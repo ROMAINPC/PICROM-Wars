@@ -70,7 +70,7 @@ public class World extends Context {
 		this.nbAIs = nbAIs;
 		this.nbBarons = nbBarons;
 		this.nbPlayers = 1;
-		
+
 		// generate player:
 		for (int i = 0; i < this.nbPlayers; i++)
 			owners.add(new Owner(OwnerType.Player));
@@ -83,7 +83,7 @@ public class World extends Context {
 	}
 
 	public void generateWorldCastles() throws TooManyCastlesException {
-		
+
 		// Each owner (player or AI or baron) start the game with one castle.
 		long time = System.currentTimeMillis();
 		for (Owner owner : owners) {
@@ -120,7 +120,7 @@ public class World extends Context {
 					validDoor = false;
 				}
 			}
-			
+
 			Castle castle = new Castle(owner, x, y, doorDir, this);
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
@@ -130,24 +130,24 @@ public class World extends Context {
 	}
 
 	public void processCastles() {
-		
+
 		for (Owner owner : owners) {
 			for (Castle castle : owner.getCastles()) {
 				// Manage money
 				castle.setTreasure(castle.getTreasure() + castle.getIncome());
 
-				// Manage production 
+				// Manage production
 				castle.updateProduction();
-				
+
 				// Manage doors and exit of units
-				List<Unit> l = castle.getCourtyard().takeOutUnits();
-				if (l != null) {
-					for(Unit u : l) {
+				List<Unit> toOut = castle.getCourtyard().takeOutUnits();
+				if (toOut != null) {
+					for (Unit u : toOut) {
 						u.setWorldX(u.getWorldX() + castle.getDoor().getDir().getX());
 						u.setWorldY(u.getWorldY() + castle.getDoor().getDir().getY());
+						engageUnit(u);
 					}
-					units.addAll(l);
-					this.getChildren().addAll(l);
+
 				}
 
 			}
@@ -156,50 +156,50 @@ public class World extends Context {
 
 	// Process units engaged on the field
 	public void processUnits() {
-
-		for (Unit u : units) {
-			double varx = u.getObjective().getWorldX() - u.getWorldX();
-			double vary = u.getObjective().getWorldY() - u.getWorldY();
+		// TODO fix exception due to remove object in list while explore it !!!!
+		for (Unit unit : units) {
+			double varx = unit.getObjective().getWorldX() - unit.getWorldX();
+			double vary = unit.getObjective().getWorldY() - unit.getWorldY();
 			int indx, indy;
 
-			// For each unit step
-			for (int i = 0; i < u.getSpeed(); i++) {
+			// For each unit step (each unit has a number of step per tour equal to its
+			// speed)
+			for (int i = 0; i < unit.getSpeed(); i++) {
+				// Moving (following a smaller ddivision of the world grid):
 				if (Math.abs(varx) > Math.abs(vary))
-					u.setWorldX(u.getWorldX() + (varx / Math.abs(varx)) / Settings.UNITS_GRID_SIZE);
+					unit.setWorldX(unit.getWorldX() + (varx / Math.abs(varx)) / Settings.UNITS_GRID_SIZE);
 				else
-					u.setWorldY(u.getWorldY() + (vary / Math.abs(vary)) / Settings.UNITS_GRID_SIZE);
+					unit.setWorldY(unit.getWorldY() + (vary / Math.abs(vary)) / Settings.UNITS_GRID_SIZE);
 
-				indx = (int) Math.round(u.getWorldX());
-				indy = (int) Math.round(u.getWorldY());
+				indx = (int) Math.round(unit.getWorldX());
+				indy = (int) Math.round(unit.getWorldY());
 
 				// If the unit finds a castle
 				if (castlesArray[indx][indy] != null) {
-					System.out.println("ici");
 					// If objective
-					if (castlesArray[indx][indy] == u.getObjective()) {
+					if (castlesArray[indx][indy] == unit.getObjective()) {
 						// If enemy
-						if (u.getObjective().getOwner() != u.getOwner()) {
+						if (unit.getObjective().getOwner() != unit.getOwner()) {
 							if (!castlesArray[indx][indy].getCourtyard().getUnits().isEmpty()) {
 								// If unit dead
-								if (u.getDamage() == u.getDamageDone()) {
-									units.remove(u);
+								if (unit.getDamage() == unit.getDamageDone()) {
+									unengageUnit(unit);
 								} else {
 									// Assault
 									castlesArray[indx][indy].getCourtyard().assault();
-									u.setDamageDone(u.getDamageDone() + 1);
+									unit.setDamageDone(unit.getDamageDone() + 1);
 								}
 							} else {
 								// Victory
-								castlesArray[indx][indy].setOwner(u.getOwner());
-								System.out.println(castlesArray[indx][indy].getOwner());
+								castlesArray[indx][indy].setOwner(unit.getOwner());
 								castlesArray[indx][indy].getProductionUnit().setProduction(null);
 							}
 						}
 						// If same owner
 						else {
 							// Add unit to courtyard
-							u.getObjective().getCourtyard().addUnit(u);
-							units.remove(u);
+							unit.getObjective().getCourtyard().addUnit(unit);
+							unengageUnit(unit);
 						}
 					}
 
@@ -207,6 +207,16 @@ public class World extends Context {
 			}
 
 		}
+	}
+
+	public void unengageUnit(Unit unit) {
+		units.remove(unit);
+		this.getChildren().remove(unit);
+	}
+
+	public void engageUnit(Unit unit) {
+		units.add(unit);
+		this.getChildren().add(unit);
 	}
 
 	public int getNbPlayers() {

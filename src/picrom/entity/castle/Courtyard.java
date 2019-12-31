@@ -58,7 +58,6 @@ public class Courtyard {
 		Random r = Settings.SEED;
 		int idx = r.nextInt(units.size());
 		Unit u = units.get(idx);
-		System.out.println(u);
 		u.setHp(u.getHp() - 1);
 		if (u.getHp() <= 0) {
 			removeUnit(u);
