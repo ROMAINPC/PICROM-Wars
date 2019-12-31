@@ -41,9 +41,8 @@ public class Courtyard {
 		if (!units.isEmpty() && (objective != null)) {
 			int i = 0;
 			List<Unit> l = new LinkedList<Unit>();
-			while (!units.isEmpty() && i < Settings.MAX_UNITS_OUT_BY_TURN) {
-				Unit u = units.get(0);
-				units.remove(0);
+			while (!units.isEmpty() && i < Settings.MAX_UNITS_OUT_BY_TURN && i < units.size()) {
+				Unit u = units.get(i);
 				u.setObjective(objective);
 				u.setOrigin(castle);
 				l.add(u);

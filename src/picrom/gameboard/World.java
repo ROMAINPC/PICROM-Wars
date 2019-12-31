@@ -146,6 +146,7 @@ public class World extends Context {
 					for (Unit u : toOut) {
 						u.setWorldX(u.getWorldX() + castle.getDoor().getDir().getX());
 						u.setWorldY(u.getWorldY() + castle.getDoor().getDir().getY());
+						castle.removeUnit(u);
 						engageUnit(u);
 					}
 

@@ -57,7 +57,7 @@ public class Castle extends Entity implements Producible {
 		u.setWorldY(this.getWorldY());
 	}
 
-	public void rmUnit(Unit u) {
+	public void removeUnit(Unit u) {
 		court.removeUnit(u);
 	}
 
