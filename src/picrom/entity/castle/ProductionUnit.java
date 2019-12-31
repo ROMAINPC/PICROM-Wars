@@ -15,14 +15,16 @@ public class ProductionUnit {
 	}
 
 	public void update() {
-		if (!produced) {
-			timeLeft--;
-			if (timeLeft <= 0 && castle.getTreasure() >= currentProduction.getProductionCost()) {
-				castle.setTreasure(castle.getTreasure() - currentProduction.getProductionCost()); // Apply cost
-				currentProduction.produce(castle);
-				produced = true;
+		if(currentProduction != null) {
+			if (!produced) {
+				timeLeft--;
+				if (timeLeft <= 0 && castle.getTreasure() >= currentProduction.getProductionCost()) {
+					castle.setTreasure(castle.getTreasure() - currentProduction.getProductionCost()); // Apply cost
+					currentProduction.produce(castle);
+					produced = true;
+				}
+	
 			}
-
 		}
 	}
 

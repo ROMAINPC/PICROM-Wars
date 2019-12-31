@@ -28,7 +28,7 @@ public class Castle extends Entity implements Producible {
 		level = 1;
 		productionUnit = new ProductionUnit(this);
 		this.door = new Door(doorDir, false);
-		court = new Courtyard();
+		court = new Courtyard(this);
 		nextLevelCost = 1000 * level;
 		nextLevelTime = 100 + 50 * level;
 		income = level * Settings.INCOME_MULTIPLIER;

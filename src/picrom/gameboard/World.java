@@ -135,7 +135,7 @@ public class World extends Context {
 			for (Castle castle : owner.getCastles()) {
 				// Manage money
 				castle.setTreasure(castle.getTreasure() + castle.getIncome());
-				
+
 				// Manage production 
 				castle.updateProduction();
 				
@@ -149,25 +149,64 @@ public class World extends Context {
 					units.addAll(l);
 					this.getChildren().addAll(l);
 				}
-				
+
 			}
 		}
 	}
 
 	// Process units engaged on the field
 	public void processUnits() {
-		
-		for(Unit u : units) {
+
+		for (Unit u : units) {
 			double varx = u.getObjective().getWorldX() - u.getWorldX();
 			double vary = u.getObjective().getWorldY() - u.getWorldY();
+			int indx, indy;
 
-			if (Math.abs(varx) > Math.abs(vary))
-				u.setWorldX(u.getWorldX() + Settings.UNITS_SPEED_MULTIPLIER * varx/Math.abs(varx) * u.getSpeed());
-			else
-				u.setWorldY(u.getWorldY() + Settings.UNITS_SPEED_MULTIPLIER * vary/Math.abs(vary) * u.getSpeed());
+			// For each unit step
+			for (int i = 0; i < u.getSpeed(); i++) {
+				if (Math.abs(varx) > Math.abs(vary))
+					u.setWorldX(u.getWorldX() + (varx / Math.abs(varx)) / Settings.UNITS_GRID_SIZE);
+				else
+					u.setWorldY(u.getWorldY() + (vary / Math.abs(vary)) / Settings.UNITS_GRID_SIZE);
+
+				indx = (int) Math.round(u.getWorldX());
+				indy = (int) Math.round(u.getWorldY());
+
+				// If the unit finds a castle
+				if (castlesArray[indx][indy] != null) {
+					System.out.println("ici");
+					// If objective
+					if (castlesArray[indx][indy] == u.getObjective()) {
+						// If enemy
+						if (u.getObjective().getOwner() != u.getOwner()) {
+							if (!castlesArray[indx][indy].getCourtyard().getUnits().isEmpty()) {
+								// If unit dead
+								if (u.getDamage() == u.getDamageDone()) {
+									units.remove(u);
+								} else {
+									// Assault
+									castlesArray[indx][indy].getCourtyard().assault();
+									u.setDamageDone(u.getDamageDone() + 1);
+								}
+							} else {
+								// Victory
+								castlesArray[indx][indy].setOwner(u.getOwner());
+								System.out.println(castlesArray[indx][indy].getOwner());
+								castlesArray[indx][indy].getProductionUnit().setProduction(null);
+							}
+						}
+						// If same owner
+						else {
+							// Add unit to courtyard
+							u.getObjective().getCourtyard().addUnit(u);
+							units.remove(u);
+						}
+					}
+
+				}
+			}
+
 		}
-
-		// TODO assault or enter castle, if unit reached the target
 	}
 
 	public int getNbPlayers() {
