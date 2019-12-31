@@ -10,7 +10,7 @@ import picrom.utils.Settings;
 import picrom.utils.SlowestUnitComparator;
 
 public class Courtyard {
-	//TODO find a solution to avoid sorting the list at each addition / suppression
+	// TODO find a solution to avoid sorting the list at each addition / suppression
 	private List<Unit> units;
 	private Castle castle;
 	private Castle objective;
@@ -53,18 +53,16 @@ public class Courtyard {
 		}
 		return null;
 	}
-	
-	public void assault() {
+
+	public void assault(int damage) {
 		Random r = Settings.SEED;
 		int idx = r.nextInt(units.size());
 		Unit u = units.get(idx);
-		u.setHp(u.getHp() - 1);
+		u.setHp(u.getHp() - damage);
 		if (u.getHp() <= 0) {
 			removeUnit(u);
 		}
 	}
-
-	
 
 	public List<Unit> getUnits() {
 		return units;

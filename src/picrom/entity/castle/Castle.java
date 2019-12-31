@@ -53,14 +53,12 @@ public class Castle extends Entity implements Producible {
 
 	public void addUnit(Unit u) {
 		court.addUnit(u);
+		u.setWorldX(this.getWorldX());
+		u.setWorldY(this.getWorldY());
 	}
 
 	public void rmUnit(Unit u) {
 		court.removeUnit(u);
-	}
-
-	public ProductionUnit getProductionUnit() {
-		return productionUnit;
 	}
 
 	public int getLevel() {
@@ -86,6 +84,10 @@ public class Castle extends Entity implements Producible {
 
 	public Door getDoor() {
 		return door;
+	}
+
+	public boolean isGarrison() {
+		return getCourtyard().getUnits().isEmpty();
 	}
 
 	public void produce(Castle castle) {
@@ -157,6 +159,11 @@ public class Castle extends Entity implements Producible {
 
 	public void setCircled(boolean b) {
 		circled.setVisible(b);
+	}
+
+	public void attackWith(Unit attacker, int damage) {
+		getCourtyard().assault(damage);
+		attacker.setDamage(attacker.getDamage() - damage);
 	}
 
 }

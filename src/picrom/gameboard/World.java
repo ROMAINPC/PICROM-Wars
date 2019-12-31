@@ -1,6 +1,7 @@
 package picrom.gameboard;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -156,7 +157,9 @@ public class World extends Context {
 
 	// Process units engaged on the field
 	public void processUnits() {
-		// TODO fix exception due to remove object in list while explore it !!!!
+		
+		HashSet<Unit> toRemove = new HashSet<Unit>();
+		
 		for (Unit unit : units) {
 			double varx = unit.getObjective().getWorldX() - unit.getWorldX();
 			double vary = unit.getObjective().getWorldY() - unit.getWorldY();
@@ -165,7 +168,7 @@ public class World extends Context {
 			// For each unit step (each unit has a number of step per tour equal to its
 			// speed)
 			for (int i = 0; i < unit.getSpeed(); i++) {
-				// Moving (following a smaller ddivision of the world grid):
+				// Moving (following a smaller division of the world grid):
 				if (Math.abs(varx) > Math.abs(vary))
 					unit.setWorldX(unit.getWorldX() + (varx / Math.abs(varx)) / Settings.UNITS_GRID_SIZE);
 				else
@@ -180,26 +183,26 @@ public class World extends Context {
 					if (castlesArray[indx][indy] == unit.getObjective()) {
 						// If enemy
 						if (unit.getObjective().getOwner() != unit.getOwner()) {
-							if (!castlesArray[indx][indy].getCourtyard().getUnits().isEmpty()) {
+							if (!castlesArray[indx][indy].isGarrison()) {
 								// If unit dead
-								if (unit.getDamage() == unit.getDamageDone()) {
-									unengageUnit(unit);
+								if (unit.getDamage() <= 0) {
+									toRemove.add(unit);
 								} else {
 									// Assault
-									castlesArray[indx][indy].getCourtyard().assault();
-									unit.setDamageDone(unit.getDamageDone() + 1);
+									castlesArray[indx][indy].attackWith(unit , 1);
 								}
 							} else {
 								// Victory
 								castlesArray[indx][indy].setOwner(unit.getOwner());
-								castlesArray[indx][indy].getProductionUnit().setProduction(null);
+								castlesArray[indx][indy].setProduction(null);
+								castlesArray[indx][indy].getDoor().setOpen(false);
 							}
 						}
 						// If same owner
 						else {
 							// Add unit to courtyard
-							unit.getObjective().getCourtyard().addUnit(unit);
-							unengageUnit(unit);
+							toRemove.add(unit);
+							castlesArray[indx][indy].addUnit(unit);
 						}
 					}
 
@@ -207,6 +210,12 @@ public class World extends Context {
 			}
 
 		}
+		//unengage units dead or entered in a castle:
+		for(Unit u : toRemove)
+			unengageUnit(u);
+		
+		
+		
 	}
 
 	public void unengageUnit(Unit unit) {
@@ -217,6 +226,7 @@ public class World extends Context {
 	public void engageUnit(Unit unit) {
 		units.add(unit);
 		this.getChildren().add(unit);
+		//TODO fix Exception !!!!!!!!!
 	}
 
 	public int getNbPlayers() {
