@@ -111,6 +111,7 @@ public class Castle extends Entity implements Producible {
 
 	public void setObjective(Castle objective) {
 		court.setObjective(objective);
+		door.setOpen(true);
 	}
 
 	public void updateProduction() {
@@ -138,6 +139,7 @@ public class Castle extends Entity implements Producible {
 
 	public void setProduction(Class<? extends Producible> productionType) {
 		this.productionType = productionType;
+		this.productionUnit.stop();
 	}
 
 	public Class<? extends Producible> getProduction() {

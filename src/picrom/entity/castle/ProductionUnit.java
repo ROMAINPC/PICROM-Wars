@@ -17,7 +17,6 @@ public class ProductionUnit {
 	public void update() {
 		if (!produced) {
 			timeLeft--;
-			System.out.println(timeLeft);
 			if (timeLeft <= 0 && castle.getTreasure() >= currentProduction.getProductionCost()) {
 				castle.setTreasure(castle.getTreasure() - currentProduction.getProductionCost()); // Apply cost
 				currentProduction.produce(castle);
@@ -40,6 +39,10 @@ public class ProductionUnit {
 
 	public boolean isProduced() {
 		return produced;
+	}
+
+	public void stop() {
+		produced = true;
 	}
 
 }
