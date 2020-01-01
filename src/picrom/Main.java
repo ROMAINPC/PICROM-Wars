@@ -230,8 +230,6 @@ public class Main extends Application {
 			gameLoop.setCycleCount(Timeline.INDEFINITE);
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
-					refreshCastleInfos();
-
 					// TODO test if pause disabled
 
 					// update world:
@@ -239,6 +237,9 @@ public class Main extends Application {
 					gameboard.processUnits();
 
 					// TODO Test end of game
+
+					// refresh UI
+					refreshCastleInfos();
 				}
 			}));
 
