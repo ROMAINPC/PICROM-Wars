@@ -1,5 +1,8 @@
 package picrom.entity.castle;
 
+import picrom.utils.Settings;
+import picrom.utils.Utils.OwnerType;
+
 public class ProductionUnit {
 
 	private Castle castle;
@@ -15,7 +18,7 @@ public class ProductionUnit {
 	}
 
 	public void update() {
-		if(currentProduction != null) {
+		if (currentProduction != null) {
 			if (!produced) {
 				timeLeft--;
 				if (timeLeft <= 0 && castle.getTreasure() >= currentProduction.getProductionCost()) {
@@ -23,7 +26,7 @@ public class ProductionUnit {
 					currentProduction.produce(castle);
 					produced = true;
 				}
-	
+
 			}
 		}
 	}
@@ -31,8 +34,13 @@ public class ProductionUnit {
 	public void setProduction(Producible production) {
 		currentProduction = production;
 		produced = false;
-		if (production != null)
-			timeLeft = production.getProductionTime();
+		if (production != null) {
+			int multiplier = castle.getOwner().getOwnerType() == OwnerType.Baron
+					? Settings.NEUTRAL_PRODUCTION_MULTIPLIER
+					: 1;
+			timeLeft = production.getProductionTime() * multiplier;
+		}
+
 	}
 
 	public Producible getProduction() {

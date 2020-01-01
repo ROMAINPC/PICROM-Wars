@@ -100,7 +100,7 @@ public class Castle extends Entity implements Producible {
 	}
 
 	public void produce(Castle castle) {
-		level++;
+		setLevel(getLevel() + 1);
 		nextLevelCost = 1000 * level;
 		nextLevelTime = 100 + 50 * level;
 	}

@@ -12,8 +12,9 @@ public class Settings {
 	public static final Duration TURN_DURATION = Duration.millis(100);
 	public static final int MAX_UNITS_OUT_BY_TURN = 3;
 	public static final int INCOME_MULTIPLIER = 10;
-	public static final double UNITS_GRID_SIZE = 10;
+	public static final int UNITS_GRID_SIZE = 10;
 	public static final int START_TREASURE = 0;
+	public static final int NEUTRAL_PRODUCTION_MULTIPLIER = 10;
 
 	// game board settings:
 	public static final int WORLD_WIDTH = 18;
