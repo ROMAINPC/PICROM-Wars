@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -51,6 +52,8 @@ public class Main extends Application {
 	private ImageView castleMask, knightM, pikemanM, onagerM;
 	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasorL, doorL, incomeL;
 	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
+
+	private boolean pause;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -225,19 +228,32 @@ public class Main extends Application {
 					currentClicked.setProduction(Castle.class);
 			});
 
+			// pause button:
+			Button pauseB = new Button("Pause");
+			infos.bindIn(pauseB, 0.15, 0.47, 0.6, 0.1);
+			infos.getChildren().add(pauseB);
+			pause = false;
+			pauseB.setOnAction(e -> {
+				if (pause) {
+					pauseB.setText("Pause");
+					pause = false;
+				} else {
+					pauseB.setText("Reprendre");
+					pause = true;
+				}
+			});
+
 			// Main game loop:
 			Timeline gameLoop = new Timeline();
 			gameLoop.setCycleCount(Timeline.INDEFINITE);
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
-					// TODO test if pause disabled
-
-					// update world:
-					gameboard.processCastles();
-					gameboard.processUnits();
-
-					// TODO Test end of game
-
+					if (!pause) {
+						// update world:
+						gameboard.processCastles();
+						gameboard.processUnits();
+						// TODO Test end of game
+					}
 					// refresh UI
 					refreshCastleInfos();
 				}
