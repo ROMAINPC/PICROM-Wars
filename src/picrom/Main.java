@@ -31,7 +31,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import picrom.entity.Owner;
 import picrom.entity.castle.Castle;
-import picrom.entity.castle.Producible;
 import picrom.entity.unit.Knight;
 import picrom.entity.unit.Onager;
 import picrom.entity.unit.Pikeman;
@@ -49,6 +48,9 @@ public class Main extends Application {
 	private Castle currentClicked;
 	private Border border;
 	private Border alphaBorder;
+	private ImageView castleMask, knightM, pikemanM, onagerM;
+	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasorL, doorL, incomeL;
+	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -110,7 +112,7 @@ public class Main extends Application {
 			castleInfos.setAlignment(Pos.CENTER);
 			StackPane castlePreview = new StackPane();
 			ImageView castleImage = new ImageView(Drawables.castle.getImage());
-			ImageView castleMask = new ImageView(Drawables.castle.getMask());
+			castleMask = new ImageView(Drawables.castle.getMask());
 			castleImage.fitHeightProperty().bind(infos.heightProperty().multiply(0.15));
 			castleImage.setPreserveRatio(true);
 			castleMask.fitHeightProperty().bind(infos.heightProperty().multiply(0.15));
@@ -120,29 +122,29 @@ public class Main extends Application {
 			HBox produceChoice = new HBox(); // also print quantity in garrison
 			VBox pikeman = new VBox();
 			ImageView pikemanIV = new ImageView(Drawables.pikeman.getImage());
-			ImageView pikemanM = new ImageView(Drawables.pikeman.getMask());
-			StackPane pikemanSP = new StackPane(pikemanIV, pikemanM);
-			Label pikemanNumber = new Label();
+			pikemanM = new ImageView(Drawables.pikeman.getMask());
+			pikemanSP = new StackPane(pikemanIV, pikemanM);
+			pikemanNumber = new Label();
 			pikeman.setAlignment(Pos.CENTER);
 			pikeman.getChildren().addAll(pikemanSP, pikemanNumber);
 			VBox knight = new VBox();
 			ImageView knightIV = new ImageView(Drawables.knight.getImage());
-			ImageView knightM = new ImageView(Drawables.knight.getMask());
-			StackPane knightSP = new StackPane(knightIV, knightM);
-			Label knightNumber = new Label();
+			knightM = new ImageView(Drawables.knight.getMask());
+			knightSP = new StackPane(knightIV, knightM);
+			knightNumber = new Label();
 			knight.setAlignment(Pos.CENTER);
 			knight.getChildren().addAll(knightSP, knightNumber);
 			VBox onager = new VBox();
 			ImageView onagerIV = new ImageView(Drawables.onager.getImage());
-			ImageView onagerM = new ImageView(Drawables.onager.getMask());
-			StackPane onagerSP = new StackPane(onagerIV, onagerM);
-			Label onagerNumber = new Label();
+			onagerM = new ImageView(Drawables.onager.getMask());
+			onagerSP = new StackPane(onagerIV, onagerM);
+			onagerNumber = new Label();
 			onager.setAlignment(Pos.CENTER);
 			onager.getChildren().addAll(onagerSP, onagerNumber);
 			VBox hammer = new VBox();
 			ImageView hammerIV = new ImageView(Drawables.hammer);
-			StackPane hammerSP = new StackPane(hammerIV);
-			Label levelL = new Label();
+			hammerSP = new StackPane(hammerIV);
+			levelL = new Label();
 			hammer.setAlignment(Pos.CENTER);
 			hammer.getChildren().addAll(hammerSP, levelL);
 			pikemanIV.setPreserveRatio(true);
@@ -165,11 +167,11 @@ public class Main extends Application {
 			alphaBorder = new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
 					new BorderWidths(3, 3, 3, 3)));
 			// Labels:
-			Label ownerL = new Label();
+			ownerL = new Label();
 			ownerL.setTextAlignment(TextAlignment.CENTER);
-			Label treasorL = new Label();
-			Label incomeL = new Label();
-			Label doorL = new Label();
+			treasorL = new Label();
+			incomeL = new Label();
+			doorL = new Label();
 			doorL.setTextAlignment(TextAlignment.CENTER);
 			castleInfosSP.setVisible(false);
 			castleInfos.getChildren().addAll(castlePreview, produceChoice, ownerL, treasorL, incomeL, doorL);
@@ -196,29 +198,7 @@ public class Main extends Application {
 							currentClicked.getObjective().setCircled(true);
 					} else if (e.getButton() == MouseButton.PRIMARY) { // Normal click
 						currentClicked = (Castle) clicked;
-						Utils.colorize(castleMask, currentClicked.getOwner().getColor());
-						Utils.colorize(pikemanM, currentClicked.getOwner().getColor());
-						Utils.colorize(knightM, currentClicked.getOwner().getColor());
-						Utils.colorize(onagerM, currentClicked.getOwner().getColor());
-						ownerL.setText(currentClicked.getOwner().getName());
-						levelL.setText("Nv " + currentClicked.getLevel());
-						Map<Class<? extends Unit>, Integer> units = currentClicked.getGarrisonQuantity();
-						Class<? extends Unit> key = Pikeman.class;
-						pikemanNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
-						key = Knight.class;
-						knightNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
-						key = Onager.class;
-						onagerNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
-						treasorL.setText("Trésor: " + currentClicked.getTreasure());
-						incomeL.setText("Revenu: " + currentClicked.getIncome());
-						doorL.setText("Porte:\n" + currentClicked.getDoor());
 						castleInfosSP.setVisible(true);
-						pikeman.setBorder(currentClicked.getProduction() == Pikeman.class ? border : alphaBorder);
-						knight.setBorder(currentClicked.getProduction() == Knight.class ? border : alphaBorder);
-						onager.setBorder(currentClicked.getProduction() == Onager.class ? border : alphaBorder);
-						hammer.setBorder(currentClicked.getProduction() == Castle.class ? border : alphaBorder);
-						if (currentClicked.getObjective() != null)
-							currentClicked.getObjective().setCircled(true);
 					}
 				} else {
 					castleInfosSP.setVisible(false);
@@ -250,6 +230,8 @@ public class Main extends Application {
 			gameLoop.setCycleCount(Timeline.INDEFINITE);
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
+					refreshCastleInfos();
+
 					// TODO test if pause disabled
 
 					// update world:
@@ -271,6 +253,33 @@ public class Main extends Application {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void refreshCastleInfos() {
+		if (currentClicked != null) {
+			Utils.colorize(castleMask, currentClicked.getOwner().getColor());
+			Utils.colorize(pikemanM, currentClicked.getOwner().getColor());
+			Utils.colorize(knightM, currentClicked.getOwner().getColor());
+			Utils.colorize(onagerM, currentClicked.getOwner().getColor());
+			ownerL.setText(currentClicked.getOwner().getName());
+			levelL.setText("Nv " + currentClicked.getLevel());
+			Map<Class<? extends Unit>, Integer> units = currentClicked.getGarrisonQuantity();
+			Class<? extends Unit> key = Pikeman.class;
+			pikemanNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
+			key = Knight.class;
+			knightNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
+			key = Onager.class;
+			onagerNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
+			treasorL.setText("Trésor: " + currentClicked.getTreasure());
+			incomeL.setText("Revenu: " + currentClicked.getIncome());
+			doorL.setText("Porte:\n" + currentClicked.getDoor());
+			pikemanSP.setBorder(currentClicked.getProduction() == Pikeman.class ? border : alphaBorder);
+			knightSP.setBorder(currentClicked.getProduction() == Knight.class ? border : alphaBorder);
+			onagerSP.setBorder(currentClicked.getProduction() == Onager.class ? border : alphaBorder);
+			hammerSP.setBorder(currentClicked.getProduction() == Castle.class ? border : alphaBorder);
+			if (currentClicked.getObjective() != null)
+				currentClicked.getObjective().setCircled(true);
 		}
 	}
 
