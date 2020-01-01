@@ -15,7 +15,7 @@ public class Door {
 		return (open ? "Ouverte" : "Fermée") + " (direction " + dir + ")";
 	}
 
-	public Direction getDir() {
+	public Direction getDirection() {
 		return dir;
 	}
 

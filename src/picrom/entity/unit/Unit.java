@@ -55,7 +55,7 @@ public class Unit extends Entity implements Producible {
 	}
 
 	public void produce(Castle c) {
-		c.addUnit(this);
+		c.enterUnit(this);
 	}
 
 	public int getProductionCost() {

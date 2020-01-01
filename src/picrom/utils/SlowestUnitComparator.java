@@ -8,7 +8,7 @@ public class SlowestUnitComparator implements Comparator<Unit> {
 	
 	@Override
 	public int compare(Unit u1, Unit u2) {
-		return ((Integer) u2.getSpeed()).compareTo(u1.getSpeed());
+		return ((Integer) u1.getSpeed()).compareTo(u2.getSpeed());
 	}
 
 }

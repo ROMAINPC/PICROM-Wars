@@ -180,7 +180,7 @@ public class Main extends Application {
 						incomeL.setText("Revenu: " + currentClicked.getIncome());
 						productionL.setText("Production:\n" + currentClicked.productionName());
 						doorL.setText("Porte:\n" + currentClicked.getDoor());
-						garrisonL.setText("Garnison:" + currentClicked.getCourtyard());
+						garrisonL.setText("Garnison:" + "TODO");
 						castleInfosSP.setVisible(true);
 						produceChoice.setVisible(currentClicked.getOwner().getOwnerType() == OwnerType.Player);
 						if (currentClicked.getObjective() != null)

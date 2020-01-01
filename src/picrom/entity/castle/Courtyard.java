@@ -12,11 +12,9 @@ import picrom.utils.SlowestUnitComparator;
 public class Courtyard {
 	// TODO find a solution to avoid sorting the list at each addition / suppression
 	private List<Unit> units;
-	private Castle castle;
 	private Castle objective;
 
 	public Courtyard(Castle castle) {
-		this.castle = castle;
 		objective = null;
 		units = new LinkedList<Unit>();
 	}
@@ -32,25 +30,19 @@ public class Courtyard {
 	}
 
 	/**
-	 * Removes the first unit of the sorted list, and returns it in order to add it
-	 * to the world.
+	 * Choose units wich are ready to exit the court.
 	 * 
-	 * @return The first unit of the sorted list.
+	 * @return List of max 3 units, the slowest in the court.
 	 */
-	public List<Unit> takeOutUnits() {
-		if (!units.isEmpty() && (objective != null)) {
-			int i = 0;
-			List<Unit> l = new LinkedList<Unit>();
-			while (!units.isEmpty() && i < Settings.MAX_UNITS_OUT_BY_TURN && i < units.size()) {
-				Unit u = units.get(i);
-				u.setObjective(objective);
-				u.setOrigin(castle);
-				l.add(u);
-				i++;
-			}
-			return l;
-		}
-		return null;
+	public List<Unit> getReadyUnits() {
+
+		List<Unit> l = new LinkedList<Unit>();
+		for (int i = 0; i < 3; i++)
+			if (i < units.size())
+				l.add(units.get(i));
+
+		return l;
+
 	}
 
 	public void assault(int damage) {

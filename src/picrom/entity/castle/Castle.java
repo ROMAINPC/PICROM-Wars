@@ -1,5 +1,8 @@
 package picrom.entity.castle;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
 import picrom.entity.Owner;
@@ -51,14 +54,18 @@ public class Castle extends Entity implements Producible {
 		this(new Owner(type), x, y, doorDir, context);
 	}
 
-	public void addUnit(Unit u) {
+	public void enterUnit(Unit u) {
 		court.addUnit(u);
 		u.setWorldX(this.getWorldX());
 		u.setWorldY(this.getWorldY());
+		u.setOrigin(this);
+		u.setObjective(null);
 	}
 
-	public void removeUnit(Unit u) {
+	public void launchUnit(Unit u) {
 		court.removeUnit(u);
+		u.setObjective(court.getObjective());
+		getContext().engageUnit(u);
 	}
 
 	public int getLevel() {
@@ -87,7 +94,7 @@ public class Castle extends Entity implements Producible {
 	}
 
 	public boolean isGarrison() {
-		return getCourtyard().getUnits().isEmpty();
+		return court.getUnits().isEmpty();
 	}
 
 	public void produce(Castle castle) {
@@ -104,9 +111,6 @@ public class Castle extends Entity implements Producible {
 		return nextLevelTime;
 	}
 
-	public Courtyard getCourtyard() {
-		return court;
-	}
 
 	public Castle getObjective() {
 		return court.getObjective();
@@ -162,8 +166,20 @@ public class Castle extends Entity implements Producible {
 	}
 
 	public void attackWith(Unit attacker, int damage) {
-		getCourtyard().assault(damage);
+		court.assault(damage);
 		attacker.setDamage(attacker.getDamage() - damage);
+	}
+
+	/**
+	 * To know which units are launchable, have an objective to do and the door open.
+	 * 
+	 * @return List of units to launch toward the objectiv
+	 */
+	public List<Unit> getLaunchList() {
+		List<Unit> l = new LinkedList<Unit>();
+		if(court.getObjective() != null && door.isOpen())
+			l.addAll(court.getReadyUnits());
+		return l;
 	}
 
 }

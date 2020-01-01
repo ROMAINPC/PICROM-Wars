@@ -13,7 +13,7 @@ import picrom.utils.Utils;
 public abstract class Entity extends Group {
 	private SimpleDoubleProperty worldX;
 	private SimpleDoubleProperty worldY;
-	private Owner owner; // TODO create owner type
+	private Owner owner;
 
 	private World context;
 

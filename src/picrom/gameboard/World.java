@@ -141,15 +141,11 @@ public class World extends Context {
 				castle.updateProduction();
 
 				// Manage doors and exit of units
-				List<Unit> toOut = castle.getCourtyard().takeOutUnits();
-				if (toOut != null) {
-					for (Unit u : toOut) {
-						u.setWorldX(u.getWorldX() + castle.getDoor().getDir().getX());
-						u.setWorldY(u.getWorldY() + castle.getDoor().getDir().getY());
-						castle.removeUnit(u);
-						engageUnit(u);
-					}
-
+				List<Unit> toOut = castle.getLaunchList();
+				for (Unit u : toOut) {
+					u.setWorldX(u.getWorldX() + castle.getDoor().getDirection().getX());
+					u.setWorldY(u.getWorldY() + castle.getDoor().getDirection().getY());
+					castle.launchUnit(u);
 				}
 
 			}
@@ -158,9 +154,9 @@ public class World extends Context {
 
 	// Process units engaged on the field
 	public void processUnits() {
-		
+
 		HashSet<Unit> toRemove = new HashSet<Unit>();
-		
+
 		for (Unit unit : units) {
 			double varx = unit.getObjective().getWorldX() - unit.getWorldX();
 			double vary = unit.getObjective().getWorldY() - unit.getWorldY();
@@ -190,7 +186,7 @@ public class World extends Context {
 									toRemove.add(unit);
 								} else {
 									// Assault
-									castlesArray[indx][indy].attackWith(unit , 1);
+									castlesArray[indx][indy].attackWith(unit, 1);
 								}
 							} else {
 								// Victory
@@ -203,7 +199,7 @@ public class World extends Context {
 						else {
 							// Add unit to courtyard
 							toRemove.add(unit);
-							castlesArray[indx][indy].addUnit(unit);
+							castlesArray[indx][indy].enterUnit(unit);
 						}
 					}
 
@@ -211,12 +207,10 @@ public class World extends Context {
 			}
 
 		}
-		//unengage units dead or entered in a castle:
-		for(Unit u : toRemove)
+		// unengage units dead or entered in a castle:
+		for (Unit u : toRemove)
 			unengageUnit(u);
-		
-		
-		
+
 	}
 
 	public void unengageUnit(Unit unit) {
@@ -227,7 +221,6 @@ public class World extends Context {
 	public void engageUnit(Unit unit) {
 		units.add(unit);
 		this.getChildren().add(unit);
-		//TODO fix Exception !!!!!!!!!
 	}
 
 	public int getNbPlayers() {
