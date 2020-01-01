@@ -1,7 +1,9 @@
 package picrom.entity.castle;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
@@ -111,7 +113,6 @@ public class Castle extends Entity implements Producible {
 		return nextLevelTime;
 	}
 
-
 	public Castle getObjective() {
 		return court.getObjective();
 	}
@@ -171,15 +172,34 @@ public class Castle extends Entity implements Producible {
 	}
 
 	/**
-	 * To know which units are launchable, have an objective to do and the door open.
+	 * To know which units are launchable, have an objective to do and the door
+	 * open.
 	 * 
 	 * @return List of units to launch toward the objectiv
 	 */
 	public List<Unit> getLaunchList() {
 		List<Unit> l = new LinkedList<Unit>();
-		if(court.getObjective() != null && door.isOpen())
+		if (court.getObjective() != null && door.isOpen())
 			l.addAll(court.getReadyUnits());
 		return l;
+	}
+
+	/*
+	 * Get number of each kind of unit currently in the castle.
+	 * 
+	 * @return Map which associate to a class of units the number of units of this
+	 * type in garrison.
+	 */
+	public Map<Class<? extends Unit>, Integer> getGarrisonQuantity() {
+		Map<Class<? extends Unit>, Integer> map = new HashMap<Class<? extends Unit>, Integer>();
+		for (Unit unit : court.getUnits()) {
+			Integer n = map.get(unit.getClass());
+			if (n == null)
+				n = 0;
+			n++;
+			map.put(unit.getClass(), n);
+		}
+		return map;
 	}
 
 }
