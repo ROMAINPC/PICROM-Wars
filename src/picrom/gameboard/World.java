@@ -190,7 +190,8 @@ public class World extends Context {
 								}
 							} else {
 								// Victory
-								castlesArray[indx][indy].setOwner(unit.getOwner());
+								castlesArray[indx][indy].getOwner().removeCastle(castlesArray[indx][indy]);
+								unit.getOwner().addCastle(castlesArray[indx][indy]);
 								castlesArray[indx][indy].setProduction(null);
 								castlesArray[indx][indy].getDoor().setOpen(false);
 							}

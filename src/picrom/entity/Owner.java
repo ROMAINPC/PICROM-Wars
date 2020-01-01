@@ -84,6 +84,13 @@ public class Owner extends StackPane {
 
 	public void addCastle(Castle castle) {
 		castles.add(castle);
+		castle.setOwner(this);
+		numberL.setText(String.valueOf(castles.size()));
+		crossed.setVisible(castles.size() < 1);
+	}
+
+	public void removeCastle(Castle castle) {
+		castles.remove(castle);
 		numberL.setText(String.valueOf(castles.size()));
 		crossed.setVisible(castles.size() < 1);
 	}
