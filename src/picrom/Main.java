@@ -213,19 +213,31 @@ public class Main extends Application {
 			// production choice:
 			pikemanSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
+					if(currentClicked.getProduction() != Pikeman.class)
 					currentClicked.setProduction(Pikeman.class);
+					else
+						currentClicked.setProduction(null);
 			});
 			knightSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
+					if(currentClicked.getProduction() != Knight.class)
 					currentClicked.setProduction(Knight.class);
+					else
+						currentClicked.setProduction(null);
 			});
 			onagerSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
+					if(currentClicked.getProduction() != Onager.class)
 					currentClicked.setProduction(Onager.class);
+					else
+						currentClicked.setProduction(null);
 			});
 			hammerSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
+					if(currentClicked.getProduction() != Castle.class)
 					currentClicked.setProduction(Castle.class);
+					else
+						currentClicked.setProduction(null);
 			});
 
 			// pause button:
