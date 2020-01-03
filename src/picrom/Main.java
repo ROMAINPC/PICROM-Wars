@@ -51,7 +51,7 @@ public class Main extends Application {
 	private Border border;
 	private Border alphaBorder;
 	private ImageView castleMask, knightM, pikemanM, onagerM;
-	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasorL, doorL, incomeL;
+	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasureL, doorL;
 	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
 
 	private boolean pause;
@@ -173,12 +173,18 @@ public class Main extends Application {
 			// Labels:
 			ownerL = new Label();
 			ownerL.setTextAlignment(TextAlignment.CENTER);
-			treasorL = new Label();
-			incomeL = new Label();
 			doorL = new Label();
 			doorL.setTextAlignment(TextAlignment.CENTER);
+			// Treasure:
+			HBox treasure = new HBox();
+			ImageView treasureIV = new ImageView(Drawables.treasure);
+			treasureIV.setPreserveRatio(true);
+			treasureIV.fitHeightProperty().bind(castleImage.fitHeightProperty().divide(3));
+			treasureL = new Label();
+			treasure.setAlignment(Pos.CENTER);
+			treasure.getChildren().addAll(treasureIV, treasureL);
 			castleInfosSP.setVisible(false);
-			castleInfos.getChildren().addAll(castlePreview, produceChoice, ownerL, treasorL, incomeL, doorL);
+			castleInfos.getChildren().addAll(castlePreview, produceChoice, ownerL, treasure, doorL);
 			infos.getChildren().add(castleInfosSP);
 
 			// add elements:
@@ -317,6 +323,7 @@ public class Main extends Application {
 			Utils.colorize(knightM, currentClicked.getOwner().getColor());
 			Utils.colorize(onagerM, currentClicked.getOwner().getColor());
 			ownerL.setText(currentClicked.getOwner().getName());
+			treasureL.setText(currentClicked.getTreasure() + " (+" + currentClicked.getIncome() + ")");
 			levelL.setText("Nv " + currentClicked.getLevel());
 			Map<Class<? extends Unit>, Integer> units = currentClicked.getGarrisonQuantity();
 			Class<? extends Unit> key = Pikeman.class;
@@ -325,8 +332,6 @@ public class Main extends Application {
 			knightNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
 			key = Onager.class;
 			onagerNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
-			treasorL.setText("Trésor: " + currentClicked.getTreasure());
-			incomeL.setText("Revenu: " + currentClicked.getIncome());
 			doorL.setText("Porte:\n" + currentClicked.getDoor());
 			pikemanSP.setBorder(currentClicked.getProduction() == Pikeman.class ? border : alphaBorder);
 			knightSP.setBorder(currentClicked.getProduction() == Knight.class ? border : alphaBorder);
