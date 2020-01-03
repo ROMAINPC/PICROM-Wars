@@ -11,6 +11,7 @@ public class Drawables {
 	public static Image infosBackground;
 	public static Image circled;
 	public static Image hammer;
+	public static Image crown;
 	public static EntityAssets castle;
 	public static EntityAssets onager;
 	public static EntityAssets knight;
@@ -21,6 +22,7 @@ public class Drawables {
 		infosBackground = new Image("Drawables/infos_background.png");
 		circled = new Image("Drawables/circled.png");
 		hammer = new Image("Drawables/hammer.png");
+		crown = new Image("Drawables/crown.png");
 
 		castle = new EntityAssets("castle");
 		onager = new EntityAssets("onager");

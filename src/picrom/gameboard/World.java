@@ -260,4 +260,13 @@ public class World extends Context {
 	public List<Owner> getOwners() {
 		return owners;
 	}
+
+	public List<Owner> getInGameOwners() {
+		List<Owner> inGame = new LinkedList<Owner>();
+		for (Owner owner : owners) {
+			if (owner.isInGame())
+				inGame.add(owner);
+		}
+		return inGame;
+	}
 }

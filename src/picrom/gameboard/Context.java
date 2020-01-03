@@ -5,6 +5,7 @@ import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
@@ -132,7 +133,7 @@ public class Context extends Group {
 	/**
 	 * Function to anchor a Region in the context.
 	 * 
-	 * @param iV          The Region to anchor
+	 * @param r           The Region to anchor
 	 * @param xRatio      X position in the context (value between 0.0 and 1.0)
 	 * @param yRatio      Y position in the context (value between 0.0 and 1.0)
 	 * @param widthRatio  Fraction of the Width of the context (value between 0.0
@@ -147,6 +148,37 @@ public class Context extends Group {
 		r.prefHeightProperty().bind(height.multiply(heightRatio));
 		r.maxHeightProperty().bind(height.multiply(heightRatio));
 		r.minHeightProperty().bind(height.multiply(heightRatio));
+	}
+
+	/**
+	 * Function to anchor a Label in the context relative to the center of the
+	 * label;
+	 * 
+	 * @param l      The Region to anchor
+	 * @param xRatio X position in the context (value between 0.0 and 1.0)
+	 * @param yRatio Y position in the context (value between 0.0 and 1.0)
+	 */
+	public void bindCenterIn(Label l, double xRatio, double yRatio) {
+		l.layoutXProperty().bind(X.add(width.multiply(xRatio).subtract(l.widthProperty().divide(2))));
+		l.layoutYProperty().bind(Y.add(height.multiply(yRatio).subtract(l.heightProperty().divide(2))));
+	}
+	
+	/**
+	 * Function to anchor a ImageView in the context relative to the center of it.
+	 * 
+	 * @param iV          The ImageView to anchor
+	 * @param xRatio      X position in the context (value between 0.0 and 1.0)
+	 * @param yRatio      Y position in the context (value between 0.0 and 1.0)
+	 * @param widthRatio  Fraction of the Width of the context (value between 0.0
+	 *                    and 1.0)
+	 * @param heightRatio Fraction of the height of the context (value between 0.0
+	 *                    and 1.0)
+	 */
+	public void bindCenterIn(ImageView iV, double xRatio, double yRatio, double widthRatio, double heightRatio) {
+		iV.xProperty().bind(X.add(width.multiply(xRatio).subtract(iV.fitWidthProperty().divide(2))));
+		iV.yProperty().bind(Y.add(height.multiply(yRatio).subtract(iV.fitHeightProperty().divide(2))));
+		iV.fitWidthProperty().bind(width.multiply(widthRatio));
+		iV.fitHeightProperty().bind(height.multiply(heightRatio));
 	}
 
 }

@@ -23,7 +23,13 @@
 .label {
 	-fx-font-size: 10pt;
 	-fx-font-weight: bold;
+}
 
+#victory-label {
+	-fx-font-size: 25pt;
+	-fx-font-weight: bold;
+	-fx-text-fill: gold;
+	-fx-background-color: chocolate;
 }
 
 .button {

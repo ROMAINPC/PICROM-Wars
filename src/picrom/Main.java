@@ -1,5 +1,6 @@
 package picrom;
 
+import java.util.List;
 import java.util.Map;
 
 import javafx.animation.KeyFrame;
@@ -256,6 +257,16 @@ public class Main extends Application {
 			});
 
 			// Main game loop:
+
+			Label victoryL = new Label("--");
+			victoryL.setId("victory-label");
+			gameboard.bindCenterIn(victoryL, 0.5, 0.5);
+			ImageView crown = new ImageView(Drawables.crown);
+			gameboard.bindCenterIn(crown, 0.5, 0.38, 0.2, 0.2);
+			Group victory = new Group(victoryL, crown);
+			victory.setVisible(false);
+			root.getChildren().add(victory);
+
 			Timeline gameLoop = new Timeline();
 			gameLoop.setCycleCount(Timeline.INDEFINITE);
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
@@ -264,7 +275,21 @@ public class Main extends Application {
 						// update world:
 						gameboard.processCastles();
 						gameboard.processUnits();
-						// TODO Test end of game
+
+						// end of game:
+						List<Owner> inGame = gameboard.getInGameOwners();
+						if (inGame.size() < 2) {
+
+							if (inGame.size() == 1)
+								victoryL.setText(inGame.get(0).getName());
+							else
+								victoryL.setText("Pas de vainqueur");
+
+							victory.setVisible(true);
+							pause = true;
+							pauseB.setVisible(false);
+						}
+
 					}
 					// refresh UI
 					refreshCastleInfos();

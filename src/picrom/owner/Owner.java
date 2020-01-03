@@ -94,4 +94,8 @@ public abstract class Owner extends StackPane {
 		crossed.setVisible(castles.size() < 1);
 	}
 
+	public boolean isInGame() {
+		return castles.size() > 0;
+	}
+
 }
