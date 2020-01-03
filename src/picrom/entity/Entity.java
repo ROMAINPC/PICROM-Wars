@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import picrom.entity.castle.Castle;
 import picrom.gameboard.World;
+import picrom.owner.Owner;
 import picrom.utils.Drawables.EntityAssets;
 import picrom.utils.Settings;
 import picrom.utils.Utils;

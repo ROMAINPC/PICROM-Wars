@@ -1,4 +1,4 @@
-package picrom.entity;
+package picrom.owner;
 
 public class AI extends Owner implements Pensive {
 

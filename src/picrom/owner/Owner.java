@@ -1,4 +1,4 @@
-package picrom.entity;
+package picrom.owner;
 
 import java.util.LinkedList;
 import java.util.List;

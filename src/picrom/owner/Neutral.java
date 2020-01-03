@@ -1,4 +1,4 @@
-package picrom.entity;
+package picrom.owner;
 
 import picrom.entity.castle.Castle;
 

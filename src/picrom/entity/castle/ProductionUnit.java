@@ -1,6 +1,6 @@
 package picrom.entity.castle;
 
-import picrom.entity.Neutral;
+import picrom.owner.Neutral;
 import picrom.utils.Settings;
 
 public class ProductionUnit {

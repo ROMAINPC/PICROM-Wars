@@ -7,9 +7,9 @@ import java.util.Map;
 
 import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
-import picrom.entity.Owner;
 import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
+import picrom.owner.Owner;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils.Direction;
