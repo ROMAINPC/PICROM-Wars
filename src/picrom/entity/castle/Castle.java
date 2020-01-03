@@ -13,7 +13,6 @@ import picrom.gameboard.World;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils.Direction;
-import picrom.utils.Utils.OwnerType;
 
 public class Castle extends Entity implements Producible {
 
@@ -50,10 +49,6 @@ public class Castle extends Entity implements Producible {
 		circled.fitHeightProperty().bind(image.fitHeightProperty().multiply(imageRatio));
 		circled.fitWidthProperty().bind(image.fitWidthProperty().multiply(imageRatio));
 		this.getChildren().addAll(circled);
-	}
-
-	public Castle(OwnerType type, int x, int y, Direction doorDir, World context) {
-		this(new Owner(type), x, y, doorDir, context);
 	}
 
 	public void enterUnit(Unit u) {

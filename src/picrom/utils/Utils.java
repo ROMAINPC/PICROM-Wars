@@ -11,20 +11,6 @@ import javafx.scene.paint.Color;
 public class Utils {
 	private static Random r = Settings.SEED;
 
-	public static enum OwnerType {
-		Player("HU"), AI("IA"), Baron("BR");
-
-		private String string;
-
-		private OwnerType(String str) {
-			string = str;
-		}
-
-		public String toString() {
-			return string;
-		}
-	}
-
 	public static enum Direction {
 		North(0, -1, "Nord"), East(1, 0, "Est"), South(0, 1, "Sud"), West(-1, 0, "Ouest");
 
@@ -70,10 +56,9 @@ public class Utils {
 
 	public static String generateKingdomName() {
 		String name = "";
-		String[] syllables = {"li","la","le","chto","chta","fra","fro","fru",
-				              "tro","tru","tra","tri","nou","mou","kou","ing",
-				              "bra","bre","bri","bru","ka","ke","ki","ku",
-				              "vish","vik","gla","glo","gle"};
+		String[] syllables = { "li", "la", "le", "chto", "chta", "fra", "fro", "fru", "tro", "tru", "tra", "tri", "nou",
+				"mou", "kou", "ing", "bra", "bre", "bri", "bru", "ka", "ke", "ki", "ku", "vish", "vik", "gla", "glo",
+				"gle" };
 		for (int i = 0; i < r.nextInt(3) + 2; i++) {
 			name += syllables[r.nextInt(syllables.length)];
 		}

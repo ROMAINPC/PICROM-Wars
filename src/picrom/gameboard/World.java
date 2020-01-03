@@ -10,14 +10,16 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import picrom.entity.AI;
+import picrom.entity.Neutral;
 import picrom.entity.Owner;
+import picrom.entity.Player;
 import picrom.entity.castle.Castle;
 import picrom.entity.unit.Unit;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
 import picrom.utils.Utils.Direction;
-import picrom.utils.Utils.OwnerType;
 
 public class World extends Context {
 
@@ -74,13 +76,13 @@ public class World extends Context {
 
 		// generate player:
 		for (int i = 0; i < this.nbPlayers; i++)
-			owners.add(new Owner(OwnerType.Player));
+			owners.add(new Player());
 		// generate AIs:
 		for (int i = 0; i < this.nbAIs; i++)
-			owners.add(new Owner(OwnerType.AI));
-		// generate barons:
+			owners.add(new AI());
+		// generate neutrals:
 		for (int i = 0; i < this.nbBarons; i++)
-			owners.add(new Owner(OwnerType.Baron));
+			owners.add(new Neutral());
 	}
 
 	public void generateWorldCastles() throws TooManyCastlesException {
@@ -126,7 +128,6 @@ public class World extends Context {
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
 			this.getChildren().add(castle);
-
 		}
 	}
 

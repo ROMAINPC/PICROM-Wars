@@ -31,6 +31,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import picrom.entity.Owner;
+import picrom.entity.Player;
 import picrom.entity.castle.Castle;
 import picrom.entity.unit.Knight;
 import picrom.entity.unit.Onager;
@@ -42,7 +43,6 @@ import picrom.gameboard.World;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
-import picrom.utils.Utils.OwnerType;
 
 public class Main extends Application {
 
@@ -190,7 +190,7 @@ public class Main extends Application {
 				if (currentClicked != null && currentClicked.getObjective() != null)
 					currentClicked.getObjective().setCircled(false);
 				if (clicked instanceof Castle) {
-					if (currentClicked != null && currentClicked.getOwner().getOwnerType() == OwnerType.Player
+					if (currentClicked != null && currentClicked.getOwner() instanceof Player
 							&& e.getButton() == MouseButton.SECONDARY) { // Right click to
 																			// define objectiv
 						Castle target = (Castle) clicked;
@@ -212,30 +212,30 @@ public class Main extends Application {
 
 			// production choice:
 			pikemanSP.setOnMouseClicked(e -> {
-				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
-					if(currentClicked.getProduction() != Pikeman.class)
-					currentClicked.setProduction(Pikeman.class);
+				if (currentClicked.getOwner() instanceof Player)
+					if (currentClicked.getProduction() != Pikeman.class)
+						currentClicked.setProduction(Pikeman.class);
 					else
 						currentClicked.setProduction(null);
 			});
 			knightSP.setOnMouseClicked(e -> {
-				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
-					if(currentClicked.getProduction() != Knight.class)
-					currentClicked.setProduction(Knight.class);
+				if (currentClicked.getOwner() instanceof Player)
+					if (currentClicked.getProduction() != Knight.class)
+						currentClicked.setProduction(Knight.class);
 					else
 						currentClicked.setProduction(null);
 			});
 			onagerSP.setOnMouseClicked(e -> {
-				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
-					if(currentClicked.getProduction() != Onager.class)
-					currentClicked.setProduction(Onager.class);
+				if (currentClicked.getOwner() instanceof Player)
+					if (currentClicked.getProduction() != Onager.class)
+						currentClicked.setProduction(Onager.class);
 					else
 						currentClicked.setProduction(null);
 			});
 			hammerSP.setOnMouseClicked(e -> {
-				if (currentClicked.getOwner().getOwnerType() == OwnerType.Player)
-					if(currentClicked.getProduction() != Castle.class)
-					currentClicked.setProduction(Castle.class);
+				if (currentClicked.getOwner() instanceof Player)
+					if (currentClicked.getProduction() != Castle.class)
+						currentClicked.setProduction(Castle.class);
 					else
 						currentClicked.setProduction(null);
 			});

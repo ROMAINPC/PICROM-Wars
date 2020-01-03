@@ -12,13 +12,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import picrom.entity.castle.Castle;
 import picrom.utils.Kingdom;
-import picrom.utils.Utils.OwnerType;
 
-public class Owner extends StackPane {
+public abstract class Owner extends StackPane {
 
 	private Color color;
 	private String name; // not use as ID, prefer object reference
-	private OwnerType ownerType;
+	private String ownerType;
 
 	// castles owned
 	private List<Castle> castles;
@@ -26,11 +25,11 @@ public class Owner extends StackPane {
 	private Label numberL;
 	private Line crossed;
 
-	public Owner(Kingdom kingdom, OwnerType ownerType) {
+	public Owner(Kingdom kingdom, String ownerType) {
 		this(kingdom.getColor(), kingdom.getName(), ownerType);
 	}
 
-	public Owner(Color color, String name, OwnerType ownerType) {
+	public Owner(Color color, String name, String ownerType) {
 		this.color = color;
 		this.name = name;
 		this.ownerType = ownerType;
@@ -38,14 +37,14 @@ public class Owner extends StackPane {
 		setUI();
 	}
 
-	public Owner(OwnerType ownerType) {
+	public Owner(String ownerType) {
 		this(Kingdom.randomKingdom(), ownerType);
 	}
 
 	private void setUI() {
 		HBox content = new HBox();
 		content.setAlignment(Pos.CENTER_LEFT);
-		Label type = new Label(ownerType.toString());
+		Label type = new Label(ownerType);
 		type.setPrefWidth(25);
 		Label nameL = new Label(" " + name);
 
@@ -93,14 +92,6 @@ public class Owner extends StackPane {
 		castles.remove(castle);
 		numberL.setText(String.valueOf(castles.size()));
 		crossed.setVisible(castles.size() < 1);
-	}
-
-	public OwnerType getOwnerType() {
-		return ownerType;
-	}
-
-	public void setOwnerType(OwnerType ownerType) {
-		this.ownerType = ownerType;
 	}
 
 }

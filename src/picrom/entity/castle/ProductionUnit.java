@@ -1,7 +1,7 @@
 package picrom.entity.castle;
 
+import picrom.entity.Neutral;
 import picrom.utils.Settings;
-import picrom.utils.Utils.OwnerType;
 
 public class ProductionUnit {
 
@@ -33,7 +33,7 @@ public class ProductionUnit {
 		currentProduction = production;
 		produced = false;
 		if (production != null) {
-			int multiplier = castle.getOwner().getOwnerType() == OwnerType.Baron
+			int multiplier = castle.getOwner() instanceof Neutral
 					? Settings.NEUTRAL_PRODUCTION_MULTIPLIER
 					: 1;
 			timeLeft = production.getProductionTime() * multiplier;
