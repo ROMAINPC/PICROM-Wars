@@ -50,8 +50,8 @@ public class Main extends Application {
 	private Castle currentClicked;
 	private Border border;
 	private Border alphaBorder;
-	private ImageView castleMask, knightM, pikemanM, onagerM, circled;
-	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasureL, doorL;
+	private ImageView castleMask, knightM, pikemanM, onagerM, circled, door;
+	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasureL;
 	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
 	private World gameboard;
 
@@ -122,7 +122,13 @@ public class Main extends Application {
 			castleImage.setPreserveRatio(true);
 			castleMask.fitHeightProperty().bind(infos.heightProperty().multiply(0.15));
 			castleMask.setPreserveRatio(true);
-			castlePreview.getChildren().addAll(castleImage, castleMask);
+			door = new ImageView(Drawables.door_close);
+			door.fitHeightProperty().bind(castleImage.fitHeightProperty().multiply(0.4));
+			door.translateYProperty()
+					.bind(castleImage.fitHeightProperty().divide(2).subtract(door.fitHeightProperty().divide(2)));
+			door.setPreserveRatio(true);
+			castlePreview.getChildren().addAll(castleImage, castleMask, door);
+
 			// Production buttons:
 			HBox produceChoice = new HBox(); // also print quantity in garrison
 			VBox pikeman = new VBox();
@@ -174,8 +180,6 @@ public class Main extends Application {
 			// Labels:
 			ownerL = new Label();
 			ownerL.setTextAlignment(TextAlignment.CENTER);
-			doorL = new Label();
-			doorL.setTextAlignment(TextAlignment.CENTER);
 			// Treasure:
 			HBox treasure = new HBox();
 			ImageView treasureIV = new ImageView(Drawables.treasure);
@@ -185,7 +189,7 @@ public class Main extends Application {
 			treasure.setAlignment(Pos.CENTER);
 			treasure.getChildren().addAll(treasureIV, treasureL);
 			castleInfosSP.setVisible(false);
-			castleInfos.getChildren().addAll(castlePreview, produceChoice, ownerL, treasure, doorL);
+			castleInfos.getChildren().addAll(castlePreview, produceChoice, ownerL, treasure);
 			infos.getChildren().add(castleInfosSP);
 
 			// Objective:
@@ -224,31 +228,27 @@ public class Main extends Application {
 			// production choice:
 			pikemanSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Pikeman.class)
-						currentClicked.setProduction(Pikeman.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked
+							.setProduction(currentClicked.getProduction() != Pikeman.class ? Pikeman.class : null);
 			});
 			knightSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Knight.class)
-						currentClicked.setProduction(Knight.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked.setProduction(currentClicked.getProduction() != Knight.class ? Knight.class : null);
 			});
 			onagerSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Onager.class)
-						currentClicked.setProduction(Onager.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked.setProduction(currentClicked.getProduction() != Onager.class ? Onager.class : null);
 			});
 			hammerSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Castle.class)
-						currentClicked.setProduction(Castle.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked.setProduction(currentClicked.getProduction() != Castle.class ? Castle.class : null);
+			});
+
+			// Door close or open:
+			castlePreview.setOnMouseClicked(e -> {
+				if (currentClicked.getOwner() instanceof Player)
+					currentClicked.getDoor().setOpen(!currentClicked.getDoor().isOpen());
+
 			});
 
 			// pause button:
@@ -328,6 +328,7 @@ public class Main extends Application {
 			Utils.colorize(pikemanM, currentClicked.getOwner().getColor());
 			Utils.colorize(knightM, currentClicked.getOwner().getColor());
 			Utils.colorize(onagerM, currentClicked.getOwner().getColor());
+			door.setImage(currentClicked.getDoor().isOpen() ? Drawables.door_open : Drawables.door_close);
 			ownerL.setText(currentClicked.getOwner().getName());
 			treasureL.setText(currentClicked.getTreasure() + " (+" + currentClicked.getIncome() + ")");
 			levelL.setText("Nv " + currentClicked.getLevel());
@@ -338,7 +339,6 @@ public class Main extends Application {
 			knightNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
 			key = Onager.class;
 			onagerNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
-			doorL.setText("Porte:\n" + currentClicked.getDoor());
 			pikemanSP.setBorder(currentClicked.getProduction() == Pikeman.class ? border : alphaBorder);
 			knightSP.setBorder(currentClicked.getProduction() == Knight.class ? border : alphaBorder);
 			onagerSP.setBorder(currentClicked.getProduction() == Onager.class ? border : alphaBorder);

@@ -13,6 +13,8 @@ public class Drawables {
 	public static Image hammer;
 	public static Image crown;
 	public static Image treasure;
+	public static Image door_close;
+	public static Image door_open;
 	public static EntityAssets castle;
 	public static EntityAssets onager;
 	public static EntityAssets knight;
@@ -25,6 +27,8 @@ public class Drawables {
 		hammer = new Image("Drawables/hammer.png");
 		crown = new Image("Drawables/crown.png");
 		treasure = new Image("Drawables/treasure.png");
+		door_close = new Image("Drawables/door_close.png");
+		door_open = new Image("Drawables/door_open.png");
 
 		castle = new EntityAssets("castle");
 		onager = new EntityAssets("onager");

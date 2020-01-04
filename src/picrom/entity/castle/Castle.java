@@ -101,7 +101,6 @@ public class Castle extends Entity implements Producible {
 
 	public void setObjective(Castle objective) {
 		court.setObjective(objective);
-		door.setOpen(true);
 	}
 
 	public void updateProduction() {
