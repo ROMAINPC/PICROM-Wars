@@ -11,6 +11,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.castle.Castle;
+import picrom.entity.unit.Knight;
+import picrom.entity.unit.Onager;
+import picrom.entity.unit.Pikeman;
 import picrom.entity.unit.Unit;
 import picrom.owner.AI;
 import picrom.owner.Neutral;
@@ -128,6 +131,21 @@ public class World extends Context {
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
 			this.getChildren().add(castle);
+			// Start garrison:
+			int quantity = owner instanceof Neutral ? Settings.NEUTRAL_START_GARRISON : Settings.START_GARRISON;
+			int generated = 0;
+			while (generated < quantity) {
+				int r = random.nextInt(3);
+				Unit unit = null;
+				if (r == 0)
+					unit = new Pikeman(castle);
+				else if (r == 1)
+					unit = new Knight(castle);
+				else
+					unit = new Onager(castle);
+				castle.enterUnit(unit);
+				generated += unit.getHp();
+			}
 		}
 	}
 

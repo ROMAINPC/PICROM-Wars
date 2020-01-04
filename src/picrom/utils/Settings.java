@@ -15,6 +15,8 @@ public class Settings {
 	public static final int UNITS_GRID_SIZE = 10;
 	public static final int START_TREASURE = 0;
 	public static final int NEUTRAL_PRODUCTION_MULTIPLIER = 10;
+	public static final int NEUTRAL_START_GARRISON = 30; // HPs
+	public static final int START_GARRISON = 10; // HPs
 
 	// game board settings:
 	public static final int WORLD_WIDTH = 18;
