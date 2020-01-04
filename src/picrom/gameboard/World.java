@@ -41,10 +41,6 @@ public class World extends Context {
 	private int worldWidth;
 	private int worldHeight;
 
-	private int nbPlayers;
-	private int nbAIs;
-	private int nbBarons;
-
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, new SimpleDoubleProperty(0), new SimpleDoubleProperty(0), context.widthProperty(),
 				context.heightProperty());
@@ -73,18 +69,16 @@ public class World extends Context {
 	}
 
 	public void generateOwners(int nbAIs, int nbBarons) {
-		this.nbAIs = nbAIs;
-		this.nbBarons = nbBarons;
-		this.nbPlayers = 1;
+		int nbPlayers = 1;
 
 		// generate player:
-		for (int i = 0; i < this.nbPlayers; i++)
+		for (int i = 0; i < nbPlayers; i++)
 			owners.add(new Player());
 		// generate AIs:
-		for (int i = 0; i < this.nbAIs; i++)
+		for (int i = 0; i < nbAIs; i++)
 			owners.add(new AI());
 		// generate neutrals:
-		for (int i = 0; i < this.nbBarons; i++)
+		for (int i = 0; i < nbBarons; i++)
 			owners.add(new Neutral());
 	}
 
@@ -241,30 +235,6 @@ public class World extends Context {
 	public void engageUnit(Unit unit) {
 		units.add(unit);
 		this.getChildren().add(unit);
-	}
-
-	public int getNbPlayers() {
-		return nbPlayers;
-	}
-
-	public void setNbPlayers(int nbPlayers) {
-		this.nbPlayers = nbPlayers;
-	}
-
-	public int getNbAIs() {
-		return nbAIs;
-	}
-
-	public void setNbAIs(int nbAIs) {
-		this.nbAIs = nbAIs;
-	}
-
-	public int getNbBarons() {
-		return nbBarons;
-	}
-
-	public void setNbBarons(int nbBarons) {
-		this.nbBarons = nbBarons;
 	}
 
 	public int getWorldWidth() {
