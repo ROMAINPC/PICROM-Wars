@@ -15,6 +15,7 @@ public class ProductionUnit {
 	public ProductionUnit(Castle castle) {
 		this.castle = castle;
 		produced = true;
+		timeLeft = 0;
 	}
 
 	public void update() {
@@ -33,9 +34,7 @@ public class ProductionUnit {
 		currentProduction = production;
 		produced = false;
 		if (production != null) {
-			int multiplier = castle.getOwner() instanceof Neutral
-					? Settings.NEUTRAL_PRODUCTION_MULTIPLIER
-					: 1;
+			int multiplier = castle.getOwner() instanceof Neutral ? Settings.NEUTRAL_PRODUCTION_MULTIPLIER : 1;
 			timeLeft = production.getProductionTime() * multiplier;
 		}
 
@@ -51,6 +50,21 @@ public class ProductionUnit {
 
 	public void stop() {
 		produced = true;
+		timeLeft = 0;
+	}
+
+	/**
+	 * Get the time remaining to finish production.
+	 * 
+	 * @return Number of updates of this production unit needed to finish production
+	 *         (not include money cost). Could be negativ (waiting for money).
+	 */
+	public int getTimeLeft() {
+		return timeLeft;
+	}
+
+	public int getCost() {
+		return currentProduction == null ? 0 : currentProduction.getProductionCost();
 	}
 
 }

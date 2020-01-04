@@ -140,6 +140,20 @@ public class Castle extends Entity implements Producible {
 		}
 	}
 
+	/**
+	 * Get the time remaining to finish production choosed.
+	 * 
+	 * @return Number of update of updateProduction() needed to finish production.
+	 *         Also consider turns to have enough money.
+	 */
+	public int getProductionTimeLeft() {
+		int leftTime = productionUnit.getTimeLeft();
+		int leftMoney = (productionUnit.getCost() - treasure) / income;
+		leftTime = leftTime < 0 ? 0 : leftTime;
+		leftMoney = leftMoney < 0 ? 0 : leftMoney;
+		return Math.max(leftTime, leftMoney);
+	}
+
 	public void setProduction(Class<? extends Producible> productionType) {
 		this.productionType = productionType;
 		this.productionUnit.stop();
