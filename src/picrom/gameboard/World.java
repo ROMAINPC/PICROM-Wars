@@ -18,6 +18,7 @@ import picrom.entity.unit.Unit;
 import picrom.owner.AI;
 import picrom.owner.Neutral;
 import picrom.owner.Owner;
+import picrom.owner.Pensive;
 import picrom.owner.Player;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
@@ -227,6 +228,14 @@ public class World extends Context {
 
 	}
 
+	public void processAIs() {
+		for (Owner owner : owners) {
+			if (owner instanceof Pensive) {
+				((Pensive) owner).reflect();
+			}
+		}
+	}
+
 	public void unengageUnit(Unit unit) {
 		units.remove(unit);
 		this.getChildren().remove(unit);
@@ -257,4 +266,5 @@ public class World extends Context {
 		}
 		return inGame;
 	}
+
 }

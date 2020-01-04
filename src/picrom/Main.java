@@ -278,6 +278,9 @@ public class Main extends Application {
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
 					if (!pause) {
+						//Update AI choices:
+						gameboard.processAIs();
+						
 						// update world:
 						gameboard.processCastles();
 						gameboard.processUnits();
