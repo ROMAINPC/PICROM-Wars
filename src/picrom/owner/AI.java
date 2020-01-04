@@ -13,11 +13,17 @@ public class AI extends Owner implements Pensive {
 
 	private static Random random = Settings.SEED;
 
+	private boolean changeNext;
+
 	public AI() {
 		super("IA");
+		changeNext = false;
 	}
 
 	public void reflect() {
+		// TODO : Use door, choose good unit for defend or attack, deploy unit in
+		// another castle as reinforcment, improve level of castles.
+
 		for (Castle castle : this.getCastles()) {
 
 			// choose a Castle to attack:
@@ -35,10 +41,14 @@ public class AI extends Owner implements Pensive {
 					}
 				}
 			}
+
 			castle.setObjective(nearestEnnemyCastle);
+			castle.getDoor().setOpen(true);
 
 			// Choose production:
-			if (castle.getProductionTimeLeft() == 0) {
+			// System.out.println(castle.getProductionTimeLeft());
+
+			if (changeNext || castle.getProductionTimeLeft() == 0) {
 				int r = random.nextInt(3);
 				if (r == 0) {
 					castle.setProduction(Knight.class);
@@ -47,7 +57,10 @@ public class AI extends Owner implements Pensive {
 				} else {
 					castle.setProduction(Onager.class);
 				}
-
+				changeNext = false;
+			}
+			if (castle.getProductionTimeLeft() == 1) {
+				changeNext = true;
 			}
 		}
 	}

@@ -11,8 +11,11 @@ public class Neutral extends Owner implements Pensive {
 
 	private static Random random = Settings.SEED;
 
+	private boolean changeNext;
+
 	public Neutral() {
 		super("NE");
+		changeNext = false;
 	}
 
 	public void addCastle(Castle castle) {
@@ -45,7 +48,7 @@ public class Neutral extends Owner implements Pensive {
 					break;
 			}
 
-			if (castle.getProductionTimeLeft() == 0) {
+			if (changeNext || castle.getProductionTimeLeft() == 0) {
 				if (underAttack) {
 					castle.setProduction(Pikeman.class);
 				} else {
@@ -56,11 +59,14 @@ public class Neutral extends Owner implements Pensive {
 						castle.setProduction(Pikeman.class);
 					}
 				}
-
+				changeNext = false;
 			} else {
 				if (underAttack && castle.getProduction() != Pikeman.class) {
 					castle.setProduction(Pikeman.class);
 				}
+			}
+			if (castle.getProductionTimeLeft() == 1) {
+				changeNext = true;
 			}
 		}
 	}
