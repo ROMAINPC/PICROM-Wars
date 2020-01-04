@@ -248,10 +248,10 @@ public class Main extends Application {
 			});
 
 			// pause button:
-			Button pauseB = new Button("Pause");
+			Button pauseB = new Button("Lancer");
 			infos.bindIn(pauseB, 0.15, 0.47, 0.6, 0.1);
 			infos.getChildren().add(pauseB);
-			pause = false;
+			pause = true;
 			pauseB.setOnAction(e -> {
 				if (pause) {
 					pauseB.setText("Pause");

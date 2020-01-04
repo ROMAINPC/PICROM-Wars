@@ -54,6 +54,10 @@ public class Utils {
 		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
 	}
 
+	public static int manDistance(double x1, double y1, double x2, double y2) {
+		return manDistance((int) x1, (int) y1, (int) x2, (int) y2);
+	}
+
 	public static String generateKingdomName() {
 		String name = "";
 		String[] syllables = { "li", "la", "le", "chto", "chta", "fra", "fro", "fru", "tro", "tru", "tra", "tri", "nou",
