@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
 import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
@@ -25,8 +24,6 @@ public class Castle extends Entity implements Producible {
 	private int income;
 	private Class<? extends Producible> productionType;
 
-	private ImageView circled;
-
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
 		super(Drawables.castle, owner, X, Y, context);
 		level = 1;
@@ -39,16 +36,6 @@ public class Castle extends Entity implements Producible {
 		productionType = null;
 		setTreasure(Settings.START_TREASURE);
 
-		circled = new ImageView(Drawables.circled);
-		setCircled(false);
-		double imageRatio = circled.getImage().getHeight() / image.getImage().getHeight();
-		circled.layoutXProperty()
-				.bind(image.layoutXProperty().subtract(image.fitWidthProperty().multiply((imageRatio - 1) / 2)));
-		circled.layoutYProperty()
-				.bind(image.layoutYProperty().subtract(image.fitHeightProperty().multiply((imageRatio - 1) / 2)));
-		circled.fitHeightProperty().bind(image.fitHeightProperty().multiply(imageRatio));
-		circled.fitWidthProperty().bind(image.fitWidthProperty().multiply(imageRatio));
-		this.getChildren().addAll(circled);
 	}
 
 	public void enterUnit(Unit u) {
@@ -169,10 +156,6 @@ public class Castle extends Entity implements Producible {
 		if (productionType == Castle.class)
 			return "Fortifications";
 		return ((Unit) productionUnit.getProduction()).getName();
-	}
-
-	public void setCircled(boolean b) {
-		circled.setVisible(b);
 	}
 
 	public void attackWith(Unit attacker, int damage) {
