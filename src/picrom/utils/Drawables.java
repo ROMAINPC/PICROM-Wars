@@ -16,6 +16,9 @@ public class Drawables {
 	public static Image door_close;
 	public static Image door_open;
 	public static EntityAssets castle;
+	public static Image castle_s;
+	public static Image castle_e;
+	public static Image castle_w;
 	public static EntityAssets onager;
 	public static EntityAssets knight;
 	public static EntityAssets pikeman;
@@ -31,6 +34,9 @@ public class Drawables {
 		door_open = new Image("Drawables/door_open.png");
 
 		castle = new EntityAssets("castle");
+		castle_s = new Image("Drawables/castle_s.png");
+		castle_e = new Image("Drawables/castle_e.png");
+		castle_w = new Image("Drawables/castle_w.png");
 		onager = new EntityAssets("onager");
 		knight = new EntityAssets("knight");
 		pikeman = new EntityAssets("pikeman");
