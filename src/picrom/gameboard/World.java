@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright (C) 2019-2020 ROMAINPC
+ * Copyright (C) 2019-2020 Picachoc
+ * 
+ * This file is part of PICROM-Wars
+ * 
+ * PICROM-Wars is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * PICROM-Wars is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package picrom.gameboard;
 
 import java.io.Serializable;
@@ -12,16 +31,38 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import picrom.entity.castle.Castle;
+import picrom.entity.unit.Knight;
+import picrom.entity.unit.Onager;
+import picrom.entity.unit.Pikeman;
 import picrom.entity.unit.Unit;
 import picrom.owner.AI;
 import picrom.owner.Neutral;
 import picrom.owner.Owner;
+import picrom.owner.Pensive;
 import picrom.owner.Player;
 import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
 import picrom.utils.Utils.Direction;
 
+/**
+ * World objects are graphical areas and also gameboards.
+ * 
+ * In a World there are different Owner : all players of the game.
+ * 
+ * The World contain several Castles, but also Units which are moving on the
+ * terran (they have exited a Castle and not yet enter in another).
+ * 
+ * Graphically World is a JavaFX component wich shows ImageView of Castles and
+ * Units. It adapts its size when window size change.
+ * 
+ * World doesn't run the game itself but offers methods to update Castles and
+ * Units and do actions with them.
+ * 
+ * @see picrom.owner.Owner
+ * @see picrom.entity.castle.Castle
+ * @see picrom.entity.unit.Unit
+ */
 public class World extends Context implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -39,16 +80,29 @@ public class World extends Context implements Serializable{
 	// size in number of cells
 	private int worldWidth;
 	private int worldHeight;
- 
-	private int nbPlayers;
-	private int nbAIs;
-	private int nbBarons;
 
+	/**
+	 * Create a world and fix it in the entire window.
+	 * 
+	 * @param worldWidth  Number of cases horizontally
+	 * @param worldHeight Number of cases vertically
+	 * @param context     JavaFX Scene to fix the World.
+	 */
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, new SimpleDoubleProperty(0), new SimpleDoubleProperty(0), context.widthProperty(),
 				context.heightProperty());
 	}
 
+	/**
+	 * Create a world and bind it in the specified area.
+	 * 
+	 * @param worldWidth  Number of cases horizontally
+	 * @param worldHeight Number of cases vertically
+	 * @param x           Property to bind World top left corner X coordinate.
+	 * @param y           Property to bind World top left corner Y coordinate.
+	 * @param width       Property to bin World graphic width.
+	 * @param height      Property to bin World graphic height.
+	 */
 	public World(int worldWidth, int worldHeight, ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y,
 			ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
 		super(x, y, width, height, (double) worldWidth / (double) worldHeight); // linking layout
@@ -76,24 +130,28 @@ public class World extends Context implements Serializable{
 		this.castlesArray = gameboard.getCastlesArray().clone();
 		this.units = new LinkedList<Unit>(gameboard.getUnits());
 		this.owners = new ArrayList<Owner>(gameboard.getOwners());
-		this.nbPlayers = gameboard.getNbPlayers();
-		this.nbAIs = gameboard.getNbAIs();
-		this.nbBarons = gameboard.getNbBarons();
 	}
 
+	/**
+	 * Generate players, 1 human player and some AIs
+	 * 
+	 * @param nbAIs    Number of AIs to generate.
+	 * @param nbBarons Number of Neutrals to generate.
+	 * @see picrom.owner.AI
+	 * @see picrom.owner.Neutral
+	 * @see picrom.owner.Player
+	 */
 	public void generateOwners(int nbAIs, int nbBarons) {
-		this.nbAIs = nbAIs;
-		this.nbBarons = nbBarons;
-		this.nbPlayers = 1;
+		int nbPlayers = 1;
 
 		// generate player:
-		for (int i = 0; i < this.nbPlayers; i++)
+		for (int i = 0; i < nbPlayers; i++)
 			owners.add(new Player());
 		// generate AIs:
-		for (int i = 0; i < this.nbAIs; i++)
+		for (int i = 0; i < nbAIs; i++)
 			owners.add(new AI());
 		// generate neutrals:
-		for (int i = 0; i < this.nbBarons; i++)
+		for (int i = 0; i < nbBarons; i++)
 			owners.add(new Neutral());
 	}
 	
@@ -113,13 +171,23 @@ public class World extends Context implements Serializable{
 		}
 	}
 
+	/**
+	 * Generate 1 Castle for each Owner in game. Found a random place to install the
+	 * Castle. Also randomize door orientation and first garrison.
+	 * 
+	 * @throws TooManyCastlesException Throw Exception if too many castle cause
+	 *                                 infinite research for an empty place to set a
+	 *                                 Castle.
+	 * @see picrom.utils.Settings#MINIMAL_CASTLE_DISTANCE
+	 */
 	public void generateWorldCastles() throws TooManyCastlesException {
 
 		// Each owner (player or AI or baron) start the game with one castle.
 		long time = System.currentTimeMillis();
 		for (Owner owner : owners) {
+
+			// choose position:
 			boolean validCastle = false;
-			boolean validDoor = false;
 			int x = 0, y = 0;
 			Direction doorDir = null;
 			while (!validCastle) { // avoid too near castles.
@@ -143,6 +211,8 @@ public class World extends Context implements Serializable{
 				}
 			}
 
+			// door orientation:
+			boolean validDoor = false;
 			while (!validDoor) {
 				doorDir = Direction.randomDirection();
 				validDoor = true;
@@ -152,13 +222,34 @@ public class World extends Context implements Serializable{
 				}
 			}
 
+			// create Castle:
 			Castle castle = new Castle(owner, x, y, doorDir, this);
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
 			this.getChildren().add(castle);
+
+			// Start garrison:
+			int quantity = owner instanceof Neutral ? Settings.NEUTRAL_START_GARRISON : Settings.START_GARRISON;
+			int generated = 0;
+			while (generated < quantity) {
+				int r = random.nextInt(3);
+				Unit unit = null;
+				if (r == 0)
+					unit = new Pikeman(castle);
+				else if (r == 1)
+					unit = new Knight(castle);
+				else
+					unit = new Onager(castle);
+				castle.enterUnit(unit);
+				generated += unit.getHp();
+			}
 		}
 	}
 
+	/**
+	 * Call this method to update all Castles in the World, for each of them that
+	 * will update money, production and will manage exit if the Units.
+	 */
 	public void processCastles() {
 
 		for (Owner owner : owners) {
@@ -181,7 +272,10 @@ public class World extends Context implements Serializable{
 		}
 	}
 
-	// Process units engaged on the field
+	/**
+	 * Call this method to move all Units currently engaged in the world. Also
+	 * manage Castle enter and Castle assault.
+	 */
 	public void processUnits() {
 
 		HashSet<Unit> toRemove = new HashSet<Unit>();
@@ -243,52 +337,62 @@ public class World extends Context implements Serializable{
 
 	}
 
+	/**
+	 * Call this method to make AI think oneitération.
+	 */
+	public void processAIs() {
+		for (Owner owner : owners) {
+			if (owner instanceof Pensive) {
+				((Pensive) owner).reflect();
+			}
+		}
+	}
+
+	/**
+	 * Unengage an Unit from the World,because this Unit is dead or was entered in a
+	 * Castle.
+	 * 
+	 * @param unit
+	 */
 	public void unengageUnit(Unit unit) {
 		units.remove(unit);
 		this.getChildren().remove(unit);
 	}
 
+	/**
+	 * Engage an Unit in the World, for instance because it exits a Castle.
+	 * 
+	 * @param unit
+	 */
 	public void engageUnit(Unit unit) {
 		units.add(unit);
 		this.getChildren().add(unit);
 	}
 
-	public int getNbPlayers() {
-		return nbPlayers;
-	}
-
-	public void setNbPlayers(int nbPlayers) {
-		this.nbPlayers = nbPlayers;
-	}
-
-	public int getNbAIs() {
-		return nbAIs;
-	}
-
-	public void setNbAIs(int nbAIs) {
-		this.nbAIs = nbAIs;
-	}
-
-	public int getNbBarons() {
-		return nbBarons;
-	}
-
-	public void setNbBarons(int nbBarons) {
-		this.nbBarons = nbBarons;
-	}
-
+	/**
+	 * @return Number of case of the world horizontally.
+	 */
 	public int getWorldWidth() {
 		return worldWidth;
 	}
 
+	/**
+	 * @return Number of case of the world vertically.
+	 */
 	public int getWorldHeight() {
 		return worldHeight;
 	}
 
+	/**
+	 * @return List of Owners which play in the World (human or not)
+	 */
 	public List<Owner> getOwners() {
 		return owners;
 	}
 
+	/**
+	 * @return List of Owners which still in the World (human or not)
+	 */
 	public List<Owner> getInGameOwners() {
 		List<Owner> inGame = new LinkedList<Owner>();
 		for (Owner owner : owners) {

@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright (C) 2019-2020 ROMAINPC
+ * Copyright (C) 2019-2020 Picachoc
+ * 
+ * This file is part of PICROM-Wars
+ * 
+ * PICROM-Wars is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * PICROM-Wars is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
 package picrom;
 
 import java.util.List;
@@ -56,18 +76,20 @@ import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
 
+/**
+ * Main class, setup UI, init gameboard and run it.
+ */
 public class Main extends Application {
 
 	private Castle currentClicked;
 	private Border border;
 	private Border alphaBorder;
-	private ImageView castleMask, knightM, pikemanM, onagerM;
-	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasureL, doorL;
+	private ImageView castleMask, knightM, pikemanM, onagerM, circled, door;
+	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasureL;
 	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
+	private World gameboard;
 
 	private boolean pause;
-	
-	private World gameboard;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -106,9 +128,11 @@ public class Main extends Application {
 			} else if (choice.get() == buttonNo) {
 				gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, new SimpleDoubleProperty(0),
 						new SimpleDoubleProperty(0), vSeparator, scene.heightProperty());
-
+						
+				// Add players and AIs in the game:
 				gameboard.generateOwners(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
-				
+
+				// Generate first castle for each owner:
 				try {
 					gameboard.generateWorldCastles();
 				} catch (TooManyCastlesException e) {
@@ -126,15 +150,15 @@ public class Main extends Application {
 			
 
 			// setup GUI:
-			Context infos = new Context();
+			Context infos = new Context(); // informations and actions area at the right of the game.
 			infos.xProperty().bind(gameboard.xProperty().add(gameboard.widthProperty()));
 			infos.yProperty().set(0);
 			infos.heightProperty().bind(scene.heightProperty());
 			infos.widthProperty().bind(scene.widthProperty().multiply(1 - Settings.WORLD_WIDTH_RATIO));
 			ImageView infosBackground = new ImageView(Drawables.infosBackground);
 			infos.bindIn(infosBackground, 0, 0, 1, 1);
-
 			infos.getChildren().add(infosBackground);
+
 			// owners list:
 			ScrollPane owners = new ScrollPane();
 			infos.bindIn(owners, 0.15, 0.07, 0.8, 0.4);
@@ -158,7 +182,13 @@ public class Main extends Application {
 			castleImage.setPreserveRatio(true);
 			castleMask.fitHeightProperty().bind(infos.heightProperty().multiply(0.15));
 			castleMask.setPreserveRatio(true);
-			castlePreview.getChildren().addAll(castleImage, castleMask);
+			door = new ImageView(Drawables.door_close);
+			door.fitHeightProperty().bind(castleImage.fitHeightProperty().multiply(0.4));
+			door.translateYProperty()
+					.bind(castleImage.fitHeightProperty().divide(2).subtract(door.fitHeightProperty().divide(2)));
+			door.setPreserveRatio(true);
+			castlePreview.getChildren().addAll(castleImage, castleMask, door);
+
 			// Production buttons:
 			HBox produceChoice = new HBox(); // also print quantity in garrison
 			VBox pikeman = new VBox();
@@ -204,14 +234,14 @@ public class Main extends Application {
 			hammerIV.fitHeightProperty().bind(castleImage.fitHeightProperty().divide(3));
 			produceChoice.getChildren().addAll(pikeman, knight, onager, hammer);
 			border = new Border(new BorderStroke(Color.DARKRED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-					new BorderWidths(3, 3, 3, 3)));
+					new BorderWidths(3, 3, 3, 3))); // Border to circle production choosed.
 			alphaBorder = new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
 					new BorderWidths(3, 3, 3, 3)));
+
 			// Labels:
 			ownerL = new Label();
 			ownerL.setTextAlignment(TextAlignment.CENTER);
-			doorL = new Label();
-			doorL.setTextAlignment(TextAlignment.CENTER);
+
 			// Treasure:
 			HBox treasure = new HBox();
 			ImageView treasureIV = new ImageView(Drawables.treasure);
@@ -221,18 +251,23 @@ public class Main extends Application {
 			treasure.setAlignment(Pos.CENTER);
 			treasure.getChildren().addAll(treasureIV, treasureL);
 			castleInfosSP.setVisible(false);
-			castleInfos.getChildren().addAll(castlePreview, produceChoice, ownerL, treasure, doorL);
+			castleInfos.getChildren().addAll(castlePreview, produceChoice, ownerL, treasure);
 			infos.getChildren().add(castleInfosSP);
 
+			// Objective:
+			circled = new ImageView(Drawables.circled);
+			circled.setVisible(false);
+			circled.fitHeightProperty()
+					.bind(gameboard.heightProperty().divide(gameboard.getWorldHeight()).multiply(1.4));
+			circled.fitWidthProperty().bind(gameboard.widthProperty().divide(gameboard.getWorldWidth()).multiply(1.4));
+
 			// add elements:
-			root.getChildren().addAll(gameboard, infos);
+			root.getChildren().addAll(gameboard, infos, circled);
 
 			// Listeners:
 			currentClicked = null;
 			gameboard.setOnMouseClicked(e -> {
 				Parent clicked = e.getPickResult().getIntersectedNode().getParent();
-				if (currentClicked != null && currentClicked.getObjective() != null)
-					currentClicked.getObjective().setCircled(false);
 				if (clicked instanceof Castle) {
 					if (currentClicked != null && currentClicked.getOwner() instanceof Player
 							&& e.getButton() == MouseButton.SECONDARY) { // Right click to
@@ -241,54 +276,48 @@ public class Main extends Application {
 						if (target != currentClicked) {
 							currentClicked.setObjective(target);
 						}
-						if (currentClicked.getObjective() != null)
-							currentClicked.getObjective().setCircled(true);
 					} else if (e.getButton() == MouseButton.PRIMARY) { // Normal click
 						currentClicked = (Castle) clicked;
 						castleInfosSP.setVisible(true);
 					}
-				} else {
+				} else { // Click on other thing than a Castle :
 					castleInfosSP.setVisible(false);
 					currentClicked = null;
 				}
 
 			});
 
-			// production choice:
+			// production choice, click twice to set no production:
 			pikemanSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Pikeman.class)
-						currentClicked.setProduction(Pikeman.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked
+							.setProduction(currentClicked.getProduction() != Pikeman.class ? Pikeman.class : null);
 			});
 			knightSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Knight.class)
-						currentClicked.setProduction(Knight.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked.setProduction(currentClicked.getProduction() != Knight.class ? Knight.class : null);
 			});
 			onagerSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Onager.class)
-						currentClicked.setProduction(Onager.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked.setProduction(currentClicked.getProduction() != Onager.class ? Onager.class : null);
 			});
 			hammerSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
-					if (currentClicked.getProduction() != Castle.class)
-						currentClicked.setProduction(Castle.class);
-					else
-						currentClicked.setProduction(null);
+					currentClicked.setProduction(currentClicked.getProduction() != Castle.class ? Castle.class : null);
+			});
+
+			// Door close or open:
+			castlePreview.setOnMouseClicked(e -> {
+				if (currentClicked.getOwner() instanceof Player)
+					currentClicked.getDoor().setOpen(!currentClicked.getDoor().isOpen());
+
 			});
 
 			// pause button:
-			Button pauseB = new Button("Pause");
+			Button pauseB = new Button("Lancer");
 			infos.bindIn(pauseB, 0.15, 0.47, 0.6, 0.1);
 			infos.getChildren().add(pauseB);
-			pause = false;
+			pause = true;
 			pauseB.setOnAction(e -> {
 				if (pause) {
 					pauseB.setText("Pause");
@@ -299,7 +328,7 @@ public class Main extends Application {
 				}
 			});
 			
-			Button saveB = new Button("Save this game");
+			Button saveB = new Button("Sauvegarder la partie");
 			infos.bindIn(saveB, 0.15, 0.37, 0.6, 0.1);
 			//infos.bindIn(iV, xRatio, yRatio, widthRatio, heightRatio);
 			infos.getChildren().add(saveB);
@@ -314,7 +343,6 @@ public class Main extends Application {
 			});
 
 			// Main game loop:
-
 			Label victoryL = new Label("--");
 			victoryL.setId("victory-label");
 			gameboard.bindCenterIn(victoryL, 0.5, 0.5);
@@ -329,11 +357,14 @@ public class Main extends Application {
 			gameLoop.getKeyFrames().add(new KeyFrame(Settings.TURN_DURATION, new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
 					if (!pause) {
+						// Update AI choices:
+						gameboard.processAIs();
+
 						// update world:
 						gameboard.processCastles();
 						gameboard.processUnits();
-						
-						// end of game:
+
+						// Test end of game:
 						List<Owner> inGame = gameboard.getInGameOwners();
 						if (inGame.size() < 2) {
 
@@ -348,19 +379,20 @@ public class Main extends Application {
 						}
 
 					}
+
 					// refresh UI
 					refreshCastleInfos();
 				}
 			}));
-
-			// start loop
-			gameLoop.play();
 
 			primaryStage.setResizable(true);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("PICROM Wars ! par ROMAINPC & Picachoc, projet POO L3 info Université de Bordeaux");
 			primaryStage.setMaximized(true);
 			primaryStage.show();
+
+			// START LOOP
+			gameLoop.play();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -423,12 +455,17 @@ public class Main extends Application {
 		}
 	}
 
+	
+	/**
+	 * Used to update values of castle preview.
+	 */
 	private void refreshCastleInfos() {
 		if (currentClicked != null) {
 			Utils.colorize(castleMask, currentClicked.getOwner().getColor());
 			Utils.colorize(pikemanM, currentClicked.getOwner().getColor());
 			Utils.colorize(knightM, currentClicked.getOwner().getColor());
 			Utils.colorize(onagerM, currentClicked.getOwner().getColor());
+			door.setImage(currentClicked.getDoor().isOpen() ? Drawables.door_open : Drawables.door_close);
 			ownerL.setText(currentClicked.getOwner().getName());
 			treasureL.setText(currentClicked.getTreasure() + " (+" + currentClicked.getIncome() + ")");
 			levelL.setText("Nv " + currentClicked.getLevel());
@@ -439,13 +476,29 @@ public class Main extends Application {
 			knightNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
 			key = Onager.class;
 			onagerNumber.setText(units.containsKey(key) ? String.valueOf(units.get(key)) : "0");
-			doorL.setText("Porte:\n" + currentClicked.getDoor());
 			pikemanSP.setBorder(currentClicked.getProduction() == Pikeman.class ? border : alphaBorder);
 			knightSP.setBorder(currentClicked.getProduction() == Knight.class ? border : alphaBorder);
 			onagerSP.setBorder(currentClicked.getProduction() == Onager.class ? border : alphaBorder);
 			hammerSP.setBorder(currentClicked.getProduction() == Castle.class ? border : alphaBorder);
-			if (currentClicked.getObjective() != null)
-				currentClicked.getObjective().setCircled(true);
+
+			if (currentClicked.getObjective() != null) {
+				circled.setVisible(true);
+				circled.layoutXProperty()
+						.bind(gameboard.xProperty()
+								.add(circled.fitWidthProperty().divide(1.4)
+										.multiply(currentClicked.getObjective().getWorldX())
+										.subtract(circled.fitWidthProperty().divide(7))));
+				circled.layoutYProperty()
+						.bind(gameboard.yProperty()
+								.add(circled.fitHeightProperty().divide(1.4)
+										.multiply(currentClicked.getObjective().getWorldY())
+										.subtract(circled.fitHeightProperty().divide(7))));
+
+			} else {
+				circled.setVisible(false);
+			}
+		} else {
+			circled.setVisible(false);
 		}
 	}
 

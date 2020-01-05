@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright (C) 2019-2020 ROMAINPC
+ * Copyright (C) 2019-2020 Picachoc
+ * 
+ * This file is part of PICROM-Wars
+ * 
+ * PICROM-Wars is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * PICROM-Wars is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package picrom.entity.castle;
 
 import java.io.Serializable;
@@ -6,7 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javafx.scene.image.ImageView;
 import picrom.entity.Entity;
 import picrom.entity.unit.Unit;
 import picrom.gameboard.World;
@@ -17,10 +35,8 @@ import picrom.utils.Utils.Direction;
 
 public class Castle extends Entity implements Producible,Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
 	private ProductionUnit productionUnit;
 	private int level;
 	private int treasure;
@@ -30,13 +46,25 @@ public class Castle extends Entity implements Producible,Serializable {
 	private int income;
 	private Class<? extends Producible> productionType;
 
-	transient private ImageView circled;
-
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
 		super(Drawables.castle, owner, X, Y, context);
 		level = 1;
 		productionUnit = new ProductionUnit(this);
 		this.door = new Door(doorDir, false);
+		switch (doorDir) {
+		case East:
+			image.setImage(Drawables.castle_e);
+			break;
+		case South:
+			image.setImage(Drawables.castle_s);
+			break;
+		case West:
+			image.setImage(Drawables.castle_w);
+			break;
+		default:
+			break;
+		}
+
 		court = new Courtyard(this);
 		nextLevelCost = 1000 * level;
 		nextLevelTime = 100 + 50 * level;
@@ -44,16 +72,6 @@ public class Castle extends Entity implements Producible,Serializable {
 		productionType = null;
 		setTreasure(Settings.START_TREASURE);
 
-		circled = new ImageView(Drawables.circled);
-		setCircled(false);
-		double imageRatio = circled.getImage().getHeight() / image.getImage().getHeight();
-		circled.layoutXProperty()
-				.bind(image.layoutXProperty().subtract(image.fitWidthProperty().multiply((imageRatio - 1) / 2)));
-		circled.layoutYProperty()
-				.bind(image.layoutYProperty().subtract(image.fitHeightProperty().multiply((imageRatio - 1) / 2)));
-		circled.fitHeightProperty().bind(image.fitHeightProperty().multiply(imageRatio));
-		circled.fitWidthProperty().bind(image.fitWidthProperty().multiply(imageRatio));
-		this.getChildren().addAll(circled);
 	}
 	
 	//Reinstanciate a castle. Work in progress.
@@ -124,7 +142,6 @@ public class Castle extends Entity implements Producible,Serializable {
 
 	public void setObjective(Castle objective) {
 		court.setObjective(objective);
-		door.setOpen(true);
 	}
 
 	public void updateProduction() {
@@ -150,6 +167,20 @@ public class Castle extends Entity implements Producible,Serializable {
 		}
 	}
 
+	/**
+	 * Get the time remaining to finish production choosed.
+	 * 
+	 * @return Number of update of updateProduction() needed to finish production.
+	 *         Also consider turns to have enough money.
+	 */
+	public int getProductionTimeLeft() {
+		int leftTime = productionUnit.getTimeLeft();
+		int leftMoney = (productionUnit.getCost() - treasure) / income;
+		leftTime = leftTime < 0 ? 0 : leftTime;
+		leftMoney = leftMoney < 0 ? 0 : leftMoney;
+		return Math.max(leftTime, leftMoney);
+	}
+
 	public void setProduction(Class<? extends Producible> productionType) {
 		this.productionType = productionType;
 		this.productionUnit.stop();
@@ -159,17 +190,6 @@ public class Castle extends Entity implements Producible,Serializable {
 		return productionType;
 	}
 
-	public String productionName() {
-		if (productionType == null)
-			return "Pas de Production";
-		if (productionType == Castle.class)
-			return "Fortifications";
-		return ((Unit) productionUnit.getProduction()).getName();
-	}
-
-	public void setCircled(boolean b) {
-		circled.setVisible(b);
-	}
 
 	public void attackWith(Unit attacker, int damage) {
 		court.assault(damage);
