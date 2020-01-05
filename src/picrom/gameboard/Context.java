@@ -30,7 +30,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Class representing a Group with fixed dimensions.
+ * JavaFX layout, just an area defined by the coordinates of its top left
+ * corner, its height and its width.
+ * 
+ * All this values are Properties, use it to bind your JavaFX components.
  */
 public class Context extends Group {
 	private SimpleDoubleProperty X;
@@ -40,6 +43,9 @@ public class Context extends Group {
 	private SimpleDoubleProperty largerWidth;
 	private SimpleDoubleProperty largerHeight;
 
+	/**
+	 * Create context with empty properties.
+	 */
 	public Context() {
 		X = new SimpleDoubleProperty();
 		Y = new SimpleDoubleProperty();
@@ -47,6 +53,14 @@ public class Context extends Group {
 		this.height = new SimpleDoubleProperty();
 	}
 
+	/**
+	 * Create context with the following parameters as first values for properties.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public Context(double x, double y, double width, double height) {
 		this();
 		X.set(x);
@@ -55,6 +69,15 @@ public class Context extends Group {
 		this.height.set(height);
 	}
 
+	/**
+	 * Create Context and bind its top left corner and its size to the following
+	 * properties.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public Context(ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y, ReadOnlyDoubleProperty width,
 			ReadOnlyDoubleProperty height) {
 		this();
@@ -68,6 +91,8 @@ public class Context extends Group {
 	 * Context with preserved ratio, context property may be different from property
 	 * passed, however there is always a binding.
 	 * 
+	 * May lead to empty area around the context area.
+	 * 
 	 * @param x
 	 * @param y
 	 * @param width
@@ -79,6 +104,8 @@ public class Context extends Group {
 			ReadOnlyDoubleProperty height, double ratio) {
 		this();
 		When condition = Bindings.when((width.divide(height)).greaterThanOrEqualTo(ratio));
+		// The purpose of this bind is to compare format of the area to decide to have
+		// empty area at the top/bottom or at the right/left pf the Context.
 		this.width.bind(condition.then(this.height.multiply(ratio)).otherwise(width));
 		this.height.bind(condition.then(height).otherwise(this.width.divide(ratio)));
 		X.bind(x.add((width.subtract(this.width)).divide(2)));
@@ -89,26 +116,46 @@ public class Context extends Group {
 		largerHeight.bind(height);
 	}
 
+	/**
+	 * @return Top Left X coordinate of the larger part of the context.
+	 */
 	public SimpleDoubleProperty xProperty() {
 		return X;
 	}
 
+	/**
+	 * @return Top Left Y coordinate of the larger part of the context.
+	 */
 	public SimpleDoubleProperty yProperty() {
 		return Y;
 	}
 
+	/**
+	 * @return Width of the used context, may be reduced if ratio is preserved.
+	 */
 	public SimpleDoubleProperty widthProperty() {
 		return width;
 	}
 
+	/**
+	 * @return Height of the used context, may be reduced if ratio is preserved.
+	 */
 	public SimpleDoubleProperty heightProperty() {
 		return height;
 	}
 
+	/**
+	 * @return Larger width possible, may be larger than
+	 *         {@link Context#widthProperty()} if ratio is preserved.
+	 */
 	public SimpleDoubleProperty largerWidthProperty() {
 		return largerWidth;
 	}
 
+	/**
+	 * @return Larger Height possible, may be larger than
+	 *         {@link Context#heightProperty()} if ratio is preserved.
+	 */
 	public SimpleDoubleProperty largerHeightProperty() {
 		return largerHeight;
 	}
@@ -181,7 +228,7 @@ public class Context extends Group {
 		l.layoutXProperty().bind(X.add(width.multiply(xRatio).subtract(l.widthProperty().divide(2))));
 		l.layoutYProperty().bind(Y.add(height.multiply(yRatio).subtract(l.heightProperty().divide(2))));
 	}
-	
+
 	/**
 	 * Function to anchor a ImageView in the context relative to the center of it.
 	 * 

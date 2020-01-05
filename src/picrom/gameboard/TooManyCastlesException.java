@@ -19,7 +19,17 @@
  ******************************************************************************/
 package picrom.gameboard;
 
+/**
+ * Exception used to inform that a World try to generate too many Castles. Use
+ * it to limit number of castles generated.
+ * 
+ * @see picrom.gameboard.World
+ * @see picrom.entity.castle.Castle
+ */
 public class TooManyCastlesException extends Exception {
+	/**
+	 * Constructor, also print error message in standard error exit.
+	 */
 	public TooManyCastlesException() {
 		System.err.println(
 				"Exception trigered due to too long castle generation, try to reduce number of castles or spacing between them or increase world size.");

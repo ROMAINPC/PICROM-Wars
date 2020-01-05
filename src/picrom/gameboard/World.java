@@ -44,6 +44,24 @@ import picrom.utils.Settings;
 import picrom.utils.Utils;
 import picrom.utils.Utils.Direction;
 
+/**
+ * World objects are graphical areas and also gameboards.
+ * 
+ * In a World there are different Owner : all players of the game.
+ * 
+ * The World contain several Castles, but also Units which are moving on the
+ * terran (they have exited a Castle and not yet enter in another).
+ * 
+ * Graphically World is a JavaFX component wich shows ImageView of Castles and
+ * Units. It adapts its size when window size change.
+ * 
+ * World doesn't run the game itself but offers methods to update Castles and
+ * Units and do actions with them.
+ * 
+ * @see picrom.owner.Owner
+ * @see picrom.entity.castle.Castle
+ * @see picrom.entity.unit.Unit
+ */
 public class World extends Context {
 
 	private static Random random = Settings.SEED;
@@ -61,12 +79,29 @@ public class World extends Context {
 	private int worldWidth;
 	private int worldHeight;
 
+	/**
+	 * Create a world and fix it in the entire window.
+	 * 
+	 * @param worldWidth  Number of cases horizontally
+	 * @param worldHeight Number of cases vertically
+	 * @param context     JavaFX Scene to fix the World.
+	 */
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, new SimpleDoubleProperty(0), new SimpleDoubleProperty(0), context.widthProperty(),
 				context.heightProperty());
 
 	}
 
+	/**
+	 * Create a world and bind it in the specified area.
+	 * 
+	 * @param worldWidth  Number of cases horizontally
+	 * @param worldHeight Number of cases vertically
+	 * @param x           Property to bind World top left corner X coordinate.
+	 * @param y           Property to bind World top left corner Y coordinate.
+	 * @param width       Property to bin World graphic width.
+	 * @param height      Property to bin World graphic height.
+	 */
 	public World(int worldWidth, int worldHeight, ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y,
 			ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
 		super(x, y, width, height, (double) worldWidth / (double) worldHeight); // linking layout
@@ -88,6 +123,15 @@ public class World extends Context {
 
 	}
 
+	/**
+	 * Generate players, 1 human player and some AIs
+	 * 
+	 * @param nbAIs    Number of AIs to generate.
+	 * @param nbBarons Number of Neutrals to generate.
+	 * @see picrom.owner.AI
+	 * @see picrom.owner.Neutral
+	 * @see picrom.owner.Player
+	 */
 	public void generateOwners(int nbAIs, int nbBarons) {
 		int nbPlayers = 1;
 
@@ -102,13 +146,23 @@ public class World extends Context {
 			owners.add(new Neutral());
 	}
 
+	/**
+	 * Generate 1 Castle for each Owner in game. Found a random place to install the
+	 * Castle. Also randomize door orientation and first garrison.
+	 * 
+	 * @throws TooManyCastlesException Throw Exception if too many castle cause
+	 *                                 infinite research for an empty place to set a
+	 *                                 Castle.
+	 * @see picrom.utils.Settings#MINIMAL_CASTLE_DISTANCE
+	 */
 	public void generateWorldCastles() throws TooManyCastlesException {
 
 		// Each owner (player or AI or baron) start the game with one castle.
 		long time = System.currentTimeMillis();
 		for (Owner owner : owners) {
+
+			// choose position:
 			boolean validCastle = false;
-			boolean validDoor = false;
 			int x = 0, y = 0;
 			Direction doorDir = null;
 			while (!validCastle) { // avoid too near castles.
@@ -132,6 +186,8 @@ public class World extends Context {
 				}
 			}
 
+			// door orientation:
+			boolean validDoor = false;
 			while (!validDoor) {
 				doorDir = Direction.randomDirection();
 				validDoor = true;
@@ -141,10 +197,12 @@ public class World extends Context {
 				}
 			}
 
+			// create Castle:
 			Castle castle = new Castle(owner, x, y, doorDir, this);
 			owner.addCastle(castle);
 			castlesArray[x][y] = castle;
 			this.getChildren().add(castle);
+
 			// Start garrison:
 			int quantity = owner instanceof Neutral ? Settings.NEUTRAL_START_GARRISON : Settings.START_GARRISON;
 			int generated = 0;
@@ -163,6 +221,10 @@ public class World extends Context {
 		}
 	}
 
+	/**
+	 * Call this method to update all Castles in the World, for each of them that
+	 * will update money, production and will manage exit if the Units.
+	 */
 	public void processCastles() {
 
 		for (Owner owner : owners) {
@@ -185,7 +247,10 @@ public class World extends Context {
 		}
 	}
 
-	// Process units engaged on the field
+	/**
+	 * Call this method to move all Units currently engaged in the world. Also
+	 * manage Castle enter and Castle assault.
+	 */
 	public void processUnits() {
 
 		HashSet<Unit> toRemove = new HashSet<Unit>();
@@ -247,6 +312,9 @@ public class World extends Context {
 
 	}
 
+	/**
+	 * Call this method to make AI think oneitération.
+	 */
 	public void processAIs() {
 		for (Owner owner : owners) {
 			if (owner instanceof Pensive) {
@@ -255,28 +323,51 @@ public class World extends Context {
 		}
 	}
 
+	/**
+	 * Unengage an Unit from the World,because this Unit is dead or was entered in a
+	 * Castle.
+	 * 
+	 * @param unit
+	 */
 	public void unengageUnit(Unit unit) {
 		units.remove(unit);
 		this.getChildren().remove(unit);
 	}
 
+	/**
+	 * Engage an Unit in the World, for instance because it exits a Castle.
+	 * 
+	 * @param unit
+	 */
 	public void engageUnit(Unit unit) {
 		units.add(unit);
 		this.getChildren().add(unit);
 	}
 
+	/**
+	 * @return Number of case of the world horizontally.
+	 */
 	public int getWorldWidth() {
 		return worldWidth;
 	}
 
+	/**
+	 * @return Number of case of the world vertically.
+	 */
 	public int getWorldHeight() {
 		return worldHeight;
 	}
 
+	/**
+	 * @return List of Owners which play in the World (human or not)
+	 */
 	public List<Owner> getOwners() {
 		return owners;
 	}
 
+	/**
+	 * @return List of Owners which still in the World (human or not)
+	 */
 	public List<Owner> getInGameOwners() {
 		List<Owner> inGame = new LinkedList<Owner>();
 		for (Owner owner : owners) {
