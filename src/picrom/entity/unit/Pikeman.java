@@ -20,7 +20,6 @@
 package picrom.entity.unit;
 
 import picrom.entity.castle.Castle;
-import picrom.utils.Drawables;
 
 /**
  * Base soldier, low life and low damage, but quick to produce.
@@ -30,7 +29,7 @@ public class Pikeman extends Unit {
 	 * @param castle Origin Castle of this Unit.
 	 */
 	public Pikeman(Castle castle) {
-		super(Drawables.pikeman, "Piquier", 100, 5, 2, 1, 1, castle);
+		super("Piquier", 100, 5, 2, 1, 1, castle);
 	}
 
 }

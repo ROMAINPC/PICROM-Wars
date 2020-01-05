@@ -86,6 +86,14 @@ public class Context extends Group {
 		this.width.bind(width);
 		this.height.bind(height);
 	}
+	
+	public void rebind(ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y,
+			ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
+		X.bind(x);
+		Y.bind(y);
+		this.width.bind(width);
+		this.height.bind(height);
+	}
 
 	/**
 	 * Context with preserved ratio, context property may be different from property

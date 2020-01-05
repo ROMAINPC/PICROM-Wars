@@ -30,6 +30,9 @@ import picrom.utils.Utils.Direction;
  * @see picrom.entity.castle.Castle
  */
 public class Door implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Direction dir;
 	private boolean open;
 

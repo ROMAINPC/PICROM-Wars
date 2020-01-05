@@ -33,7 +33,9 @@ import picrom.utils.Settings;
  * @see picrom.entity.unit.Unit
  */
 public class ProductionUnit implements Serializable {
-
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Castle castle;
 
 	private Producible currentProduction;

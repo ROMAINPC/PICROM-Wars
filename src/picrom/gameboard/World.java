@@ -19,6 +19,8 @@
  ******************************************************************************/
 package picrom.gameboard;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -63,9 +65,10 @@ import picrom.utils.Utils.Direction;
  * @see picrom.entity.castle.Castle
  * @see picrom.entity.unit.Unit
  */
-public class World extends Context implements Serializable{
+public class World extends Context implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	private static Random random = Settings.SEED;
 
 	// 2D array to store castles positions
@@ -115,21 +118,19 @@ public class World extends Context implements Serializable{
 		this.owners = new ArrayList<Owner>();
 
 		// load and display background:
+		setUI();
+	}
+
+	/**
+	 * Just setup JavaFX part of the object.
+	 */
+	private void setUI() {
 		ImageView background = new ImageView(Drawables.worldBackground);
 		background.fitWidthProperty().bind(this.widthProperty());
 		background.fitHeightProperty().bind(this.heightProperty());
 		background.xProperty().bind(this.xProperty());
 		background.yProperty().bind(this.yProperty());
 		this.getChildren().add(background);
-	}
-	
-	
-	//May be used for loading a game..
-	public World(World gameboard, Scene context) {
-		this(gameboard.getWorldWidth(), gameboard.getWorldHeight(), context);
-		this.castlesArray = gameboard.getCastlesArray().clone();
-		this.units = new LinkedList<Unit>(gameboard.getUnits());
-		this.owners = new ArrayList<Owner>(gameboard.getOwners());
 	}
 
 	/**
@@ -153,22 +154,6 @@ public class World extends Context implements Serializable{
 		// generate neutrals:
 		for (int i = 0; i < nbBarons; i++)
 			owners.add(new Neutral());
-	}
-	
-	//May be used for loading a game, but not sure yet.
-	public void loadGame(World gameboard) {
-		for(Owner owner : owners) {
-			Owner newOwner = new Owner(owner.getColor(),owner.getName(),owner.getOwnerType());
-			this.owners.add(newOwner);
-			for(Castle castle : owner.getCastles()) {
-				int x = (int) castle.getWorldX();
-				int y = (int) castle.getWorldY();
-				Castle newCastle = new Castle(castle, this);
-				owner.addCastle(newCastle);
-				castlesArray[x][y] = newCastle;
-				this.getChildren().add(newCastle);
-			}
-		}
 	}
 
 	/**
@@ -401,16 +386,19 @@ public class World extends Context implements Serializable{
 		}
 		return inGame;
 	}
-	
-	public void setOwners(List<Owner> owners) {
-		this.owners = owners;
-	}
 
-	public Castle[][] getCastlesArray() {
-		return castlesArray;
-	}
-
-	public List<Unit> getUnits() {
-		return units;
+	/**
+	 * Called when World is de-serialized.
+	 * 
+	 * @param in ObjectInputStream
+	 * @throws IOException            If IO error.
+	 * @throws ClassNotFoundException If serialization problem
+	 */
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		setUI();
+		for (Owner owner : owners)
+			this.getChildren().addAll(owner.getCastles());
+		this.getChildren().addAll(units);
 	}
 }

@@ -20,6 +20,11 @@
 package picrom.utils;
 
 import javafx.scene.image.Image;
+import picrom.entity.Entity;
+import picrom.entity.castle.Castle;
+import picrom.entity.unit.Knight;
+import picrom.entity.unit.Onager;
+import picrom.entity.unit.Pikeman;
 
 /**
  * Class for load all game pictures.
@@ -101,6 +106,25 @@ public class Drawables {
 		public Image getMask() {
 			return mask;
 		}
+
+	}
+
+	/**
+	 * Method used to get the correct assets for an Entity depending the type.
+	 * 
+	 * @param type Entity class type
+	 * @return Image and mask for the Entity, null if unknow Entity.
+	 */
+	public static EntityAssets getAssets(Class<? extends Entity> type) {
+		if (type == Castle.class)
+			return castle;
+		if (type == Pikeman.class)
+			return pikeman;
+		if (type == Onager.class)
+			return onager;
+		if (type == Knight.class)
+			return knight;
+		return null;
 	}
 
 }

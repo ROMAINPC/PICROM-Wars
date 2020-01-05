@@ -20,13 +20,13 @@
 
 package picrom;
 
-import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -88,6 +88,8 @@ public class Main extends Application {
 	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasureL;
 	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
 	private World gameboard;
+	private Scene scene;
+	private SimpleDoubleProperty vSeparator;
 
 	private boolean pause;
 
@@ -96,15 +98,22 @@ public class Main extends Application {
 		try {
 
 			Group root = new Group();
-			Scene scene = new Scene(root, Settings.DEFAULT_SCENE_WIDTH, Settings.DEFAULT_SCENE_HEIGHT);
+			scene = new Scene(root, Settings.DEFAULT_SCENE_WIDTH, Settings.DEFAULT_SCENE_HEIGHT);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// loading textures:
 			new Drawables();
 			scene.setFill(Color.BLACK);
-			SimpleDoubleProperty vSeparator = new SimpleDoubleProperty();
+
+			// create save folder:
+			File folder = new File("./saves");
+			folder.mkdir();// create saves folder if needed:
+
+			// Separator:
+			vSeparator = new SimpleDoubleProperty();
 			vSeparator.bind(scene.widthProperty().multiply(Settings.WORLD_WIDTH_RATIO));
-			
+
+			// Load or generate World:
 			Alert loadSave = new Alert(AlertType.CONFIRMATION);
 			loadSave.setTitle("PICROM Wars - Par ROMAINPC & Picachoc");
 			loadSave.setHeaderText("Souhaitez-vous charger une sauvegarde ?");
@@ -113,8 +122,8 @@ public class Main extends Application {
 			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 			loadSave.getButtonTypes().setAll(buttonYes, buttonNo, buttonTypeCancel);
 			Optional<ButtonType> choice = loadSave.showAndWait();
-			
-			if (choice.get() == buttonYes){
+
+			if (choice.get() == buttonYes) { // load World.
 				String filename;
 				final FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Choose a save");
@@ -122,13 +131,16 @@ public class Main extends Application {
 				fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICROM WARS SAVE", "*.pw"));
 
 				File file = fileChooser.showOpenDialog(primaryStage);
+				if (file == null)
+					System.exit(0);
 				filename = file.getName();
 				load(filename);
-				
-			} else if (choice.get() == buttonNo) {
+
+			} else if (choice.get() == buttonNo) { // generate new World (with world settings, see in
+													// picrom.utils.Settings )
 				gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, new SimpleDoubleProperty(0),
 						new SimpleDoubleProperty(0), vSeparator, scene.heightProperty());
-						
+
 				// Add players and AIs in the game:
 				gameboard.generateOwners(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
 
@@ -145,9 +157,8 @@ public class Main extends Application {
 					alert.showAndWait();
 				}
 			} else {
-			    System.exit(0);
+				System.exit(0);
 			}
-			
 
 			// setup GUI:
 			Context infos = new Context(); // informations and actions area at the right of the game.
@@ -327,10 +338,10 @@ public class Main extends Application {
 					pause = true;
 				}
 			});
-			
+
 			Button saveB = new Button("Sauvegarder la partie");
 			infos.bindIn(saveB, 0.15, 0.37, 0.6, 0.1);
-			//infos.bindIn(iV, xRatio, yRatio, widthRatio, heightRatio);
+			// infos.bindIn(iV, xRatio, yRatio, widthRatio, heightRatio);
 			infos.getChildren().add(saveB);
 			saveB.setOnAction(e -> {
 				String saveName = "";
@@ -399,6 +410,12 @@ public class Main extends Application {
 		}
 	}
 
+	/**
+	 * Save gameboard in a file. In the folder "saves"
+	 * 
+	 * @param filename  File name (with extension).
+	 * @param gameboard World to save.
+	 */
 	private void save(String filename, World gameboard) {
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
@@ -422,23 +439,28 @@ public class Main extends Application {
 			}
 
 		}
-		
+
 	}
-	
+
+	/**
+	 * Load gameboad from .pw file.
+	 * 
+	 * @param filename File name (with extension).
+	 */
 	private void load(String filename) {
 		FileInputStream fileInputStream = null;
 		ObjectInputStream objectInputStream = null;
 		try {
 			fileInputStream = new FileInputStream("./saves/" + filename);
 			objectInputStream = new ObjectInputStream(fileInputStream);
-			//Doesn't display it for the moment.. work in progress
 			gameboard = (World) objectInputStream.readObject();
-			//TODO add the gameboard to the group
+			gameboard.rebind(new SimpleDoubleProperty(0), new SimpleDoubleProperty(0), vSeparator,
+					scene.heightProperty());
+
 		} catch (IOException e) {
 			System.err.println("Error while loading the save.");
 			e.printStackTrace();
-		}	
-		  catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			System.err.println("Error : the save is corrupted.");
 			e.printStackTrace();
 		} finally {
@@ -455,7 +477,6 @@ public class Main extends Application {
 		}
 	}
 
-	
 	/**
 	 * Used to update values of castle preview.
 	 */

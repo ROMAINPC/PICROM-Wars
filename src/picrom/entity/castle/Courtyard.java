@@ -38,6 +38,9 @@ import picrom.utils.SlowestUnitComparator;
  * @see picrom.entity.castle.Castle
  */
 public class Courtyard implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	// TODO find a solution to avoid sorting the list at each addition / suppression
 	private List<Unit> units;
 	private Castle objective;

@@ -19,6 +19,8 @@
  ******************************************************************************/
 package picrom.entity.castle;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -53,7 +55,7 @@ import picrom.utils.Utils.Direction;
 public class Castle extends Entity implements Producible, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private ProductionUnit productionUnit;
 	private int level;
 	private int treasure;
@@ -73,11 +75,32 @@ public class Castle extends Entity implements Producible, Serializable {
 	 * @param context World context.
 	 */
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
-		super(Drawables.castle, owner, X, Y, context);
+		super(owner, X, Y, context);
 		level = 1;
 		productionUnit = new ProductionUnit(this);
 		this.door = new Door(doorDir, false);
-		switch (doorDir) {
+		setUI();
+
+		court = new Courtyard();
+		nextLevelCost = 1000 * level;
+		nextLevelTime = 100 + 50 * level;
+		income = level * Settings.INCOME_MULTIPLIER;
+		productionType = null;
+		setTreasure(Settings.START_TREASURE);
+
+	}
+
+	// Reinstanciate a castle. Work in progress.
+	public Castle(Castle castle, World context) {
+		this(castle.getOwner(), (int) castle.getWorldX(), (int) castle.getWorldY(), castle.getDoor().getDirection(),
+				context);
+	}
+
+	/**
+	 * Just setup JavaFX part of the object.
+	 */
+	private void setUI() {
+		switch (door.getDirection()) {
 		case East:
 			image.setImage(Drawables.castle_e);
 			break;
@@ -90,19 +113,6 @@ public class Castle extends Entity implements Producible, Serializable {
 		default:
 			break;
 		}
-
-		court = new Courtyard();
-		nextLevelCost = 1000 * level;
-		nextLevelTime = 100 + 50 * level;
-		income = level * Settings.INCOME_MULTIPLIER;
-		productionType = null;
-		setTreasure(Settings.START_TREASURE);
-
-	}
-	
-	//Reinstanciate a castle. Work in progress.
-	public Castle(Castle castle, World context) {
-		this(castle.getOwner(), (int) castle.getWorldX(), (int) castle.getWorldY(), castle.getDoor().getDirection(), context);
 	}
 
 	/**
@@ -319,6 +329,18 @@ public class Castle extends Entity implements Producible, Serializable {
 			map.put(unit.getClass(), n);
 		}
 		return map;
+	}
+
+	/**
+	 * Called when Castle is de-serialized.
+	 * 
+	 * @param in ObjectInputStream
+	 * @throws IOException            If IO error.
+	 * @throws ClassNotFoundException If serialization problem
+	 */
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		setUI();
 	}
 
 }

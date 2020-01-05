@@ -20,11 +20,12 @@
 package picrom.owner;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -42,13 +43,13 @@ import picrom.utils.Kingdom;
  * This class is also a JavaFX component, a small bar with some informations
  * about the owner. Show it for instance in a VBox.
  */
-public class Owner extends StackPane implements Serializable{
+public class Owner extends StackPane implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	transient private Color color;
-	//Only used for serialization and deserialization
-	private double[] colorHSB;
+
+	private double[] colorHSB; // Only used for serialization and deserialization
 	private String name; // not use as ID, prefer object reference
 	private String ownerType;
 
@@ -102,7 +103,7 @@ public class Owner extends StackPane implements Serializable{
 		Label type = new Label(ownerType);
 		type.setPrefWidth(25);
 		Label nameL = new Label(" " + name);
-		
+
 		Rectangle rec = new Rectangle(30, 15, color);
 		numberL = new Label(String.valueOf(castles.size()));
 		numberL.setTextFill(color.getBrightness() < 0.5 ? Color.WHITE : Color.BLACK);
@@ -147,14 +148,6 @@ public class Owner extends StackPane implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getOwnerType() {
-		return ownerType;
-	}
-
-	public void setOwnerType(String ownerType) {
-		this.ownerType = ownerType;
-	}
 
 	/**
 	 * @return List of all Castles owned by the Owner.
@@ -192,15 +185,31 @@ public class Owner extends StackPane implements Serializable{
 	public boolean isInGame() {
 		return castles.size() > 0;
 	}
-	
-	 private void writeObject(java.io.ObjectOutputStream out) throws IOException{
-		 //the javafx.Color is not serializable and thus needs to be passed as a HSB array
-		 colorHSB = new double[] {color.getHue(),color.getSaturation(), color.getBrightness()};
-		 out.defaultWriteObject();
-	 }
-	 
-	 private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
-		 in.defaultReadObject();
-		 color = Color.hsb(colorHSB[0], colorHSB[1], colorHSB[2]);
-	 }
+
+	/**
+	 * Called when Owner is serialized.
+	 * 
+	 * @param out ObjectOutputStream
+	 * @throws IOException If IO error.
+	 */
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		// the javafx.Color is not serializable and thus needs to be passed as a HSB
+		// array
+		colorHSB = new double[] { color.getHue(), color.getSaturation(), color.getBrightness() };
+		out.defaultWriteObject();
+	}
+
+	/**
+	 * Called when Owner is de-serialized.
+	 * 
+	 * @param in ObjectInputStream
+	 * @throws IOException            If IO error.
+	 * @throws ClassNotFoundException If serialization problem
+	 */
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		color = Color.hsb(colorHSB[0], colorHSB[1], colorHSB[2]);
+		setUI();
+		crossed.setVisible(castles.size() < 1);
+	}
 }

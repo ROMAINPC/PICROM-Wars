@@ -20,7 +20,6 @@
 package picrom.entity.unit;
 
 import picrom.entity.castle.Castle;
-import picrom.utils.Drawables;
 
 /**
  * Sows chaos and destruction. Slow unit but resistant and very dangerous.
@@ -31,7 +30,7 @@ public class Onager extends Unit {
 	 * @param castle Origin Castle of this Unit.
 	 */
 	public Onager(Castle castle) {
-		super(Drawables.onager, "Onagre", 1000, 50, 1, 5, 10, castle);
+		super("Onagre", 1000, 50, 1, 5, 10, castle);
 	}
 
 }

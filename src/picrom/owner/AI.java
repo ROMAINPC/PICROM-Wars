@@ -72,8 +72,6 @@ public class AI extends Owner implements Pensive {
 			castle.getDoor().setOpen(true);
 
 			// Choose production:
-			// System.out.println(castle.getProductionTimeLeft());
-
 			if (changeNext || castle.getProductionTimeLeft() == 0) {
 				int r = random.nextInt(3);
 				if (r == 0) {

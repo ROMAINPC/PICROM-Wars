@@ -24,7 +24,6 @@ import java.io.Serializable;
 import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
 import picrom.entity.castle.Producible;
-import picrom.utils.Drawables.EntityAssets;
 
 /**
  * Units are mainly military units. They can be produced in Castles and sended
@@ -38,6 +37,8 @@ import picrom.utils.Drawables.EntityAssets;
  * @see picrom.entity.castle.ProductionUnit
  */
 public class Unit extends Entity implements Producible, Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	private int speed, hp, damage;
 	private String name;
@@ -49,8 +50,6 @@ public class Unit extends Entity implements Producible, Serializable {
 	/**
 	 * Create new Unit
 	 * 
-	 * @param img      Image and mask Image, see
-	 *                 {@link picrom.utils.Drawables.EntityAssets}
 	 * @param name     String, the name of the type of Unit
 	 * @param prodCost Money cost to produce it
 	 * @param prodTime Number of turn needed to produce it
@@ -59,9 +58,9 @@ public class Unit extends Entity implements Producible, Serializable {
 	 * @param damage   Damage potential
 	 * @param origin   owner Castle
 	 */
-	public Unit(EntityAssets img, String name, int prodCost, int prodTime, int speed, int hp, int damage,
+	public Unit(String name, int prodCost, int prodTime, int speed, int hp, int damage,
 			Castle origin) {
-		super(img, origin);
+		super(origin);
 		this.speed = speed;
 		this.hp = hp;
 		this.damage = damage;
