@@ -40,8 +40,8 @@ import picrom.utils.Utils;
  * Entity has an Owner (see {@link picrom.owner.Owner}) which owns it.
  * 
  * Entity is also a JavaFX component, it comes with two ImageView, mask and main
- * image (see {@link picrom.utils.EntityAssets}). Graphics will be correclty
- * bind in the World which contains this Entity.
+ * image (see {@link picrom.utils.Drawables.EntityAssets}). Graphics will be
+ * correclty bind in the World which contains this Entity.
  */
 public abstract class Entity extends Group implements Serializable {
 	transient private SimpleDoubleProperty worldX;
@@ -110,7 +110,7 @@ public abstract class Entity extends Group implements Serializable {
 	/**
 	 * Define new owner for this Entity
 	 * 
-	 * @param owner
+	 * @param owner the Owner
 	 */
 	public void setOwner(Owner owner) {
 		this.owner = owner;
@@ -127,7 +127,7 @@ public abstract class Entity extends Group implements Serializable {
 	/**
 	 * Set X position in the World coordinate system.
 	 * 
-	 * @param worldX
+	 * @param worldX coordinate
 	 */
 	public void setWorldX(double worldX) {
 		this.worldX.set(worldX);
@@ -143,7 +143,7 @@ public abstract class Entity extends Group implements Serializable {
 	/**
 	 * Set Y position in the World coordinate system.
 	 * 
-	 * @param worldY
+	 * @param worldY coordinate
 	 */
 	public void setWorldY(double worldY) {
 		this.worldY.set(worldY);

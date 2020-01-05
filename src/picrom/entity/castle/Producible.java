@@ -19,10 +19,27 @@
  ******************************************************************************/
 package picrom.entity.castle;
 
+/**
+ * Producible classes are Object that can be produce in ProductionUnit.
+ * 
+ * @see picrom.entity.castle.ProductionUnit
+ */
 public interface Producible {
-
+	/**
+	 * Do the action to concretly produce the Producible.
+	 * 
+	 * @param castle Castle containing the ProductionUnit
+	 */
 	public void produce(Castle castle);
+
+	/**
+	 * @return Money needed to produce this Producible.
+	 */
 	public int getProductionCost();
+
+	/**
+	 * @return Number of turns needed to produce this Producible.
+	 */
 	public int getProductionTime();
 
 }

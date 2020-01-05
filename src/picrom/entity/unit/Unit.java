@@ -81,7 +81,7 @@ public class Unit extends Entity implements Producible, Serializable {
 	/**
 	 * Set unit speed
 	 * 
-	 * @param speed
+	 * @param speed new speed
 	 */
 	public void setSpeed(int speed) {
 		this.speed = speed;
@@ -97,7 +97,7 @@ public class Unit extends Entity implements Producible, Serializable {
 	/**
 	 * Set Unit health points
 	 * 
-	 * @param hp
+	 * @param hp new amount of points
 	 */
 	public void setHp(int hp) {
 		this.hp = hp;
@@ -113,7 +113,7 @@ public class Unit extends Entity implements Producible, Serializable {
 	/**
 	 * Set Unit damage potential
 	 * 
-	 * @param damage
+	 * @param damage new amount of damages
 	 */
 	public void setDamage(int damage) {
 		this.damage = damage;
@@ -155,7 +155,7 @@ public class Unit extends Entity implements Producible, Serializable {
 	/**
 	 * Set target Castle of the Unit.
 	 * 
-	 * @param objective
+	 * @param objective new objective
 	 */
 	public void setObjective(Castle objective) {
 		this.objective = objective;
@@ -171,7 +171,7 @@ public class Unit extends Entity implements Producible, Serializable {
 	/**
 	 * Set origin Castle of the Unit (last Castle were was the Unit to be exact)
 	 * 
-	 * @param origin
+	 * @param origin new origin
 	 */
 	public void setOrigin(Castle origin) {
 		this.origin = origin;

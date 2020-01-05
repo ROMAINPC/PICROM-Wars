@@ -106,6 +106,12 @@ public class Utils {
 
 	/**
 	 * See {@link Utils#manDistance(int, int, int, int) }
+	 * 
+	 * @param x1 X coordinate of first case.
+	 * @param y1 Y coordinate of first case.
+	 * @param x2 X coordinate of second case.
+	 * @param y2 Y coordinate of second case.
+	 * @return Manhattan distance between two cases.
 	 */
 	public static int manDistance(double x1, double y1, double x2, double y2) {
 		return manDistance((int) x1, (int) y1, (int) x2, (int) y2);

@@ -126,7 +126,7 @@ public class Owner extends StackPane implements Serializable{
 	/**
 	 * Set owner color
 	 * 
-	 * @param color
+	 * @param color new Color
 	 */
 	public void setColor(Color color) {
 		this.color = color;
@@ -142,7 +142,7 @@ public class Owner extends StackPane implements Serializable{
 	/**
 	 * Set owner name
 	 * 
-	 * @param name
+	 * @param name new name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -166,7 +166,7 @@ public class Owner extends StackPane implements Serializable{
 	/**
 	 * Give a Castle to the Owner.
 	 * 
-	 * @param castle
+	 * @param castle the Castle
 	 */
 	public void addCastle(Castle castle) {
 		castles.add(castle);
@@ -178,7 +178,7 @@ public class Owner extends StackPane implements Serializable{
 	/**
 	 * To remove a Castle, the Owner will not owns this Castle.
 	 * 
-	 * @param castle
+	 * @param castle the Castle
 	 */
 	public void removeCastle(Castle castle) {
 		castles.remove(castle);
