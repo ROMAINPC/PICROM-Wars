@@ -1,7 +1,14 @@
 package picrom;
 
 import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
+import java.util.Optional;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -16,8 +23,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Border;
@@ -30,6 +40,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import picrom.entity.castle.Castle;
 import picrom.entity.unit.Knight;
@@ -55,6 +66,8 @@ public class Main extends Application {
 	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
 
 	private boolean pause;
+	
+	private World gameboard;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -67,26 +80,50 @@ public class Main extends Application {
 			// loading textures:
 			new Drawables();
 			scene.setFill(Color.BLACK);
-
-			// Create world:
 			SimpleDoubleProperty vSeparator = new SimpleDoubleProperty();
 			vSeparator.bind(scene.widthProperty().multiply(Settings.WORLD_WIDTH_RATIO));
-			World gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, new SimpleDoubleProperty(0),
-					new SimpleDoubleProperty(0), vSeparator, scene.heightProperty());
+			
+			Alert loadSave = new Alert(AlertType.CONFIRMATION);
+			loadSave.setTitle("PICROM Wars - Par ROMAINPC & Picachoc");
+			loadSave.setHeaderText("Souhaitez-vous charger une sauvegarde ?");
+			ButtonType buttonYes = new ButtonType("Oui");
+			ButtonType buttonNo = new ButtonType("Non");
+			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+			loadSave.getButtonTypes().setAll(buttonYes, buttonNo, buttonTypeCancel);
+			Optional<ButtonType> choice = loadSave.showAndWait();
+			
+			if (choice.get() == buttonYes){
+				String filename;
+				final FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Choose a save");
+				fileChooser.setInitialDirectory(new File("./saves"));
+				fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICROM WARS SAVE", "*.pw"));
 
-			gameboard.generateOwners(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
+				File file = fileChooser.showOpenDialog(primaryStage);
+				filename = file.getName();
+				load(filename);
+				
+			} else if (choice.get() == buttonNo) {
+				gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, new SimpleDoubleProperty(0),
+						new SimpleDoubleProperty(0), vSeparator, scene.heightProperty());
 
-			try {
-				gameboard.generateWorldCastles();
-			} catch (TooManyCastlesException e) {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Trop de châteaux !");
-				alert.setHeaderText(
-						"La génération des châteaux est trop longue, certains châteaux n'ont peut-être pas été placés sur le plateau.");
-				alert.setContentText(
-						"Essayez de réduire le nombre de châteaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
-				alert.showAndWait();
+				gameboard.generateOwners(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
+				
+				try {
+					gameboard.generateWorldCastles();
+				} catch (TooManyCastlesException e) {
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Trop de châteaux !");
+					alert.setHeaderText(
+							"La génération des châteaux est trop longue, certains châteaux n'ont peut-être pas été placés sur le plateau.");
+					alert.setContentText(
+							"Essayez de réduire le nombre de châteaux ou l'espacement entre eux, ou augmentez la taille du plateau de jeu.");
+					alert.showAndWait();
+				}
+			} else {
+			    System.exit(0);
 			}
+			
 
 			// setup GUI:
 			Context infos = new Context();
@@ -261,6 +298,20 @@ public class Main extends Application {
 					pause = true;
 				}
 			});
+			
+			Button saveB = new Button("Save this game");
+			infos.bindIn(saveB, 0.15, 0.37, 0.6, 0.1);
+			//infos.bindIn(iV, xRatio, yRatio, widthRatio, heightRatio);
+			infos.getChildren().add(saveB);
+			saveB.setOnAction(e -> {
+				String saveName = "";
+				TextInputDialog dialog = new TextInputDialog("");
+				dialog.setTitle("Save name");
+				// dialog.setHeaderText("Look, a Text Input Dialog");
+				dialog.setContentText("Please enter a name for this save:");
+				saveName = dialog.showAndWait().orElse(null);
+				save(saveName, gameboard);
+			});
 
 			// Main game loop:
 
@@ -281,7 +332,7 @@ public class Main extends Application {
 						// update world:
 						gameboard.processCastles();
 						gameboard.processUnits();
-
+						
 						// end of game:
 						List<Owner> inGame = gameboard.getInGameOwners();
 						if (inGame.size() < 2) {
@@ -313,6 +364,62 @@ public class Main extends Application {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void save(String filename, World gameboard) {
+		FileOutputStream fos = null;
+		ObjectOutputStream oos = null;
+		try {
+			fos = new FileOutputStream("./saves/" + filename + "." + Settings.SAVES_EXTENSION);
+			oos = new ObjectOutputStream(fos);
+			oos.writeObject(gameboard);
+		} catch (IOException e1) {
+			System.err.println("Error while saving the game.");
+			e1.printStackTrace();
+		} finally {
+			try {
+				if (fos != null) {
+					fos.close();
+				}
+				if (oos != null) {
+					oos.close();
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+		}
+		
+	}
+	
+	private void load(String filename) {
+		FileInputStream fileInputStream = null;
+		ObjectInputStream objectInputStream = null;
+		try {
+			fileInputStream = new FileInputStream("./saves/" + filename);
+			objectInputStream = new ObjectInputStream(fileInputStream);
+			//Doesn't display it for the moment.. work in progress
+			gameboard = (World) objectInputStream.readObject();
+			//TODO add the gameboard to the group
+		} catch (IOException e) {
+			System.err.println("Error while loading the save.");
+			e.printStackTrace();
+		}	
+		  catch (ClassNotFoundException e) {
+			System.err.println("Error : the save is corrupted.");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (fileInputStream != null) {
+					fileInputStream.close();
+				}
+				if (objectInputStream != null) {
+					objectInputStream.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

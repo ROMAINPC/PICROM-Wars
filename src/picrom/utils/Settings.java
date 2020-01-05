@@ -30,5 +30,8 @@ public class Settings {
 
 	// game seed:
 	public static final Random SEED = new Random();
+	
+	//save settings:
+	public static final String SAVES_EXTENSION = "pw";
 
 }
