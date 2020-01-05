@@ -184,7 +184,7 @@ public class Main extends Application {
 			// castle preview
 			VBox castleInfos = new VBox();
 			ScrollPane castleInfosSP = new ScrollPane(castleInfos);
-			infos.bindIn(castleInfosSP, 0.15, 0.57, 0.8, 0.4);
+			infos.bindIn(castleInfosSP, 0.15, 0.63, 0.8, 0.36);
 			castleInfos.setAlignment(Pos.CENTER);
 			StackPane castlePreview = new StackPane();
 			ImageView castleImage = new ImageView(Drawables.castle.getImage());
@@ -326,7 +326,7 @@ public class Main extends Application {
 
 			// pause button:
 			Button pauseB = new Button("Lancer");
-			infos.bindIn(pauseB, 0.15, 0.47, 0.6, 0.1);
+			infos.bindIn(pauseB, 0.15, 0.53, 0.65, 0.1);
 			infos.getChildren().add(pauseB);
 			pause = true;
 			pauseB.setOnAction(e -> {
@@ -339,15 +339,14 @@ public class Main extends Application {
 				}
 			});
 
-			Button saveB = new Button("Sauvegarder la partie");
-			infos.bindIn(saveB, 0.15, 0.37, 0.6, 0.1);
-			// infos.bindIn(iV, xRatio, yRatio, widthRatio, heightRatio);
+			// save button:
+			Button saveB = new Button("Sauvegarder");
+			infos.bindIn(saveB, 0.17, 0.47, 0.6, 0.06);
 			infos.getChildren().add(saveB);
 			saveB.setOnAction(e -> {
 				String saveName = "";
-				TextInputDialog dialog = new TextInputDialog("");
+				TextInputDialog dialog = new TextInputDialog();
 				dialog.setTitle("Save name");
-				// dialog.setHeaderText("Look, a Text Input Dialog");
 				dialog.setContentText("Please enter a name for this save:");
 				saveName = dialog.showAndWait().orElse(null);
 				save(saveName, gameboard);
@@ -390,6 +389,7 @@ public class Main extends Application {
 						}
 
 					}
+					saveB.setVisible(pause);
 
 					// refresh UI
 					refreshCastleInfos();
