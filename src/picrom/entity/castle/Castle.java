@@ -172,7 +172,7 @@ public class Castle extends Entity implements Producible {
 	 * @return true if there is at least on Unit in the Castle
 	 */
 	public boolean isGarrison() {
-		return court.getUnits().isEmpty();
+		return !court.getUnits().isEmpty();
 	}
 
 	/**
