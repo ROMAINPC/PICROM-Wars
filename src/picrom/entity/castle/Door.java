@@ -1,8 +1,10 @@
 package picrom.entity.castle;
 
+import java.io.Serializable;
+
 import picrom.utils.Utils.Direction;
 
-public class Door {
+public class Door implements Serializable {
 	private Direction dir;
 	private boolean open;
 

@@ -1,9 +1,10 @@
 package picrom.entity.castle;
 
 import picrom.owner.Neutral;
+import java.io.Serializable;
 import picrom.utils.Settings;
 
-public class ProductionUnit {
+public class ProductionUnit implements Serializable{
 
 	private Castle castle;
 

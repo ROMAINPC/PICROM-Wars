@@ -1,11 +1,13 @@
 package picrom.entity.unit;
 
+import java.io.Serializable;
+
 import picrom.entity.Entity;
 import picrom.entity.castle.Castle;
 import picrom.entity.castle.Producible;
 import picrom.utils.Drawables.EntityAssets;
 
-public class Unit extends Entity implements Producible {
+public class Unit extends Entity implements Producible, Serializable {
 
 	private int speed, hp, damage;
 	private String name;

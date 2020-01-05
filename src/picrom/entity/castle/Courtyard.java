@@ -1,5 +1,6 @@
 package picrom.entity.castle;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +10,7 @@ import picrom.entity.unit.Unit;
 import picrom.utils.Settings;
 import picrom.utils.SlowestUnitComparator;
 
-public class Courtyard {
+public class Courtyard implements Serializable {
 	// TODO find a solution to avoid sorting the list at each addition / suppression
 	private List<Unit> units;
 	private Castle objective;

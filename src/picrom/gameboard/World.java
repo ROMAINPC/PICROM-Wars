@@ -1,5 +1,6 @@
 package picrom.gameboard;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,8 +22,9 @@ import picrom.utils.Settings;
 import picrom.utils.Utils;
 import picrom.utils.Utils.Direction;
 
-public class World extends Context {
+public class World extends Context implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private static Random random = Settings.SEED;
 
 	// 2D array to store castles positions
@@ -37,7 +39,7 @@ public class World extends Context {
 	// size in number of cells
 	private int worldWidth;
 	private int worldHeight;
-
+ 
 	private int nbPlayers;
 	private int nbAIs;
 	private int nbBarons;
@@ -45,7 +47,6 @@ public class World extends Context {
 	public World(int worldWidth, int worldHeight, Scene context) {
 		this(worldWidth, worldHeight, new SimpleDoubleProperty(0), new SimpleDoubleProperty(0), context.widthProperty(),
 				context.heightProperty());
-
 	}
 
 	public World(int worldWidth, int worldHeight, ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y,
@@ -66,7 +67,18 @@ public class World extends Context {
 		background.xProperty().bind(this.xProperty());
 		background.yProperty().bind(this.yProperty());
 		this.getChildren().add(background);
-
+	}
+	
+	
+	//May be used for loading a game..
+	public World(World gameboard, Scene context) {
+		this(gameboard.getWorldWidth(), gameboard.getWorldHeight(), context);
+		this.castlesArray = gameboard.getCastlesArray().clone();
+		this.units = new LinkedList<Unit>(gameboard.getUnits());
+		this.owners = new ArrayList<Owner>(gameboard.getOwners());
+		this.nbPlayers = gameboard.getNbPlayers();
+		this.nbAIs = gameboard.getNbAIs();
+		this.nbBarons = gameboard.getNbBarons();
 	}
 
 	public void generateOwners(int nbAIs, int nbBarons) {
@@ -83,6 +95,22 @@ public class World extends Context {
 		// generate neutrals:
 		for (int i = 0; i < this.nbBarons; i++)
 			owners.add(new Neutral());
+	}
+	
+	//May be used for loading a game, but not sure yet.
+	public void loadGame(World gameboard) {
+		for(Owner owner : owners) {
+			Owner newOwner = new Owner(owner.getColor(),owner.getName(),owner.getOwnerType());
+			this.owners.add(newOwner);
+			for(Castle castle : owner.getCastles()) {
+				int x = (int) castle.getWorldX();
+				int y = (int) castle.getWorldY();
+				Castle newCastle = new Castle(castle, this);
+				owner.addCastle(newCastle);
+				castlesArray[x][y] = newCastle;
+				this.getChildren().add(newCastle);
+			}
+		}
 	}
 
 	public void generateWorldCastles() throws TooManyCastlesException {
@@ -268,5 +296,17 @@ public class World extends Context {
 				inGame.add(owner);
 		}
 		return inGame;
+	}
+	
+	public void setOwners(List<Owner> owners) {
+		this.owners = owners;
+	}
+
+	public Castle[][] getCastlesArray() {
+		return castlesArray;
+	}
+
+	public List<Unit> getUnits() {
+		return units;
 	}
 }

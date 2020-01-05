@@ -1,5 +1,8 @@
 package picrom.entity;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
@@ -11,15 +14,18 @@ import picrom.utils.Drawables.EntityAssets;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
 
-public abstract class Entity extends Group {
-	private SimpleDoubleProperty worldX;
-	private SimpleDoubleProperty worldY;
+public abstract class Entity extends Group implements Serializable {
+	transient private SimpleDoubleProperty worldX;
+	transient private SimpleDoubleProperty worldY;
+	//Updated just for the serialization
+	private double worldXSerial;
+	private double worldYSerial;
 	private Owner owner;
 
 	private World context;
 
-	protected ImageView image;
-	protected ImageView mask;
+	transient protected ImageView image;
+	transient protected ImageView mask;
 
 	protected Entity(EntityAssets assets, Owner owner, double X, double Y, World world) {
 		image = new ImageView(assets.getImage());
@@ -90,5 +96,20 @@ public abstract class Entity extends Group {
 	public World getContext() {
 		return context;
 	}
+	
+	 private void writeObject(java.io.ObjectOutputStream out) throws IOException{
+		 //worldX and worldY are not serializable and thus need a specific treatment
+		 worldXSerial = getWorldX();
+		 worldYSerial = getWorldY();
+		 //Default serialization
+		 out.defaultWriteObject();
+	 }
+	 
+	 private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
+		 //Default de-serialization
+		 in.defaultReadObject();
+		 worldX = new SimpleDoubleProperty(worldXSerial);
+		 worldY = new SimpleDoubleProperty(worldYSerial);
+	 }
 
 }

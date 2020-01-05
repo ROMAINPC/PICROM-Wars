@@ -1,5 +1,6 @@
 package picrom.entity.castle;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +15,12 @@ import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils.Direction;
 
-public class Castle extends Entity implements Producible {
+public class Castle extends Entity implements Producible,Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ProductionUnit productionUnit;
 	private int level;
 	private int treasure;
@@ -25,7 +30,7 @@ public class Castle extends Entity implements Producible {
 	private int income;
 	private Class<? extends Producible> productionType;
 
-	private ImageView circled;
+	transient private ImageView circled;
 
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
 		super(Drawables.castle, owner, X, Y, context);
@@ -49,6 +54,11 @@ public class Castle extends Entity implements Producible {
 		circled.fitHeightProperty().bind(image.fitHeightProperty().multiply(imageRatio));
 		circled.fitWidthProperty().bind(image.fitWidthProperty().multiply(imageRatio));
 		this.getChildren().addAll(circled);
+	}
+	
+	//Reinstanciate a castle. Work in progress.
+	public Castle(Castle castle, World context) {
+		this(castle.getOwner(), (int) castle.getWorldX(), (int) castle.getWorldY(), castle.getDoor().getDirection(), context);
 	}
 
 	public void enterUnit(Unit u) {
