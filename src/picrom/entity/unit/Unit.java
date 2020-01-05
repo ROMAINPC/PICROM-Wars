@@ -24,6 +24,17 @@ import picrom.entity.castle.Castle;
 import picrom.entity.castle.Producible;
 import picrom.utils.Drawables.EntityAssets;
 
+/**
+ * Units are mainly military units. They can be produced in Castles and sended
+ * on the battleground.
+ * 
+ * Once launched they have a Castle target.
+ * 
+ * An Unit is characterized by an amount of health-points, an amount of damage
+ * it can inflict and a speed of movement.
+ * 
+ * @see picrom.entity.castle.ProductionUnit
+ */
 public class Unit extends Entity implements Producible {
 
 	private int speed, hp, damage;
@@ -33,6 +44,19 @@ public class Unit extends Entity implements Producible {
 	private Castle origin;
 	private Castle objective;
 
+	/**
+	 * Create new Unit
+	 * 
+	 * @param img      Image and mask Image, see
+	 *                 {@link picrom.utils.Drawables.EntityAssets}
+	 * @param name     String, the name of the type of Unit
+	 * @param prodCost Money cost to produce it
+	 * @param prodTime Number of turn needed to produce it
+	 * @param speed    Speed of movment per turn
+	 * @param hp       Health points
+	 * @param damage   Damage potential
+	 * @param origin   owner Castle
+	 */
 	public Unit(EntityAssets img, String name, int prodCost, int prodTime, int speed, int hp, int damage,
 			Castle origin) {
 		super(img, origin);
@@ -45,58 +69,108 @@ public class Unit extends Entity implements Producible {
 		objective = null;
 	}
 
+	/**
+	 * @return Unit speed
+	 */
 	public int getSpeed() {
 		return speed;
 	}
 
+	/**
+	 * Set unit speed
+	 * 
+	 * @param speed
+	 */
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
 
+	/**
+	 * @return Unit health points
+	 */
 	public int getHp() {
 		return hp;
 	}
 
+	/**
+	 * Set Unit health points
+	 * 
+	 * @param hp
+	 */
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
 
+	/**
+	 * @return Unit damage potential
+	 */
 	public int getDamage() {
 		return damage;
 	}
 
+	/**
+	 * Set Unit damage potential
+	 * 
+	 * @param damage
+	 */
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
 
+	/**
+	 * @return Name of the type of the Unit
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Add the produced Unit to the garrison of the following Castle.
+	 * 
+	 * @param c Castle
+	 */
 	public void produce(Castle c) {
 		c.enterUnit(this);
 	}
 
+	@Override
 	public int getProductionCost() {
 		return productionCost;
 	}
 
+	@Override
 	public int getProductionTime() {
 		return productionTime;
 	}
 
+	/**
+	 * @return Target Castle of the Unit.
+	 */
 	public Castle getObjective() {
 		return objective;
 	}
 
+	/**
+	 * Set target Castle of the Unit.
+	 * 
+	 * @param objective
+	 */
 	public void setObjective(Castle objective) {
 		this.objective = objective;
 	}
 
+	/**
+	 * @return Last Castle were was the Unit.
+	 */
 	public Castle getOrigin() {
 		return origin;
 	}
 
+	/**
+	 * Set origin Castle of the Unit (last Castle were was the Unit to be exact)
+	 * 
+	 * @param origin
+	 */
 	public void setOrigin(Castle origin) {
 		this.origin = origin;
 	}

@@ -182,13 +182,6 @@ public class Castle extends Entity implements Producible {
 		return productionType;
 	}
 
-	public String productionName() {
-		if (productionType == null)
-			return "Pas de Production";
-		if (productionType == Castle.class)
-			return "Fortifications";
-		return ((Unit) productionUnit.getProduction()).getName();
-	}
 
 	public void attackWith(Unit attacker, int damage) {
 		court.assault(damage);

@@ -22,8 +22,14 @@ package picrom.entity.unit;
 import picrom.entity.castle.Castle;
 import picrom.utils.Drawables;
 
+/**
+ * Brave knight on his faithful steed. Middle damage and health point, really
+ * quick.
+ */
 public class Knight extends Unit {
-
+	/**
+	 * @param castle Origin Castle of this Unit.
+	 */
 	public Knight(Castle castle) {
 		super(Drawables.knight, "Chevalier", 500, 20, 6, 3, 5, castle);
 	}
