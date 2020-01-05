@@ -32,6 +32,23 @@ import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils.Direction;
 
+/**
+ * Castles are the main objectiv of this game. Castles are town wich contain
+ * garrisons of Units, but also doors and production centers.
+ * 
+ * Castles have a treasure that they enrich over time.
+ * 
+ * It's possible to improve the level of a Castle to enrich quicker, Castle
+ * class is a Producible.
+ * 
+ * Castles are also JavaFX components and must be added in a World context.
+ * 
+ * @see picrom.entity.unit.Unit
+ * @see picrom.entity.castle.Courtyard
+ * @see picrom.entity.castle.Door
+ * @see picrom.entity.castle.ProductionUnit
+ * @see picrom.entity.castle.Producible
+ */
 public class Castle extends Entity implements Producible {
 
 	private ProductionUnit productionUnit;
@@ -43,6 +60,15 @@ public class Castle extends Entity implements Producible {
 	private int income;
 	private Class<? extends Producible> productionType;
 
+	/**
+	 * Construct a new Castle in a World gameboard.
+	 * 
+	 * @param owner   The Owner of the castle
+	 * @param X       X coordinate of the Castle in the World coordinate system.
+	 * @param Y       Y coordinate of the Castle in the World coordinate system.
+	 * @param doorDir Orientation of the Door
+	 * @param context World context.
+	 */
 	public Castle(Owner owner, int X, int Y, Direction doorDir, World context) {
 		super(Drawables.castle, owner, X, Y, context);
 		level = 1;
@@ -62,7 +88,7 @@ public class Castle extends Entity implements Producible {
 			break;
 		}
 
-		court = new Courtyard(this);
+		court = new Courtyard();
 		nextLevelCost = 1000 * level;
 		nextLevelTime = 100 + 50 * level;
 		income = level * Settings.INCOME_MULTIPLIER;
@@ -71,6 +97,11 @@ public class Castle extends Entity implements Producible {
 
 	}
 
+	/**
+	 * To add an Unit to the garrison (For instance produced Unit or entered Unit)
+	 * 
+	 * @param u the Unit
+	 */
 	public void enterUnit(Unit u) {
 		court.addUnit(u);
 		u.setWorldX(this.getWorldX());
@@ -79,63 +110,112 @@ public class Castle extends Entity implements Producible {
 		u.setObjective(null);
 	}
 
+	/**
+	 * To exit an Unit from the Castle.
+	 * 
+	 * @param u the Unit
+	 */
 	public void launchUnit(Unit u) {
 		court.removeUnit(u);
 		u.setObjective(court.getObjective());
 		getContext().engageUnit(u);
 	}
 
+	/**
+	 * @return Level of the Castle
+	 */
 	public int getLevel() {
 		return level;
 	}
 
+	/**
+	 * Set Level of the Castle, affect income.
+	 * 
+	 * @param level
+	 */
 	public void setLevel(int level) {
 		this.level = level;
 		income = level * Settings.INCOME_MULTIPLIER;
 	}
 
+	/**
+	 * @return Amount of money in the Castle
+	 */
 	public int getTreasure() {
 		return treasure;
 	}
 
+	/**
+	 * Set Amount of money in the Castle
+	 * 
+	 * @param treasure
+	 */
 	public void setTreasure(int treasure) {
 		this.treasure = treasure;
 	}
 
+	/**
+	 * @return Income of money per turn for the Castle
+	 */
 	public int getIncome() {
 		return income;
 	}
 
+	/**
+	 * @return the only Door of the Castle
+	 */
 	public Door getDoor() {
 		return door;
 	}
 
+	/**
+	 * @return true if there is at least on Unit in the Castle
+	 */
 	public boolean isGarrison() {
 		return court.getUnits().isEmpty();
 	}
 
+	/**
+	 * Increase level of the Castle.
+	 * 
+	 * @param castle unused
+	 */
 	public void produce(Castle castle) {
 		setLevel(getLevel() + 1);
 		nextLevelCost = 1000 * level;
 		nextLevelTime = 100 + 50 * level;
 	}
 
+	@Override
 	public int getProductionCost() {
 		return nextLevelCost;
 	}
 
+	@Override
 	public int getProductionTime() {
 		return nextLevelTime;
 	}
 
+	/**
+	 * @return Castle target of the Castle
+	 */
 	public Castle getObjective() {
 		return court.getObjective();
 	}
 
+	/**
+	 * Set Castle target of the Castle
+	 * 
+	 * @param objective
+	 */
 	public void setObjective(Castle objective) {
 		court.setObjective(objective);
 	}
 
+	/**
+	 * Start stop or advance current production, relaunch same production if that
+	 * was an Unit.
+	 */
 	public void updateProduction() {
 		if (productionType != null) {
 			if (productionUnit.isProduced()) { // start or restart new production
@@ -173,16 +253,30 @@ public class Castle extends Entity implements Producible {
 		return Math.max(leftTime, leftMoney);
 	}
 
+	/**
+	 * Set the type of class to produce. Can be null.
+	 * 
+	 * @param productionType (use ".class")
+	 */
 	public void setProduction(Class<? extends Producible> productionType) {
 		this.productionType = productionType;
 		this.productionUnit.stop();
 	}
 
+	/**
+	 * @return Current type of production. Can be null.
+	 */
 	public Class<? extends Producible> getProduction() {
 		return productionType;
 	}
 
-
+	/**
+	 * Call this method to trigger an attack on the Castle. Will inflict damages on
+	 * the garrison.
+	 * 
+	 * @param attacker The ennemy Unit which attack the Castle
+	 * @param damage   The amount of damages that the Unit will inflict.
+	 */
 	public void attackWith(Unit attacker, int damage) {
 		court.assault(damage);
 		attacker.setDamage(attacker.getDamage() - damage);

@@ -21,27 +21,46 @@ package picrom.entity.castle;
 
 import picrom.utils.Utils.Direction;
 
+/**
+ * Doors are sticked to the side of a Castle and so have an orientation. Can be
+ * open or closed.
+ * 
+ * @see picrom.entity.castle.Castle
+ */
 public class Door {
 	private Direction dir;
 	private boolean open;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param dir  Door orientation
+	 * @param open First door statu
+	 */
 	public Door(Direction dir, boolean open) {
 		this.dir = dir;
 		this.open = open;
 	}
 
-	public String toString() {
-		return (open ? "Ouverte" : "Fermée") + " (direction " + dir + ")";
-	}
-
+	/**
+	 * @return Door orientation
+	 */
 	public Direction getDirection() {
 		return dir;
 	}
 
+	/**
+	 * @return Door statu
+	 */
 	public boolean isOpen() {
 		return open;
 	}
 
+	/**
+	 * Set Door statu
+	 * 
+	 * @param open
+	 */
 	public void setOpen(boolean open) {
 		this.open = open;
 	}

@@ -22,6 +22,15 @@ package picrom.entity.castle;
 import picrom.owner.Neutral;
 import picrom.utils.Settings;
 
+/**
+ * ProductionUnits are capable to produce Producible objects.
+ * 
+ * This class also compute time remaining to produce.
+ * 
+ * @see picrom.entity.castle.Producible
+ * @see picrom.entity.castle.Castle
+ * @see picrom.entity.unit.Unit
+ */
 public class ProductionUnit {
 
 	private Castle castle;
@@ -31,12 +40,22 @@ public class ProductionUnit {
 
 	private int timeLeft;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param castle Castle which contain the ProductionUnit.
+	 */
 	public ProductionUnit(Castle castle) {
 		this.castle = castle;
 		produced = true;
 		timeLeft = 0;
 	}
 
+	/**
+	 * Decrease by 1 the number of turns needed to produce, also produce the
+	 * Producible if money and time are enough. Current production become null when
+	 * the production is finish.
+	 */
 	public void update() {
 		if (!produced) {
 			timeLeft--;
@@ -49,6 +68,11 @@ public class ProductionUnit {
 		}
 	}
 
+	/**
+	 * Define the Producible to produce.
+	 * 
+	 * @param production Producible already instantiated
+	 */
 	public void setProduction(Producible production) {
 		currentProduction = production;
 		produced = false;
@@ -59,14 +83,23 @@ public class ProductionUnit {
 
 	}
 
+	/**
+	 * @return Producible currently in production.
+	 */
 	public Producible getProduction() {
 		return currentProduction;
 	}
 
+	/**
+	 * @return true if the production is done.
+	 */
 	public boolean isProduced() {
 		return produced;
 	}
 
+	/**
+	 * interrupt production
+	 */
 	public void stop() {
 		produced = true;
 		timeLeft = 0;
@@ -82,6 +115,9 @@ public class ProductionUnit {
 		return timeLeft;
 	}
 
+	/**
+	 * @return Money needed to do production.
+	 */
 	public int getCost() {
 		return currentProduction == null ? 0 : currentProduction.getProductionCost();
 	}

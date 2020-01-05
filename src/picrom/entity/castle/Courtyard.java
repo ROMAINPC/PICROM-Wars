@@ -28,21 +28,42 @@ import picrom.entity.unit.Unit;
 import picrom.utils.Settings;
 import picrom.utils.SlowestUnitComparator;
 
+/**
+ * Courtyard correspond to an area in the Castle which contains a garrison.
+ * 
+ * Courtyard also have a target Castle (the objective for Units that come from
+ * this yard)
+ * 
+ * @see picrom.entity.castle.Castle
+ */
 public class Courtyard {
 	// TODO find a solution to avoid sorting the list at each addition / suppression
 	private List<Unit> units;
 	private Castle objective;
 
-	public Courtyard(Castle castle) {
+	/**
+	 * Constructor
+	 */
+	public Courtyard() {
 		objective = null;
 		units = new LinkedList<Unit>();
 	}
 
+	/**
+	 * Add an Unit in the Courtyard
+	 * 
+	 * @param u the Unit
+	 */
 	public void addUnit(Unit u) {
 		units.add(u);
 		Collections.sort(units, new SlowestUnitComparator());
 	}
 
+	/**
+	 * Remove an Unit from the Courtyard
+	 * 
+	 * @param u the Unit
+	 */
 	public void removeUnit(Unit u) {
 		units.remove(u);
 		Collections.sort(units, new SlowestUnitComparator());
@@ -64,6 +85,11 @@ public class Courtyard {
 
 	}
 
+	/**
+	 * Inflict damages to Units in the Courtyard.
+	 * 
+	 * @param damage
+	 */
 	public void assault(int damage) {
 		Random r = Settings.SEED;
 		int idx = r.nextInt(units.size());
@@ -74,23 +100,26 @@ public class Courtyard {
 		}
 	}
 
+	/**
+	 * @return list of Units in
+	 */
 	public List<Unit> getUnits() {
 		return units;
 	}
 
+	/**
+	 * @return Castle target.
+	 */
 	public Castle getObjective() {
 		return objective;
 	}
 
+	/**
+	 * Set Castle target.
+	 * 
+	 * @param objective
+	 */
 	public void setObjective(Castle objective) {
 		this.objective = objective;
-	}
-
-	public String toString() {
-		String str = "";
-		for (Unit u : units) {
-			str += u.getName() + " ";
-		}
-		return str;
 	}
 }
