@@ -5,7 +5,9 @@ import java.util.Random;
 import javafx.util.Duration;
 
 /**
- * Class with constants values used by all the game.
+ * Class with constants static values used by all the game.
+ * 
+ * Edit here gameboard or eventually gameplay settings.
  */
 public class Settings {
 	// gameplay settings:

@@ -23,6 +23,11 @@ public class Drawables {
 	public static EntityAssets knight;
 	public static EntityAssets pikeman;
 
+	/**
+	 * Constructor, instantiate it to load pictures in Image object.
+	 * 
+	 * @see javafx.scene.image.Image
+	 */
 	public Drawables() {
 		worldBackground = new Image("Drawables/world_background.png");
 		infosBackground = new Image("Drawables/infos_background.png");
@@ -42,19 +47,38 @@ public class Drawables {
 		pikeman = new EntityAssets("pikeman");
 	}
 
+	/**
+	 * Usefull class for Entity. Combine two Image for showing Entity.
+	 * 
+	 * @see Entity
+	 * @see Drawables
+	 */
 	public class EntityAssets {
 		private Image image;
 		private Image mask;
 
+		/**
+		 * Constructor, load Images from file.
+		 * 
+		 * @param name Name of the file to laod. (exemple AAA if files are AAA.png and
+		 *             AAA_mask.png)
+		 */
 		private EntityAssets(String name) {
 			image = new Image("Drawables/" + name + ".png");
 			mask = new Image("Drawables/" + name + "_mask.png");
 		}
 
+		/**
+		 * @return The main Image to show an entity.
+		 */
 		public Image getImage() {
 			return image;
 		}
 
+		/**
+		 * @return A second Image, only white and transparent, which will be colored and
+		 *         superposed on the main Image.
+		 */
 		public Image getMask() {
 			return mask;
 		}

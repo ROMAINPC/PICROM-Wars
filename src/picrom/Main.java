@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright (C) 2019-2020 ROMAINPC
+ * Copyright (C) 2019-2020 Picachoc
+ * 
+ * This file is part of PICROM-Wars
+ * 
+ * PICROM-Wars is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * PICROM-Wars is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
 package picrom;
 
 import java.util.List;
@@ -75,8 +95,10 @@ public class Main extends Application {
 			gameboard = new World(Settings.WORLD_WIDTH, Settings.WORLD_HEIGHT, new SimpleDoubleProperty(0),
 					new SimpleDoubleProperty(0), vSeparator, scene.heightProperty());
 
+			// Add players and AIs in the game:
 			gameboard.generateOwners(Settings.NUMBER_OF_AIS, Settings.NUMBER_OF_BARONS);
 
+			// Generate first castle for each owner:
 			try {
 				gameboard.generateWorldCastles();
 			} catch (TooManyCastlesException e) {
@@ -90,15 +112,15 @@ public class Main extends Application {
 			}
 
 			// setup GUI:
-			Context infos = new Context();
+			Context infos = new Context(); // informations and actions area at the right of the game.
 			infos.xProperty().bind(gameboard.xProperty().add(gameboard.widthProperty()));
 			infos.yProperty().set(0);
 			infos.heightProperty().bind(scene.heightProperty());
 			infos.widthProperty().bind(scene.widthProperty().multiply(1 - Settings.WORLD_WIDTH_RATIO));
 			ImageView infosBackground = new ImageView(Drawables.infosBackground);
 			infos.bindIn(infosBackground, 0, 0, 1, 1);
-
 			infos.getChildren().add(infosBackground);
+
 			// owners list:
 			ScrollPane owners = new ScrollPane();
 			infos.bindIn(owners, 0.15, 0.07, 0.8, 0.4);
@@ -174,12 +196,14 @@ public class Main extends Application {
 			hammerIV.fitHeightProperty().bind(castleImage.fitHeightProperty().divide(3));
 			produceChoice.getChildren().addAll(pikeman, knight, onager, hammer);
 			border = new Border(new BorderStroke(Color.DARKRED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-					new BorderWidths(3, 3, 3, 3)));
+					new BorderWidths(3, 3, 3, 3))); // Border to circle production choosed.
 			alphaBorder = new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
 					new BorderWidths(3, 3, 3, 3)));
+
 			// Labels:
 			ownerL = new Label();
 			ownerL.setTextAlignment(TextAlignment.CENTER);
+
 			// Treasure:
 			HBox treasure = new HBox();
 			ImageView treasureIV = new ImageView(Drawables.treasure);
@@ -218,14 +242,14 @@ public class Main extends Application {
 						currentClicked = (Castle) clicked;
 						castleInfosSP.setVisible(true);
 					}
-				} else {
+				} else { // Click on other thing than a Castle :
 					castleInfosSP.setVisible(false);
 					currentClicked = null;
 				}
 
 			});
 
-			// production choice:
+			// production choice, click twice to set no production:
 			pikemanSP.setOnMouseClicked(e -> {
 				if (currentClicked.getOwner() instanceof Player)
 					currentClicked
@@ -288,7 +312,7 @@ public class Main extends Application {
 						gameboard.processCastles();
 						gameboard.processUnits();
 
-						// end of game:
+						// Test end of game:
 						List<Owner> inGame = gameboard.getInGameOwners();
 						if (inGame.size() < 2) {
 
@@ -303,6 +327,7 @@ public class Main extends Application {
 						}
 
 					}
+
 					// refresh UI
 					refreshCastleInfos();
 				}
@@ -314,7 +339,7 @@ public class Main extends Application {
 			primaryStage.setMaximized(true);
 			primaryStage.show();
 
-			// start loop
+			// START LOOP
 			gameLoop.play();
 
 		} catch (Exception e) {
@@ -322,6 +347,9 @@ public class Main extends Application {
 		}
 	}
 
+	/**
+	 * Used to update values of castle preview.
+	 */
 	private void refreshCastleInfos() {
 		if (currentClicked != null) {
 			Utils.colorize(castleMask, currentClicked.getOwner().getColor());
