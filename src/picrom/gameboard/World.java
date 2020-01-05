@@ -327,7 +327,7 @@ public class World extends Context {
 	 * Unengage an Unit from the World,because this Unit is dead or was entered in a
 	 * Castle.
 	 * 
-	 * @param unit
+	 * @param unit the Unit
 	 */
 	public void unengageUnit(Unit unit) {
 		units.remove(unit);
@@ -337,7 +337,7 @@ public class World extends Context {
 	/**
 	 * Engage an Unit in the World, for instance because it exits a Castle.
 	 * 
-	 * @param unit
+	 * @param unit the Unit
 	 */
 	public void engageUnit(Unit unit) {
 		units.add(unit);

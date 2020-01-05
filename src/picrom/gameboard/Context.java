@@ -56,10 +56,10 @@ public class Context extends Group {
 	/**
 	 * Create context with the following parameters as first values for properties.
 	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * @param x      top left x
+	 * @param y      top left y
+	 * @param width  area width
+	 * @param height area height
 	 */
 	public Context(double x, double y, double width, double height) {
 		this();
@@ -73,10 +73,10 @@ public class Context extends Group {
 	 * Create Context and bind its top left corner and its size to the following
 	 * properties.
 	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * @param x      top left x
+	 * @param y      top left y
+	 * @param width  area width
+	 * @param height area height
 	 */
 	public Context(ReadOnlyDoubleProperty x, ReadOnlyDoubleProperty y, ReadOnlyDoubleProperty width,
 			ReadOnlyDoubleProperty height) {
@@ -93,10 +93,10 @@ public class Context extends Group {
 	 * 
 	 * May lead to empty area around the context area.
 	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * @param x      top left x
+	 * @param y      top left y
+	 * @param width  area width
+	 * @param height area height
 	 * @param ratio  Wanted preserved ratio, Context surface will cover the maximum
 	 *               area but whithout affect this ratio. Ratio = Width / Height
 	 */

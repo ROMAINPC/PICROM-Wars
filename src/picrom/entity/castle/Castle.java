@@ -131,7 +131,7 @@ public class Castle extends Entity implements Producible {
 	/**
 	 * Set Level of the Castle, affect income.
 	 * 
-	 * @param level
+	 * @param level new level
 	 */
 	public void setLevel(int level) {
 		this.level = level;
@@ -148,7 +148,7 @@ public class Castle extends Entity implements Producible {
 	/**
 	 * Set Amount of money in the Castle
 	 * 
-	 * @param treasure
+	 * @param treasure new treasure
 	 */
 	public void setTreasure(int treasure) {
 		this.treasure = treasure;
@@ -206,7 +206,7 @@ public class Castle extends Entity implements Producible {
 	/**
 	 * Set Castle target of the Castle
 	 * 
-	 * @param objective
+	 * @param objective new objectiv
 	 */
 	public void setObjective(Castle objective) {
 		court.setObjective(objective);

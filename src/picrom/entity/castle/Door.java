@@ -59,7 +59,7 @@ public class Door {
 	/**
 	 * Set Door statu
 	 * 
-	 * @param open
+	 * @param open new statu
 	 */
 	public void setOpen(boolean open) {
 		this.open = open;

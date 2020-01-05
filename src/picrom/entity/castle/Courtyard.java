@@ -88,7 +88,7 @@ public class Courtyard {
 	/**
 	 * Inflict damages to Units in the Courtyard.
 	 * 
-	 * @param damage
+	 * @param damage Amount of damages
 	 */
 	public void assault(int damage) {
 		Random r = Settings.SEED;
@@ -117,7 +117,7 @@ public class Courtyard {
 	/**
 	 * Set Castle target.
 	 * 
-	 * @param objective
+	 * @param objective new objectiv
 	 */
 	public void setObjective(Castle objective) {
 		this.objective = objective;
