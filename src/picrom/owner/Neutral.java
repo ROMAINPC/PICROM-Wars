@@ -7,22 +7,35 @@ import picrom.entity.unit.Knight;
 import picrom.entity.unit.Pikeman;
 import picrom.utils.Settings;
 
+/**
+ * Owner type, Neutrals are no human players whithout ambitious, will attack
+ * anybody. Can only have one Castle.
+ */
 public class Neutral extends Owner implements Pensive {
 
 	private static Random random = Settings.SEED;
 
 	private boolean changeNext;
 
+	/**
+	 * Constructor, see also {@link Owner}
+	 */
 	public Neutral() {
 		super("NE");
 		changeNext = false;
 	}
 
+	/**
+	 * Overrided method, do nothing if Neutral already have a Castle.
+	 * 
+	 * @see Owner#addCastle(Castle)
+	 */
 	public void addCastle(Castle castle) {
 		if (this.getCastles().size() < 1) // Trying to add more than 1 castle will not work
 			super.addCastle(castle);
 	}
 
+	@Override
 	public void reflect() {
 		// Because Neutrals produce Units really slowly, they have all their time to
 		// make money and so don't need to improve their Castles.

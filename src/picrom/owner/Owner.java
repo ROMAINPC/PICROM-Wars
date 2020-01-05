@@ -13,6 +13,13 @@ import javafx.scene.shape.Rectangle;
 import picrom.entity.castle.Castle;
 import picrom.utils.Kingdom;
 
+/**
+ * An Owner is a player (AI or human). It has a its own identity (name and
+ * color) and it owns Casltes.
+ * 
+ * This class is also a JavaFX component, a small bar with some informations
+ * about the owner. Show it for instance in a VBox.
+ */
 public abstract class Owner extends StackPane {
 
 	private Color color;
@@ -25,10 +32,24 @@ public abstract class Owner extends StackPane {
 	private Label numberL;
 	private Line crossed;
 
+	/**
+	 * Constructor to create an Owner from a Kingdom identity.
+	 * 
+	 * @param kingdom   Identity
+	 * @param ownerType String printed in UI: type of the owner(human, ai, ...)
+	 * @see picrom.utils.Kingdom
+	 */
 	public Owner(Kingdom kingdom, String ownerType) {
 		this(kingdom.getColor(), kingdom.getName(), ownerType);
 	}
 
+	/**
+	 * Constructor to create an Owner.
+	 * 
+	 * @param color     Color
+	 * @param name      Name
+	 * @param ownerType String printed in UI: type of the owner(human, ai, ...)
+	 */
 	public Owner(Color color, String name, String ownerType) {
 		this.color = color;
 		this.name = name;
@@ -37,10 +58,18 @@ public abstract class Owner extends StackPane {
 		setUI();
 	}
 
+	/**
+	 * Constructor to create an Owner with random identity (name and color).
+	 * 
+	 * @param ownerType String printed in UI: type of the owner(human, ai, ...)
+	 */
 	public Owner(String ownerType) {
 		this(Kingdom.randomKingdom(), ownerType);
 	}
 
+	/**
+	 * Just setup JavaFX part of the object.
+	 */
 	private void setUI() {
 		HBox content = new HBox();
 		content.setAlignment(Pos.CENTER_LEFT);
@@ -61,26 +90,50 @@ public abstract class Owner extends StackPane {
 		this.getChildren().addAll(content, crossed);
 	}
 
+	/**
+	 * @return Owner color
+	 */
 	public Color getColor() {
 		return color;
 	}
 
+	/**
+	 * Set owner color
+	 * 
+	 * @param color
+	 */
 	public void setColor(Color color) {
 		this.color = color;
 	}
 
+	/**
+	 * @return Owner name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Set owner name
+	 * 
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @return List of all Castles owned by the Owner.
+	 */
 	public List<Castle> getCastles() {
 		return castles;
 	}
 
+	/**
+	 * Give a Castle to the Owner.
+	 * 
+	 * @param castle
+	 */
 	public void addCastle(Castle castle) {
 		castles.add(castle);
 		castle.setOwner(this);
@@ -88,12 +141,20 @@ public abstract class Owner extends StackPane {
 		crossed.setVisible(castles.size() < 1);
 	}
 
+	/**
+	 * To remove a Castle, the Owner will not owns this Castle.
+	 * 
+	 * @param castle
+	 */
 	public void removeCastle(Castle castle) {
 		castles.remove(castle);
 		numberL.setText(String.valueOf(castles.size()));
 		crossed.setVisible(castles.size() < 1);
 	}
 
+	/**
+	 * @return true if this Owner still have at least one Castle.
+	 */
 	public boolean isInGame() {
 		return castles.size() > 0;
 	}

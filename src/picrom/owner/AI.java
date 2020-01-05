@@ -9,17 +9,24 @@ import picrom.entity.unit.Pikeman;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
 
+/**
+ * Owner type, AIs are agressives and ambitious no human players.
+ */
 public class AI extends Owner implements Pensive {
 
 	private static Random random = Settings.SEED;
 
 	private boolean changeNext;
 
+	/**
+	 * Constructor, see also {@link Owner}
+	 */
 	public AI() {
 		super("IA");
 		changeNext = false;
 	}
 
+	@Override
 	public void reflect() {
 		// TODO : Use door, choose good unit for defend or attack, deploy unit in
 		// another castle as reinforcment, improve level of castles.

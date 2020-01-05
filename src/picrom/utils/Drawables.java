@@ -50,7 +50,7 @@ public class Drawables {
 	/**
 	 * Usefull class for Entity. Combine two Image for showing Entity.
 	 * 
-	 * @see Entity
+	 * @see picrom.entity.Entity
 	 * @see Drawables
 	 */
 	public class EntityAssets {

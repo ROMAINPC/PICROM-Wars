@@ -65,6 +65,9 @@ import picrom.utils.Drawables;
 import picrom.utils.Settings;
 import picrom.utils.Utils;
 
+/**
+ * Main class, setup UI, init gameboard and run it.
+ */
 public class Main extends Application {
 
 	private Castle currentClicked;
