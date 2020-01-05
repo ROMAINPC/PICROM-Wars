@@ -269,18 +269,18 @@ public class World extends Context implements Serializable {
 			double varx = unit.getObjective().getWorldX() - unit.getWorldX();
 			double vary = unit.getObjective().getWorldY() - unit.getWorldY();
 			int indx, indy;
-
+			
 			// For each unit step (each unit has a number of step per tour equal to its
 			// speed)
 			for (int i = 0; i < unit.getSpeed(); i++) {
 				// Moving (following a smaller division of the world grid):
 				if (Math.abs(varx) > Math.abs(vary))
-					unit.setWorldX(unit.getWorldX() + (varx / Math.abs(varx)) / Settings.UNITS_GRID_SIZE);
+					unit.setWorldX(unit.getWorldX() + Math.signum(varx) / Settings.UNITS_GRID_SIZE);
 				else
-					unit.setWorldY(unit.getWorldY() + (vary / Math.abs(vary)) / Settings.UNITS_GRID_SIZE);
+					unit.setWorldY(unit.getWorldY() + Math.signum(vary) / Settings.UNITS_GRID_SIZE);
 
-				indx = (int) Math.round(unit.getWorldX());
-				indy = (int) Math.round(unit.getWorldY());
+				indx = (int) Math.round(unit.getWorldX()) >= this.getWorldWidth() ? this.getWorldWidth() - 1 : (int) Math.round(unit.getWorldX());
+				indy = (int) Math.round(unit.getWorldY()) >= this.getWorldHeight() ? this.getWorldHeight() - 1 : (int) Math.round(unit.getWorldY());
 
 				// If the unit finds a castle
 				if (castlesArray[indx][indy] != null) {
@@ -288,14 +288,12 @@ public class World extends Context implements Serializable {
 					if (castlesArray[indx][indy] == unit.getObjective()) {
 						// If enemy
 						if (unit.getObjective().getOwner() != unit.getOwner()) {
-							if (!castlesArray[indx][indy].isGarrison()) {
-								// If unit dead
-								if (unit.getDamage() <= 0) {
+							if (unit instanceof Onager)
+								System.out.println(indx + ", " + indy);
+							if (castlesArray[indx][indy].isGarrison()) {
+								castlesArray[indx][indy].attackWith(unit, 1);
+								if (unit.getDamage() <= 0)
 									toRemove.add(unit);
-								} else {
-									// Assault
-									castlesArray[indx][indy].attackWith(unit, 1);
-								}
 							} else {
 								// Victory
 								castlesArray[indx][indy].getOwner().removeCastle(castlesArray[indx][indy]);
@@ -304,8 +302,8 @@ public class World extends Context implements Serializable {
 								castlesArray[indx][indy].getDoor().setOpen(false);
 							}
 						}
-						// If same owner
-						else {
+						// If same owner (or castle just captured)
+						if (unit.getObjective().getOwner() == unit.getOwner()) {
 							// Add unit to courtyard
 							toRemove.add(unit);
 							castlesArray[indx][indy].enterUnit(unit);
