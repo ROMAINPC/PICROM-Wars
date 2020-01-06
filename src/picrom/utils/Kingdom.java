@@ -90,4 +90,11 @@ public enum Kingdom {
 		index++;
 		return kingdoms.get(index - 1);
 	}
+
+	@Override
+	public String toString() {
+		if (name == null)
+			return "noName " + color;
+		return name + " " + color;
+	}
 }

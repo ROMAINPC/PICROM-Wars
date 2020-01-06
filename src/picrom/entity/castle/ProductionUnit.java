@@ -125,4 +125,8 @@ public class ProductionUnit implements Serializable {
 		return currentProduction == null ? 0 : currentProduction.getProductionCost();
 	}
 
+	@Override
+	public String toString() {
+		return "ProductionUnit: " + (produced ? "no production" : "Production(" + timeLeft + "): " + currentProduction);
+	}
 }

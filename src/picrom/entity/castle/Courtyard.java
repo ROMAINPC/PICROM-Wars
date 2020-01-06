@@ -76,12 +76,13 @@ public class Courtyard implements Serializable {
 	/**
 	 * Choose units wich are ready to exit the court.
 	 * 
-	 * @return List of max 3 units, the slowest in the court.
+	 * @param N Number of Units wanted to be ready
+	 * @return List of max N units, the slowest in the court.
 	 */
-	public List<Unit> getReadyUnits() {
+	public List<Unit> getReadyUnits(int N) {
 
 		List<Unit> l = new LinkedList<Unit>();
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < N; i++)
 			if (i < units.size())
 				l.add(units.get(i));
 
@@ -125,5 +126,10 @@ public class Courtyard implements Serializable {
 	 */
 	public void setObjective(Castle objective) {
 		this.objective = objective;
+	}
+
+	@Override
+	public String toString() {
+		return "Court: " + units;
 	}
 }

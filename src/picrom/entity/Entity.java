@@ -223,4 +223,9 @@ public abstract class Entity extends Group implements Serializable {
 		setUI();
 	}
 
+	@Override
+	public String toString() {
+		return "Entity, (" + getWorldX() + ", " + getWorldY() + "), Owner: " + owner;
+	}
+
 }

@@ -212,4 +212,10 @@ public class Owner extends StackPane implements Serializable {
 		setUI();
 		crossed.setVisible(castles.size() < 1);
 	}
+
+	@Override
+	public String toString() {
+		return name + " ( " + ownerType + ", " + color + "), Castles: " + castles;
+	}
+
 }

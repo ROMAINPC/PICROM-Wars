@@ -70,6 +70,7 @@ import picrom.entity.unit.Unit;
 import picrom.gameboard.Context;
 import picrom.gameboard.TooManyCastlesException;
 import picrom.gameboard.World;
+import picrom.owner.AI;
 import picrom.owner.Owner;
 import picrom.owner.Player;
 import picrom.utils.Drawables;
@@ -84,7 +85,7 @@ public class Main extends Application {
 	private Castle currentClicked;
 	private Border border;
 	private Border alphaBorder;
-	private ImageView castleMask, knightM, pikemanM, onagerM, circled, door;
+	private ImageView castleMask, knightM, pikemanM, onagerM, circled, door, selected;
 	private Label ownerL, levelL, pikemanNumber, knightNumber, onagerNumber, treasureL;
 	private StackPane knightSP, onagerSP, pikemanSP, hammerSP;
 	private World gameboard;
@@ -267,13 +268,22 @@ public class Main extends Application {
 
 			// Objective:
 			circled = new ImageView(Drawables.circled);
+			Utils.colorize(circled, Color.RED);
 			circled.setVisible(false);
 			circled.fitHeightProperty()
 					.bind(gameboard.heightProperty().divide(gameboard.getWorldHeight()).multiply(1.4));
 			circled.fitWidthProperty().bind(gameboard.widthProperty().divide(gameboard.getWorldWidth()).multiply(1.4));
 
+			// Selected Castle:
+			selected = new ImageView(Drawables.circled);
+			Utils.colorize(selected, Color.YELLOW);
+			selected.setVisible(false);
+			selected.fitHeightProperty()
+					.bind(gameboard.heightProperty().divide(gameboard.getWorldHeight()).multiply(1.4));
+			selected.fitWidthProperty().bind(gameboard.widthProperty().divide(gameboard.getWorldWidth()).multiply(1.4));
+
 			// add elements:
-			root.getChildren().addAll(gameboard, infos, circled);
+			root.getChildren().addAll(gameboard, infos, circled, selected);
 
 			// Listeners:
 			currentClicked = null;
@@ -290,9 +300,22 @@ public class Main extends Application {
 					} else if (e.getButton() == MouseButton.PRIMARY) { // Normal click
 						currentClicked = (Castle) clicked;
 						castleInfosSP.setVisible(true);
+						selected.layoutXProperty()
+								.bind(gameboard.xProperty()
+										.add(selected.fitWidthProperty().divide(1.4)
+												.multiply(currentClicked.getWorldX())
+												.subtract(selected.fitWidthProperty().divide(7))));
+						selected.layoutYProperty()
+								.bind(gameboard.yProperty()
+										.add(selected.fitHeightProperty().divide(1.4)
+												.multiply(currentClicked.getWorldY())
+												.subtract(selected.fitHeightProperty().divide(7))));
+						selected.setVisible(true);
+
 					}
 				} else { // Click on other thing than a Castle :
 					castleInfosSP.setVisible(false);
+					selected.setVisible(false);
 					currentClicked = null;
 				}
 
@@ -487,7 +510,9 @@ public class Main extends Application {
 			Utils.colorize(knightM, currentClicked.getOwner().getColor());
 			Utils.colorize(onagerM, currentClicked.getOwner().getColor());
 			door.setImage(currentClicked.getDoor().isOpen() ? Drawables.door_open : Drawables.door_close);
-			ownerL.setText(currentClicked.getOwner().getName());
+			String type = currentClicked.getOwner() instanceof Player ? "Vous"
+					: currentClicked.getOwner() instanceof AI ? "Ennemi" : "Neutre";
+			ownerL.setText(currentClicked.getOwner().getName() + " (" + type + ")");
 			treasureL.setText(currentClicked.getTreasure() + " (+" + currentClicked.getIncome() + ")");
 			levelL.setText("Nv " + currentClicked.getLevel());
 			Map<Class<? extends Unit>, Integer> units = currentClicked.getGarrisonQuantity();
@@ -503,7 +528,6 @@ public class Main extends Application {
 			hammerSP.setBorder(currentClicked.getProduction() == Castle.class ? border : alphaBorder);
 
 			if (currentClicked.getObjective() != null) {
-				circled.setVisible(true);
 				circled.layoutXProperty()
 						.bind(gameboard.xProperty()
 								.add(circled.fitWidthProperty().divide(1.4)
@@ -514,7 +538,7 @@ public class Main extends Application {
 								.add(circled.fitHeightProperty().divide(1.4)
 										.multiply(currentClicked.getObjective().getWorldY())
 										.subtract(circled.fitHeightProperty().divide(7))));
-
+				circled.setVisible(true);
 			} else {
 				circled.setVisible(false);
 			}

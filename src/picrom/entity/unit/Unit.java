@@ -37,7 +37,7 @@ import picrom.entity.castle.Producible;
  * @see picrom.entity.castle.ProductionUnit
  */
 public class Unit extends Entity implements Producible, Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private int speed, hp, damage;
@@ -58,8 +58,7 @@ public class Unit extends Entity implements Producible, Serializable {
 	 * @param damage   Damage potential
 	 * @param origin   owner Castle
 	 */
-	public Unit(String name, int prodCost, int prodTime, int speed, int hp, int damage,
-			Castle origin) {
+	public Unit(String name, int prodCost, int prodTime, int speed, int hp, int damage, Castle origin) {
 		super(origin);
 		this.speed = speed;
 		this.hp = hp;
@@ -174,6 +173,12 @@ public class Unit extends Entity implements Producible, Serializable {
 	 */
 	public void setOrigin(Castle origin) {
 		this.origin = origin;
+	}
+
+	@Override
+	public String toString() {
+		return getClass() + " (" + getWorldX() + ", " + getWorldY() + "), Owner: " + getOwner() + ", (" + speed + ", "
+				+ hp + ", " + damage + ")";
 	}
 
 }
