@@ -175,4 +175,10 @@ public class Unit extends Entity implements Producible {
 		this.origin = origin;
 	}
 
+	@Override
+	public String toString() {
+		return getClass() + " (" + getWorldX() + ", " + getWorldY() + "), Owner: " + getOwner() + ", (" + speed + ", "
+				+ hp + ", " + damage + ")";
+	}
+
 }

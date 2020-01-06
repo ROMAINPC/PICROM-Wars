@@ -64,4 +64,9 @@ public class Door {
 	public void setOpen(boolean open) {
 		this.open = open;
 	}
+	
+	@Override
+	public String toString() {
+		return "Door (" + dir + ", " + (open?"open":"close") + ")";
+	}
 }

@@ -259,7 +259,7 @@ public class World extends Context {
 			double varx = unit.getObjective().getWorldX() - unit.getWorldX();
 			double vary = unit.getObjective().getWorldY() - unit.getWorldY();
 			int indx, indy;
-			
+
 			// For each unit step (each unit has a number of step per tour equal to its
 			// speed)
 			for (int i = 0; i < unit.getSpeed(); i++) {
@@ -269,8 +269,10 @@ public class World extends Context {
 				else
 					unit.setWorldY(unit.getWorldY() + Math.signum(vary) / Settings.UNITS_GRID_SIZE);
 
-				indx = (int) Math.round(unit.getWorldX()) >= this.getWorldWidth() ? this.getWorldWidth() - 1 : (int) Math.round(unit.getWorldX());
-				indy = (int) Math.round(unit.getWorldY()) >= this.getWorldHeight() ? this.getWorldHeight() - 1 : (int) Math.round(unit.getWorldY());
+				indx = (int) Math.round(unit.getWorldX()) >= this.getWorldWidth() ? this.getWorldWidth() - 1
+						: (int) Math.round(unit.getWorldX());
+				indy = (int) Math.round(unit.getWorldY()) >= this.getWorldHeight() ? this.getWorldHeight() - 1
+						: (int) Math.round(unit.getWorldY());
 
 				// If the unit finds a castle
 				if (castlesArray[indx][indy] != null) {
@@ -371,6 +373,11 @@ public class World extends Context {
 				inGame.add(owner);
 		}
 		return inGame;
+	}
+
+	@Override
+	public String toString() {
+		return "World: " + worldWidth + "x" + worldHeight + ", Owners: " + owners;
 	}
 
 }
