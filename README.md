@@ -3,14 +3,15 @@ NB : Although the code is in English, this read-me and the game are in French.
 
 Réalisé avec ***Picachoc*** : https://github.com/picachoc
 
+Lien github du projet : https://github.com/ROMAINPC/PICROM-Wars.git
 
-
+<img src="md_src/intro.PNG">
 
 
 ## Introduction :
 
 
-
+Dans le cadre de notre troisième année de licence d'informatique à l'université de Bordeaux, nous avons réalisé un jeu de stratégie en Java dont l'affichage est basé sur la librairie JavaFX. Ce jeu constitue notre projet de Programmation Orientée Objet du semestre 5.
 
 
 ## Structure du projet et exécution :
@@ -38,17 +39,76 @@ Ce projet n'as pas encore été conçu pour être exporté en exécutable, il es
 
 
 ### Versions disponibles :
-#### Version avec sauvegarde :
+Il existe 3 branches sur notre dépôt git : master, serialisation et testpathfinding.
+Chacune correspond à une version du jeu contenant une fonctionnalité spécifique.
+
+#### Version stable (branche master)
+Version rendue
 
 
+#### Version avec sauvegarde (branche serialisation)
+Cette version offre la possibilité de sauvegarder et charger une partie.
 
+Au démarrage du jeu, on peut choisir si l'on souhaite ou non garder une sauvegarde. Dans le premier cas, le joueur peut charger une sauvegarde au format PICROM-WARS (".pw"). Dans le deuxième cas, un monde est généré de la même manière que dans la branche master.
+Lorsque le joueur appuie sur pause, un bouton "sauvegarder" apparaît sur le côté. S'il clique dessus, il peut entrer un nom de sauvegarde, puis celle-ci sera enregistrée dans le dossier "saves" à la racine du projet.
 
+Cependant, il survient un problème lors de la désérialisation de la classe Owner, la couleur est considérée commme nulle dans certains cas, ce qui provoque une NullPointerException lors de la colorisation des entités. Nous n'avons pas encore trouvé la cause, et c'est pour cette raison que nous n'avons pas implémenté la sauvegarde dans la version stable.
 
-## Règles du jeu :
-### Objectif :
+#### Version avec autre pathfinding (branche pathfinding)
+
+Nous avons créé cette branche pour améliorer le pathfinding des unités afin qu'elles aillent en ligne droite et évitent les châteaux. Cependant, les unités se bloquent parfois donc nous ne l'avons pas implémenté dans la version stable.
+
+## Règles et fonctionnement du jeu :
+
+### Objectif :  
+Au lancement d'une partie, chaque royaume dispose d'un seul château. L'objectif est de conquérir les châteaux adverses jusqu'à ce qu'il ne reste plus d'ennemis.
 ### Contrôles et interface :
-### Unités :
+
+<img src="md_src/layout.PNG">
+En 1 est visible l'écran du jeu.
+
+En 2, la liste des joueurs (HU : Humain, IA : intelligence artificielle, NE : neutre / baron) ainsi que leur nom, leur couleur et le nombre de châteaux conquis. Si un royaume perd, son nombre de château tombe à 0 et il est barré de la liste.
+
+En 3, le bouton de lancement et de pause. A noter que la pause du jeu est prise en compte uniquement à la fin d'un tour.
+
+Lorsque le joueur clique sur un château, il est encerclé en jaune et des informations apparaissent en 4. Sont visibles :
+- Le château en lui-même ainsi que l'état de sa porte.
+- La garnison courante ainsi que le niveau du château.
+- Le nom du royaume propriétaire de ce château.
+- Le trésor du château et son revenu.
+
+Si le château lui appartient, il peut choisir ce qu'il produit en cliquant sur l'une des quatre icônes correspondantes aux trois unités et à l'amélioration du niveau du château. On peut également fermer ou ouvrir la porte en cliquant sur celle-ci. Une fois son château sélectionné, on peut choisir le château cible en faisant un clic droit, ce qui a pour effet de l'encercler en rouge. 
+
 ### Châteaux :
+Un château est défini par :
+- Un propriétaire
+- Un trésor
+- Une garnison
+- Une production en cours
+- Un objectif
+- Une porte avec une direction et un état (ouverte ou fermée)
+
+Le trésor est augmenté à chaque tour en fonction du revenu du château. 
+
+La capture d'un château ennemi s'effectue en envoyant des unités sur celui-ci. Lors d'une attaque, les unités inflige des dommages aux unités de la cour ennemie. Si une unité a infligé tous ses dommages, elle meurt. Le château est capturé lorsque la cour est vide et qu'une unité l'attaque.
+
+Les châteaux alliés peuvent s'échanger des unités entre eux. Il suffit que le joueur définisse un des châteaux comme objectif pour envoyer des unités d'une cour à l'autre.
+
+Si le joueur produit une unité dans une de ses cours, cette production sera conservée une fois l'unité produite. Cependant, la production est redéfinie à "nul" s'il vient de produire un niveau supplémentaire.
+
+### Unités :
+
+Voici les différentes unités et leurs caractéristiques :
+
+|               |                 asset                 | coût de prod.| temps de prod. (en tours) | vitesse (case/tour)| points de vie | dommages |
+| -------------:|   :-------------:                     | :-----:      | :-----:                   | :----:             | :----:        |  :----:  |
+| **Piquier**   | <img src="src/Drawables/pikeman.png"> |    100       |       5                   |        2           |       1       |    1     |
+| **Chevalier** | <img src="src/Drawables/knight.png">  |    500       |      20                   |        6           |       3       |    5     |
+| **Onagre**    | <img src="src/Drawables/onager.png">  |    1000      |       50                  |        1           |       5       |    10    |
+
+Les unités les plus lentes sortent de la cour en premier.
+
+Lorsqu'une unité sort, son objectif est mis à jour et il ne peut plus changer. Elle ira ainsi jusqu'à son objectif, quoiqu'il arrive.
 
 
 
@@ -60,8 +120,6 @@ Ce projet n'as pas encore été conçu pour être exporté en exécutable, il es
 
 ## Remarques de gameplay :
 * Nous avons décidé de faire sortir les unités une par une des châteaux, cela ne change pas vraiment l'équilibrage du jeu mais rend plus joli le jeu sans unités empilées.
-* Les valeurs de l'énoncé pour les points de vie et les dégâts mériteraient d'être rééquilibrées, les piquiers ont clairement un avantage défensif, et seuls les chevaux ont un petit avantage offensif.
-* L'amélioration des châteaux devrait avoir un intérêt plus grand ou être plus rapide.
 * Les versions actuelles des IA sont donc volontairement un mélange de stratégie et de role-play.
 
 
@@ -120,10 +178,20 @@ Ce projet n'as pas encore été conçu pour être exporté en exécutable, il es
 * A de nombreux endroits nous utilisons des ArrayList ou LinkedList selon que nous estimions avoir à faire plus d'insertions ou de recherche d'éléments.
 * En pratique toutes ces List sont parcourues avec des for each. Nous aurions dû utiliser des Set, la complexité n'aurait pas changé mais c'est conceptuellement plus clair. (En effet l'ordre des éléments n'est jamais vérifié et ils n'apparaissent jamais en double)
 
+#### Sérialisation:
+
+* Certaines classes n'étant pas sérialisables (en particulier celles issues de la librairie JavaFX), nous avons ajouté des attributs de types primitifs qui sont mis à jour durant le processus de sérialisation et les classes JavaFX sont réinstanciées durant la désérialisation. Nous avons donc redéfini les méthodes writeObject() et readObject().
+
+* Nous avons défini des méthodes setUI() pour les classes nécessitant un affichage (World, Entity). Ces méthodes récupèrent les images, les chargent et les bind au contexte afin de les afficher. Elles sont appelées à la désérialisation.
+
 #### Détails:
 * Originellement les portes devaient déverser 3 unités par tour, c'est pourquoi une liste d'unités est encore utilisée à travers les méthodes telle que `getReadyUnits()` ou `getLaunchList()`
 
 
+## Améliorations
+* Fixer l'erreur provoquée par le chargement de la sauvegarde (couleur Nulle).
+* Les valeurs de l'énoncé pour les points de vie et les dégâts mériteraient d'être rééquilibrées, les piquiers ont clairement un avantage défensif, et seuls les chevaux ont un petit avantage offensif.
+* L'amélioration des châteaux devrait avoir un intérêt plus grand ou être plus rapide.
 
 
 
