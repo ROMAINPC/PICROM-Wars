@@ -69,7 +69,7 @@ En 1 est visible l'écran du jeu.
 
 En 2, la liste des joueurs (HU : Humain, IA : intelligence artificielle, NE : neutre / baron) ainsi que leur nom, leur couleur et le nombre de châteaux conquis. Si un royaume perd, son nombre de château tombe à 0 et il est barré de la liste.
 
-En 3, le bouton de lancement et de pause. A noter que la pause du jeu est prise en compte uniquement à la fin d'un tour.
+En 3, le bouton de lancement et de pause (Abusez en !).
 
 Lorsque le joueur clique sur un château, il est encerclé en jaune et des informations apparaissent en 4. Sont visibles :
 - Le château en lui-même ainsi que l'état de sa porte.
@@ -80,21 +80,15 @@ Lorsque le joueur clique sur un château, il est encerclé en jaune et des infor
 Si le château lui appartient, il peut choisir ce qu'il produit en cliquant sur l'une des quatre icônes correspondantes aux trois unités et à l'amélioration du niveau du château. On peut également fermer ou ouvrir la porte en cliquant sur celle-ci. Une fois son château sélectionné, on peut choisir le château cible en faisant un clic droit, ce qui a pour effet de l'encercler en rouge. 
 
 ### Châteaux :
-Un château est défini par :
-- Un propriétaire
-- Un trésor
-- Une garnison
-- Une production en cours
-- Un objectif
-- Une porte avec une direction et un état (ouverte ou fermée)
-
 Le trésor est augmenté à chaque tour en fonction du revenu du château. 
 
-La capture d'un château ennemi s'effectue en envoyant des unités sur celui-ci. Lors d'une attaque, les unités inflige des dommages aux unités de la cour ennemie. Si une unité a infligé tous ses dommages, elle meurt. Le château est capturé lorsque la cour est vide et qu'une unité l'attaque.
+La capture d'un château ennemi s'effectue en envoyant des unités sur celui-ci. Lors d'une attaque, les unités inflige des dommages de vie aux unités de la cour ennemie. Si une unité a infligé tous ses dommages, elle meurt. Le château est capturé lorsque la cour est vide et qu'une unité l'attaque.
 
 Les châteaux alliés peuvent s'échanger des unités entre eux. Il suffit que le joueur définisse un des châteaux comme objectif pour envoyer des unités d'une cour à l'autre.
 
-Si le joueur produit une unité dans une de ses cours, cette production sera conservée une fois l'unité produite. Cependant, la production est redéfinie à "nul" s'il vient de produire un niveau supplémentaire.
+Si la production du château est une unité, elle sera automatiquement renouvellée lorsque elle se terminera.
+
+Si la porte est ouverte les unités sortiront du château une par une.
 
 ### Unités :
 
