@@ -178,4 +178,9 @@ public abstract class Owner extends StackPane {
 		return castles.size() > 0;
 	}
 
+	@Override
+	public String toString() {
+		return name + " ( " + ownerType + ", " + color + "), Castles: " + castles;
+	}
+
 }

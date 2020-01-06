@@ -32,7 +32,7 @@ Ce projet a été édité sous l'IDE Eclipse, il est conseillé de l'exécuter a
 ### Exécution (nécessite JRE) :
 * `cd bin`
 * `java picrom.Main`
-* OR for java 11+ `java --module-path "path\to\javafx-sdk-X\lib" --add-modules javafx.controls picrom.Main`
+* Ou pour java 11+ : `java --module-path "path\to\javafx-sdk-X\lib" --add-modules javafx.controls picrom.Main`
 
 ### Paramètres :
 Ce projet n'as pas encore été conçu pour être exporté en exécutable, il est possible de modifer certains éléments de gameplay depuis la classe [src/picrom/utils/Settings.java](src/picrom/utils/Settings.java)
@@ -186,6 +186,8 @@ Lorsqu'une unité sort, son objectif est mis à jour et il ne peut plus changer.
 
 #### Détails:
 * Originellement les portes devaient déverser 3 unités par tour, c'est pourquoi une liste d'unités est encore utilisée à travers les méthodes telle que `getReadyUnits()` ou `getLaunchList()`
+* A propos du code inutile : Certaines méthodes sont surchargées, surtout des constructeurs. Il serait tout à fait possible d'en supprimer certains, mais nous considérons que pour garantir la maintenabilité du code certaines classes peuvent être construites de manières différentes.
+* De même nous avons surchargé la méthode toString afin de permettre un meilleur débogage lorsque quelqu'un se remettra sur le projet.
 
 
 ## Améliorations

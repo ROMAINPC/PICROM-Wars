@@ -123,4 +123,9 @@ public class Courtyard {
 	public void setObjective(Castle objective) {
 		this.objective = objective;
 	}
+
+	@Override
+	public String toString() {
+		return "Court: " + units;
+	}
 }

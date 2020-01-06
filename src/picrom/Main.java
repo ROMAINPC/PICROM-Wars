@@ -59,6 +59,7 @@ import picrom.entity.unit.Unit;
 import picrom.gameboard.Context;
 import picrom.gameboard.TooManyCastlesException;
 import picrom.gameboard.World;
+import picrom.owner.AI;
 import picrom.owner.Owner;
 import picrom.owner.Player;
 import picrom.utils.Drawables;
@@ -382,7 +383,9 @@ public class Main extends Application {
 			Utils.colorize(knightM, currentClicked.getOwner().getColor());
 			Utils.colorize(onagerM, currentClicked.getOwner().getColor());
 			door.setImage(currentClicked.getDoor().isOpen() ? Drawables.door_open : Drawables.door_close);
-			ownerL.setText(currentClicked.getOwner().getName());
+			String type = currentClicked.getOwner() instanceof Player ? "Vous"
+					: currentClicked.getOwner() instanceof AI ? "Ennemi" : "Neutre";
+			ownerL.setText(currentClicked.getOwner().getName() + " (" + type + ")");
 			treasureL.setText(currentClicked.getTreasure() + " (+" + currentClicked.getIncome() + ")");
 			levelL.setText("Nv " + currentClicked.getLevel());
 			Map<Class<? extends Unit>, Integer> units = currentClicked.getGarrisonQuantity();

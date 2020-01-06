@@ -174,4 +174,9 @@ public abstract class Entity extends Group {
 		return context;
 	}
 
+	@Override
+	public String toString() {
+		return "Entity, (" + getWorldX() + ", " + getWorldY() + "), Owner: " + owner;
+	}
+
 }

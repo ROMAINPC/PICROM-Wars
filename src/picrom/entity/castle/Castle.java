@@ -283,15 +283,14 @@ public class Castle extends Entity implements Producible {
 	}
 
 	/**
-	 * To know which unit is launchable, have an objective to do and the door
-	 * open.
+	 * To know which unit is launchable, have an objective to do and the door open.
 	 * 
 	 * @return One unit to launch toward the objectiv (gameplay choice)
 	 */
 	public List<Unit> getLaunchList() {
 		List<Unit> l = new LinkedList<Unit>();
 		if (court.getObjective() != null && door.isOpen())
-			l.addAll(court.getReadyUnits(1)); //one at each execution, because
+			l.addAll(court.getReadyUnits(1)); // one at each execution, because
 		return l;
 	}
 
@@ -333,6 +332,12 @@ public class Castle extends Entity implements Producible {
 			result += unit.getDamage();
 		}
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Castle (" + getWorldX() + ", " + getWorldY() + "), Owner: " + getOwner() + ", Level: " + level
+				+ ", Target: " + getObjective();
 	}
 
 }
