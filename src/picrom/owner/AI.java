@@ -20,6 +20,7 @@
 package picrom.owner;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import picrom.entity.castle.Castle;
 import picrom.entity.unit.Knight;
@@ -35,59 +36,118 @@ public class AI extends Owner implements Pensive {
 
 	private static Random random = Settings.SEED;
 
-	private boolean changeNext;
-
 	/**
 	 * Constructor, see also {@link Owner}
 	 */
 	public AI() {
 		super("IA");
-		changeNext = false;
 	}
 
 	@Override
 	public void reflect() {
-		// TODO : Use door, choose good unit for defend or attack, deploy unit in
-		// another castle as reinforcment, improve level of castles.
 
 		for (Castle castle : this.getCastles()) {
 
-			// choose a Castle to attack:
-			int minDistance = castle.getContext().getWorldHeight() + castle.getContext().getWorldWidth();
-			Castle nearestEnnemyCastle = null;
-			for (Owner ennemy : castle.getContext().getOwners()) {
-				if (ennemy != this) {
-					for (Castle ennemyCastle : ennemy.getCastles()) {
-						int dist = Utils.manDistance(castle.getWorldX(), castle.getWorldY(), ennemyCastle.getWorldX(),
-								ennemyCastle.getWorldY());
-						if (dist <= minDistance) {
-							minDistance = dist;
-							nearestEnnemyCastle = ennemyCastle;
+			// Calculate some information about other castles:
+			int maxDistance = castle.getContext().getWorldHeight() + castle.getContext().getWorldWidth();
+			int minEnnemyDistance = maxDistance;
+			Castle nearestEnnemy = null;
+			int minAllyDistance = maxDistance;
+			Castle nearestAlly = null;
+			int minAttackerDistance = maxDistance;
+			Castle nearestAttacker = null;
+			int attackers = 0;
+			for (Owner owner : castle.getContext().getOwners()) {
+				for (Castle otherCastle : owner.getCastles()) {
+					int dist = Utils.manDistance(castle.getWorldX(), castle.getWorldY(), otherCastle.getWorldX(),
+							otherCastle.getWorldY());
+					if (owner != this) { // ennemy castles
+						if (dist <= minEnnemyDistance) {
+							minEnnemyDistance = dist;
+							nearestEnnemy = otherCastle;
+						}
+						if (otherCastle.getObjective() == castle) {
+							attackers++;
+							if (nearestAttacker == null || (dist <= minAttackerDistance)) {
+								nearestAttacker = otherCastle;
+								minAttackerDistance = dist;
+							}
+						}
+					} else { // ally castles
+						if (otherCastle != castle && dist <= minAllyDistance) {
+							minAllyDistance = dist;
+							nearestAlly = otherCastle;
 						}
 					}
 				}
 			}
 
-			castle.setObjective(nearestEnnemyCastle);
-			castle.getDoor().setOpen(true);
+			// key values to make decisions.
+			int attack_key = (int) ((double) Settings.AI_ATTACK_KEY * ThreadLocalRandom.current().nextDouble(0.8, 1.2));
+			int defense_key = (int) ((double) Settings.AI_DEFENSE_KEY
+					* ThreadLocalRandom.current().nextDouble(0.8, 1.2));
+
+			// Choose a Castle to attack or reinforce :
+			if (nearestAttacker != null) { // First of all try to strike back !
+				castle.setObjective(nearestAttacker);
+			} else {
+				if (nearestAlly != null && nearestAlly.getGarrisonDefense() < defense_key / 2) { // Help nearest
+																									// ally if
+																									// it's too
+																									// weak.
+					castle.setObjective(nearestAlly);
+				} else { // Target nearest ennemy Castle
+					castle.setObjective(nearestEnnemy);
+				}
+			}
 
 			// Choose production:
-			// System.out.println(castle.getProductionTimeLeft());
-
-			if (changeNext || castle.getProductionTimeLeft() == 0) {
-				int r = random.nextInt(3);
-				if (r == 0) {
-					castle.setProduction(Knight.class);
-				} else if (r == 1) {
-					castle.setProduction(Pikeman.class);
+			if (castle.getProductionTimeLeft() <= 1) { // Normal behavior of production:
+				if (castle.getLevel() < 2 && minEnnemyDistance >= maxDistance * 0.5d) { // Sector is clear, improve
+																						// Castle
+					castle.setProduction(Castle.class);
+				} else if (castle.getLevel() < 3 && minEnnemyDistance >= maxDistance * 0.8d) { // Full peace in the area
+					castle.setProduction(Castle.class);
 				} else {
-					castle.setProduction(Onager.class);
+					int r = random.nextInt(3);
+					if (castle.getObjective() == null) { // Rare situation, show who has the biggest.
+						castle.setProduction(Onager.class);
+					} else if (castle.getObjective().getOwner() == castle.getOwner()
+							|| castle.getObjective() == nearestAttacker) { // Produce cheap Unit or quick Unit to help
+																			// Ally or to strike back.
+						if (r == 0)
+							castle.setProduction(Knight.class);
+						else
+							castle.setProduction(Pikeman.class);
+					} else { // prepared assault
+						if (r == 0)
+							castle.setProduction(Onager.class);
+						else
+							castle.setProduction(Knight.class); // Knight have the best ratio productionTime/Damage
+					}
 				}
-				changeNext = false;
+			} else { // Emergency production, priority to Pikeman, they are cheap to produce and have
+						// best ratio productionTime/HealthPoints.
+				if (attackers > 2 && castle.getProduction() != Pikeman.class) {
+
+					castle.setProduction(Pikeman.class);
+				}
 			}
-			if (castle.getProductionTimeLeft() == 1) {
-				changeNext = true;
+
+			// Decide to open the door to go the objectiv, or close the
+			// door to keep stacking Units in defense.
+			if (castle.getObjective() == null) {
+				castle.getDoor().setOpen(false);
+			} else {
+				if (castle.getDoor().isOpen()) { // decide if its time to close the door
+					if (castle.getGarrisonDefense() < defense_key)
+						castle.getDoor().setOpen(false);
+				} else { // decide if its time to send Units
+					if (castle.getGarrisonAttack() > attack_key)
+						castle.getDoor().setOpen(true);
+				}
 			}
+
 		}
 	}
 

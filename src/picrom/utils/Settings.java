@@ -30,7 +30,7 @@ import javafx.util.Duration;
  */
 public class Settings {
 	// gameplay settings:
-	public static final Duration TURN_DURATION = Duration.millis(100);
+	public static final Duration TURN_DURATION = Duration.millis(80);
 	public static final int MAX_UNITS_OUT_BY_TURN = 3;
 	public static final int INCOME_MULTIPLIER = 10;
 	public static final int UNITS_GRID_SIZE = 10;
@@ -39,11 +39,16 @@ public class Settings {
 	public static final int NEUTRAL_START_GARRISON = 30; // HPs
 	public static final int START_GARRISON = 10; // HPs
 
+	// Ais settings:
+	// Used by AIs to decide if a castle have a good or a bad attack/defense
+	public static final int AI_ATTACK_KEY = 25;
+	public static final int AI_DEFENSE_KEY = 20;
+
 	// game board settings:
-	public static final int WORLD_WIDTH = 18;
-	public static final int WORLD_HEIGHT = 15;
+	public static final int WORLD_WIDTH = 20;
+	public static final int WORLD_HEIGHT = 18;
 	public static final int NUMBER_OF_AIS = 3;
-	public static final int NUMBER_OF_BARONS = 6;
+	public static final int NUMBER_OF_BARONS = 10;
 	public static final int MINIMAL_CASTLE_DISTANCE = 2;
 
 	// graphical settings:

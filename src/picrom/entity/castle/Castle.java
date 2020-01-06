@@ -246,7 +246,7 @@ public class Castle extends Entity implements Producible {
 	 *         Also consider turns to have enough money.
 	 */
 	public int getProductionTimeLeft() {
-		int leftTime = productionUnit.getTimeLeft();
+		int leftTime = productionUnit.getTimeLeft() + 1; // +1 because TimeLeft is from X-1 to 0. We want from X to 0.
 		int leftMoney = (productionUnit.getCost() - treasure) / income;
 		leftTime = leftTime < 0 ? 0 : leftTime;
 		leftMoney = leftMoney < 0 ? 0 : leftMoney;
@@ -283,15 +283,15 @@ public class Castle extends Entity implements Producible {
 	}
 
 	/**
-	 * To know which units are launchable, have an objective to do and the door
+	 * To know which unit is launchable, have an objective to do and the door
 	 * open.
 	 * 
-	 * @return List of units to launch toward the objectiv
+	 * @return One unit to launch toward the objectiv (gameplay choice)
 	 */
 	public List<Unit> getLaunchList() {
 		List<Unit> l = new LinkedList<Unit>();
 		if (court.getObjective() != null && door.isOpen())
-			l.addAll(court.getReadyUnits());
+			l.addAll(court.getReadyUnits(1)); //one at each execution, because
 		return l;
 	}
 
@@ -311,6 +311,28 @@ public class Castle extends Entity implements Producible {
 			map.put(unit.getClass(), n);
 		}
 		return map;
+	}
+
+	/**
+	 * @return The sum of all health points of Units in garrison.
+	 */
+	public int getGarrisonDefense() {
+		int result = 0;
+		for (Unit unit : court.getUnits()) {
+			result += unit.getHp();
+		}
+		return result;
+	}
+
+	/**
+	 * @return The sum of all damage points of Units in garrison.
+	 */
+	public int getGarrisonAttack() {
+		int result = 0;
+		for (Unit unit : court.getUnits()) {
+			result += unit.getDamage();
+		}
+		return result;
 	}
 
 }

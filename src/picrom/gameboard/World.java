@@ -278,8 +278,6 @@ public class World extends Context {
 					if (castlesArray[indx][indy] == unit.getObjective()) {
 						// If enemy
 						if (unit.getObjective().getOwner() != unit.getOwner()) {
-							if (unit instanceof Onager)
-								System.out.println(indx + ", " + indy);
 							if (castlesArray[indx][indy].isGarrison()) {
 								castlesArray[indx][indy].attackWith(unit, 1);
 								if (unit.getDamage() <= 0)
